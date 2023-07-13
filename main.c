@@ -57,7 +57,7 @@ char *shell_read_command(void)
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
 #define SHELL_SPLIT_COMMAND_TOKEN_DELIMITER " \t\r\n\a"
 
-char **shell_split_command_into_args(const char *commands)
+char **shell_split_command_into_args(char *commands)
 {
   int buffer_size = SHELL_SPLIT_COMMAND_BUFFER_SIZE;
   int position = 0;
@@ -70,6 +70,9 @@ char **shell_split_command_into_args(const char *commands)
     exit(EXIT_FAILURE);
   }
 
+  /**
+   * @note strtok retorna ponteiros para dentro da string provida, ele altera a string colocando '\0' aonde encontrar o delimitador provido.
+   */
   token = strtok(commands, SHELL_SPLIT_COMMAND_TOKEN_DELIMITER);
   while (token != NULL)
   {
