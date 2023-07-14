@@ -3,6 +3,10 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 #define LINE_BUFFER_SIZE 1024
 
 char *shell_read_command(void)
@@ -97,6 +101,38 @@ char **shell_split_command_into_args(char *commands)
   return tokens;
 }
 
+int shell_launch_process(char **args)
+{
+  pid_t pid, wpid;
+  int status;
+
+  pid = fork();
+
+  if (pid == 0)
+  {
+    // processo filho
+    if (execv(args[0], args) == -1)
+    {
+      perror("Internal: Processo filho não rodou");
+    }
+    exit(EXIT_FAILURE);
+  }
+  else if (pid < 0)
+  {
+    perror("Internal: Processo filho não iniciou");
+  }
+  else
+  {
+    do
+    {
+      wpid = waitpid(pid, &status, WUNTRACED);
+    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+  }
+
+  return 1;
+}
+
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
@@ -119,6 +155,9 @@ void read_eval_shell_loop()
         token++;
       }
     }
+    //@note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
+    shell_launch_process(splitted_by_delimiter);
+
     if (readed_line)
     {
       free(readed_line);
