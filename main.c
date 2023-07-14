@@ -111,7 +111,7 @@ int shell_launch_process(char **args)
   if (pid == 0)
   {
     // processo filho
-    if (execv(args[0], args) == -1)
+    if (execvp(args[0], args) == -1)
     {
       perror("Internal: Processo filho não rodou");
     }
@@ -155,7 +155,8 @@ void read_eval_shell_loop()
         token++;
       }
     }
-    //@note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
+    // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
+    // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     shell_launch_process(splitted_by_delimiter);
 
     if (readed_line)
