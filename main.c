@@ -170,9 +170,9 @@ void read_eval_shell_loop()
 {
   char *readed_line;
   char **splitted_by_delimiter;
-  // int status;
+  int status = 0;
 
-  while (true)
+  do 
   {
     printf("|>");
     readed_line = shell_read_command();
@@ -189,7 +189,7 @@ void read_eval_shell_loop()
     }
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
-    shell_execute_command(splitted_by_delimiter);
+    status = shell_execute_command(splitted_by_delimiter);
 
     if (readed_line)
     {
@@ -197,7 +197,7 @@ void read_eval_shell_loop()
     }
     printf("\n");
     // @note loop infinito por enquanto
-  }
+  } while (status);
 }
 
 int main(void)

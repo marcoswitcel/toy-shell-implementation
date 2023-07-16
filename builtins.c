@@ -34,7 +34,7 @@ int builtin_cd(char **args)
     if (chdir(target_folder) != 0)
     {
       fprintf(stderr, "cd: não consegiu trocar para o diretório \"%s\"", target_folder);
-      return 0;
+      return 0; // @note por hora uma falha no cd encerra o terminal... mudar
     }
   }
 
@@ -61,7 +61,6 @@ int builtin_help(char **args)
 int builtin_exit(char **args)
 {
   printf("saindo, até mais!!!");
-  exit(0);
-  return 1;
+  return 0;
 }
 
