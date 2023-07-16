@@ -135,7 +135,18 @@ int shell_launch_process(char **args)
   return 1;
 }
 
+Builtin_Function has_builtin_for(const char *cstring)
+{
+  for (int i = 0; i < number_of_builtins; i++)
+  {
+    if (strcmp(cstring, builtin_cstring[i]) == 0)
+    {
+      return builtin_func[i];
+    }
+  }
 
+  return NULL;
+}
 
 int shell_execute_command(char **args)
 {
@@ -145,12 +156,10 @@ int shell_execute_command(char **args)
     return 1; // comando vazio
   }
 
-  for (int i = 0; i < number_of_builtins; i++)
+  Builtin_Function builtin_func = has_builtin_for(args[0]);
+  if (builtin_func)
   {
-    if (strcmp(args[0], builtin_cstring[i]) == 0)
-    {
-      return (*buildint_func[i])(args);
-    }
+    return builtin_func(args);
   }
 
   return shell_launch_process(args);

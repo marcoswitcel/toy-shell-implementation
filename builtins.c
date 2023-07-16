@@ -1,4 +1,6 @@
 
+typedef int (*Builtin_Function)(char **);
+
 // Definições
 int builtin_cd(char **args);
 int builtin_help(char **args);
@@ -10,7 +12,7 @@ char *builtin_cstring[] = {
   "exit",
 };
 
-int (*buildint_func[]) (char **) = {
+Builtin_Function builtin_func[] = {
   &builtin_cd,
   &builtin_help,
   &builtin_exit,
