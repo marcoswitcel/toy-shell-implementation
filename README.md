@@ -8,3 +8,4 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://www.geeksforgeeks.org/fork-system-call/](https://www.geeksforgeeks.org/fork-system-call/)
 * [https://www.includehelp.com/c/process-identification-pid_t-data-type.aspx](https://www.includehelp.com/c/process-identification-pid_t-data-type.aspx)
 * [https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-waitpid-wait-specific-child-process-end](https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-waitpid-wait-specific-child-process-end)
+* [https://medium.com/@nimeshneema/typedef-function-in-c-programming-language-968573e4cfc1](https://medium.com/@nimeshneema/typedef-function-in-c-programming-language-968573e4cfc1)
