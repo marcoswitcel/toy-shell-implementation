@@ -38,22 +38,30 @@ int builtin_cd(char **args)
     }
   }
 
-  return 1; //@todo revisar
+  return 1;
 }
 
 int builtin_help(char **args)
 {
-  // @note pendente implementação e explicação
+  printf("Toy Shell Implementation - João Marcos\n");
+  printf("Baseado no tutorial de Stephen Brennan\n");
+  printf("Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n");
+
+  printf("Comandos builtin básicos:\n");
+  for (int i = 0; i < number_of_builtins; i++)
+  {
+    printf("  %s\n", builtin_cstring[i]);
+  }
+
+  printf("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.");
   
-  printf("executado builtin_help");
-  return 1; //@todo revisar
+  return 1;
 }
 
 int builtin_exit(char **args)
 {
-  // @note pendente implementação e explicação
-  
-  printf("executado builtin_exit");
-  return 1; //@todo revisar
+  printf("saindo, até mais!!!");
+  exit(0);
+  return 1;
 }
 
