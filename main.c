@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "./builtins.c"
+
 #define LINE_BUFFER_SIZE 1024
 
 char *shell_read_command(void)
@@ -133,6 +135,27 @@ int shell_launch_process(char **args)
   return 1;
 }
 
+
+
+int shell_execute_command(char **args)
+{
+  if (args[0] == NULL)
+  {
+    // @note De fato acontece?
+    return 1; // comando vazio
+  }
+
+  for (int i = 0; i < number_of_builtins; i++)
+  {
+    if (strcmp(args[0], builtin_cstring[i]) == 0)
+    {
+      return (*buildint_func[i])(args);
+    }
+  }
+
+  return shell_launch_process(args);
+}
+
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
@@ -157,7 +180,7 @@ void read_eval_shell_loop()
     }
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
-    shell_launch_process(splitted_by_delimiter);
+    shell_execute_command(splitted_by_delimiter);
 
     if (readed_line)
     {
