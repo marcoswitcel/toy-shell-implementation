@@ -113,7 +113,7 @@ int shell_launch_process(char **args)
     // processo filho
     if (execvp(args[0], args) == -1)
     {
-      perror("Internal: Processo filho não rodou");
+      perror("Internal: Processo filho não pode executar o programa alvo");
     }
     exit(EXIT_FAILURE);
   }
