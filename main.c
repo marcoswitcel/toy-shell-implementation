@@ -195,6 +195,10 @@ void read_eval_shell_loop()
     {
       free(readed_line);
     }
+    if (splitted_by_delimiter)
+    {
+      free(splitted_by_delimiter);
+    }
     printf("\n");
     // @note loop infinito por enquanto
   } while (status);
