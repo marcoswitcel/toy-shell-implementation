@@ -2,6 +2,10 @@
 
 * ler arquivo de configuração?
 * executar comandos é um requisito, passar argumentos vai junto
+* implementar suporte para comandos com àspas ao redor
+* implementar o redirecionamento de output input
+* mais comandos builtin?
+* globing e patter matching
 
 ## Onde parei
 
