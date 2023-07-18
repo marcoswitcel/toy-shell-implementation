@@ -47,6 +47,12 @@ int builtin_help(char **args)
   printf("Baseado no tutorial de Stephen Brennan\n");
   printf("Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n");
 
+  if (args[1] != NULL)
+  {
+    printf("Por hora o comando \"help\" não consegue explicar \"%s\".\n", args[1]);  
+    return 1;
+  }
+
   printf("Comandos builtin básicos:\n");
   for (int i = 0; i < number_of_builtins; i++)
   {
@@ -60,6 +66,11 @@ int builtin_help(char **args)
 
 int builtin_exit(char **args)
 {
+  if (args[1] != NULL)
+  {
+    printf("Warning: Ignorando argumentos.\n");  
+  }
+
   printf("saindo, até mais!!!");
   return 0;
 }

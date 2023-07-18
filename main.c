@@ -105,7 +105,7 @@ char **shell_split_command_into_args(char *commands)
 
 int shell_launch_process(char **args)
 {
-  pid_t pid, wpid;
+  pid_t pid;
   int status;
 
   pid = fork();
@@ -127,7 +127,7 @@ int shell_launch_process(char **args)
   {
     do
     {
-      wpid = waitpid(pid, &status, WUNTRACED);
+      waitpid(pid, &status, WUNTRACED);
     } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 
   }
