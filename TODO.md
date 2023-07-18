@@ -6,6 +6,7 @@
 * implementar o redirecionamento de output input
 * mais comandos builtin?
 * globing e patter matching
+* implementar limpeza de terminal com crtl + l
 
 ## Onde parei
 
