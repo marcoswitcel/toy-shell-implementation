@@ -9,6 +9,9 @@
 
 #include "./builtins.c"
 
+// Desenvolvimento
+#define DEBUG_INFO false
+
 #define LINE_BUFFER_SIZE 1024
 
 char *shell_read_command(void)
@@ -176,9 +179,13 @@ void read_eval_shell_loop()
   {
     printf("|>");
     readed_line = shell_read_command();
-    printf("linha lida: [%s]\n", readed_line); // @note apenas para debugar
+    if (DEBUG_INFO)
+    {
+      printf("linha lida: [%s]\n", readed_line); // @note apenas para debugar
+    }
     splitted_by_delimiter = shell_split_command_into_args(readed_line);
     // @note o bloco abaixo é apenas para visualizar o resultado
+    if (DEBUG_INFO)
     {
       char **token = splitted_by_delimiter;
       while (*token != NULL)
