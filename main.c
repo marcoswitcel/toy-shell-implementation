@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <termios.h>
 
 #include "./builtins.c"
 
@@ -35,11 +36,13 @@ char *shell_read_command(void)
 
     if (c == EOF || c == '\n')
     {
+      printf("\n");// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
       buffer[position] = '\0';
       return buffer;
     }
     else
     {
+      printf("%c", c);// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
       buffer[position] = c;
     }
     position++;
@@ -211,8 +214,19 @@ void read_eval_shell_loop()
   } while (status);
 }
 
+void activate_raw_mode()
+{
+  // @todo João, precisa restaurar antes de sair?
+  struct termios config;
+  tcgetattr(STDIN_FILENO, &config);
+
+  config.c_lflag &= ~(ECHO);
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &config);
+}
+
 int main(void)
 {
+  activate_raw_mode();
   // @note Aceitar argumentos pela linha de comando? que argumentos
 
   // @note talvez ler um arquivo de configuração? mas que configurações aceitar?
