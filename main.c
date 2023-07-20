@@ -220,7 +220,7 @@ void activate_raw_mode()
   struct termios config;
   tcgetattr(STDIN_FILENO, &config);
 
-  config.c_lflag &= ~(ECHO);
+  config.c_lflag &= ~(ECHO | ICANON); // sem echo e buffer de saída
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &config);
 }
 
