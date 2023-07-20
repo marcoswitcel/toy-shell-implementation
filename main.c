@@ -15,6 +15,8 @@
 
 #define LINE_BUFFER_SIZE 1024
 
+int shell_launch_process(char **args);
+
 char *shell_read_command(void)
 {
   unsigned buffer_size = LINE_BUFFER_SIZE;
@@ -40,12 +42,20 @@ char *shell_read_command(void)
       buffer[position] = '\0';
       return buffer;
     }
+    else if (c == 12) // @note Crtl + L
+    {
+      char *program = "clear";
+      char *clear_process[2] = { program, NULL };
+      shell_launch_process(clear_process);
+      buffer[position] = '\0';
+      printf("|>%s", buffer); // @note organizar reimpressão da marcação inicial
+    }
     else
     {
       printf("%c", c);// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
       buffer[position] = c;
+      position++;
     }
-    position++;
 
     if (position >= buffer_size)
     {
