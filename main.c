@@ -61,9 +61,7 @@ char *shell_wait_command_input(void)
     }
     else if (c == FORM_FEED) // @note Crtl + L
     {
-      char *program = "clear";
-      char *clear_process[2] = { program, NULL };
-      shell_launch_process(clear_process);
+      builtin_clear(NULL);
       buffer[position] = '\0';
       print_input_mark(buffer); // @note organizar reimpressão da marcação inicial
     }
@@ -73,6 +71,7 @@ char *shell_wait_command_input(void)
       {
         if (position > 0)
         {
+          builtin_clear(NULL);
           position--;
           buffer[position] = '\0';
           print_input_mark(buffer); // @note organizar reimpressão da marcação inicial

@@ -5,17 +5,20 @@ typedef int (*Builtin_Function)(char **);
 int builtin_cd(char **args);
 int builtin_help(char **args);
 int builtin_exit(char **args);
+int builtin_clear(char **args);
 
 const char *builtin_cstring[] = {
   "cd",
   "help",
   "exit",
+  "clear",
 };
 
 const Builtin_Function builtin_func[] = {
   &builtin_cd,
   &builtin_help,
   &builtin_exit,
+  &builtin_clear,
 };
 
 const int number_of_builtins = sizeof(builtin_cstring) / sizeof(char *);
@@ -74,4 +77,23 @@ int builtin_exit(char **args)
   printf("saindo, até mais!!!");
   return 0;
 }
+
+// @note `builtin_clear` depende desse cara, por isso colei o protótipo aqui 
+int shell_launch_process(char **args);
+
+int builtin_clear(char **args)
+{
+  // @todo João, reimplementar a limpeza de tela de outra forma, sem o comando clear
+  char *program = "clear";
+  char *clear_process[2] = { program, NULL };
+  shell_launch_process(clear_process);
+
+  if (args && args[1] != NULL)
+  {
+    printf("Warning: Ignorando argumentos para clear .\n");  //@note apenas para evitar avisos do compilador sobre variáveis não usadas
+  }
+
+  return 1;
+}
+
 
