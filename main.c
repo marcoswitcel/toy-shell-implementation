@@ -41,6 +41,9 @@ char *shell_wait_command_input(void)
     {
       printf("\n");// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
       buffer[position] = '\0';
+
+      if (DEBUG_INFO) printf("linha lida: [%s]\n", buffer); // @note apenas para debugar
+
       return buffer;
     }
     else if (c == 12) // @note Crtl + L
@@ -117,6 +120,16 @@ char **shell_split_command_into_args(char *commands)
   }
 
   tokens[position] = NULL;
+  // @note o bloco abaixo é apenas para visualizar o resultado
+  if (DEBUG_INFO)
+  {
+    char **token = tokens;
+    while (*token != NULL)
+    {
+      printf("argumento extraído: [%s]\n", *token);
+      token++;
+    }
+  }
   return tokens;
 }
 
@@ -192,21 +205,7 @@ void read_eval_shell_loop()
   do 
   {
     readed_line = shell_wait_command_input();
-    if (DEBUG_INFO)
-    {
-      printf("linha lida: [%s]\n", readed_line); // @note apenas para debugar
-    }
     splitted_by_delimiter = shell_split_command_into_args(readed_line);
-    // @note o bloco abaixo é apenas para visualizar o resultado
-    if (DEBUG_INFO)
-    {
-      char **token = splitted_by_delimiter;
-      while (*token != NULL)
-      {
-        printf("argumento extraído: [%s]\n", *token);
-        token++;
-      }
-    }
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     status = shell_execute_command(splitted_by_delimiter);
