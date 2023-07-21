@@ -247,14 +247,24 @@ void read_eval_shell_loop()
   } while (status);
 }
 
+static struct termios original_config;
+
+void deactivate_raw_mode()
+{
+  if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\n");
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
+}
+
 void activate_raw_mode()
 {
   // @todo João, precisa restaurar antes de sair?
-  struct termios config;
-  tcgetattr(STDIN_FILENO, &config);
+  tcgetattr(STDIN_FILENO, &original_config);
+  atexit(deactivate_raw_mode);
 
-  config.c_lflag &= ~(ECHO | ICANON); // sem echo e buffer de saída
-  tcsetattr(STDERR_FILENO, TCSAFLUSH, &config);
+  struct termios new_config = original_config;
+
+  new_config.c_lflag &= ~(ECHO | ICANON); // sem echo e buffer de saída
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &new_config);
 }
 
 int main(void)
