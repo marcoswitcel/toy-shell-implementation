@@ -17,7 +17,7 @@
 
 int shell_launch_process(char **args);
 
-char *shell_read_command(void)
+char *shell_wait_command_input(void)
 {
   unsigned buffer_size = LINE_BUFFER_SIZE;
   unsigned position = 0;
@@ -32,6 +32,7 @@ char *shell_read_command(void)
     exit(EXIT_FAILURE);
   }
 
+  printf("|>");
   while (true)
   {
     c = getchar();
@@ -190,8 +191,7 @@ void read_eval_shell_loop()
 
   do 
   {
-    printf("|>");
-    readed_line = shell_read_command();
+    readed_line = shell_wait_command_input();
     if (DEBUG_INFO)
     {
       printf("linha lida: [%s]\n", readed_line); // @note apenas para debugar
