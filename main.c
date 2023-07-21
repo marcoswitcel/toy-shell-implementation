@@ -7,7 +7,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <termios.h>
+#include <ctype.h>
 
+#include "./types.h"
 #include "./builtins.c"
 
 // Desenvolvimento
@@ -16,6 +18,17 @@
 #define LINE_BUFFER_SIZE 1024
 
 int shell_launch_process(char **args);
+
+static inline void print_input_mark(const char *cstring)
+{
+  if (cstring)
+  {
+    printf("|>%s", cstring); // @note organizar reimpressão da marcação inicial
+    return;
+  }
+
+  printf("|>");
+}
 
 char *shell_wait_command_input(void)
 {
@@ -32,7 +45,7 @@ char *shell_wait_command_input(void)
     exit(EXIT_FAILURE);
   }
 
-  printf("|>");
+  print_input_mark(NULL);
   while (true)
   {
     c = getchar();
@@ -46,13 +59,25 @@ char *shell_wait_command_input(void)
 
       return buffer;
     }
-    else if (c == 12) // @note Crtl + L
+    else if (c == FORM_FEED) // @note Crtl + L
     {
       char *program = "clear";
       char *clear_process[2] = { program, NULL };
       shell_launch_process(clear_process);
       buffer[position] = '\0';
-      printf("|>%s", buffer); // @note organizar reimpressão da marcação inicial
+      print_input_mark(buffer); // @note organizar reimpressão da marcação inicial
+    }
+    else if (iscntrl(c))
+    {
+      if (c == BACKSPACE)
+      {
+        if (position > 0)
+        {
+          position--;
+          buffer[position] = '\0';
+          print_input_mark(buffer); // @note organizar reimpressão da marcação inicial
+        }
+      };
     }
     else
     {
