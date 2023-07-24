@@ -33,7 +33,7 @@ void destroy_buffer(Buffer *buffer)
     free(buffer);
 }
 
-bool buffer_ensure_enough_space(Buffer *buffer)
+static inline bool buffer_ensure_enough_space(Buffer *buffer)
 {
     if (buffer->index >= buffer->buffer_size)
     {
