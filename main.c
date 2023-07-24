@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -32,18 +33,8 @@ static inline void print_input_mark(const char *cstring)
 
 char *shell_wait_command_input(void)
 {
-  unsigned buffer_size = LINE_BUFFER_SIZE;
-  unsigned position = 0;
-  // @note Essa é a memória que será retornada
-  char *buffer = malloc(sizeof(char) * buffer_size);
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
   int c;
-
-  // @note Acho que poderia ter um buffer separado para gerenciar essa memória
-  if (!buffer_size)
-  {
-    fprintf(stderr, "Internal: Erro de alocação");
-    exit(EXIT_FAILURE);
-  }
 
   print_input_mark(NULL);
   while (true)
@@ -53,53 +44,33 @@ char *shell_wait_command_input(void)
     if (c == EOF || c == '\n')
     {
       printf("\n");// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
-      buffer[position] = '\0';
+      char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
-      if (DEBUG_INFO) printf("linha lida: [%s]\n", buffer); // @note apenas para debugar
+      if (DEBUG_INFO) printf("linha lida: [%s]\n", result); // @note apenas para debugar
 
-      return buffer;
+      destroy_buffer(buffer);
+      return result;
     }
     else if (c == FORM_FEED) // @note Crtl + L
     {
       builtin_clear(NULL);
-      buffer[position] = '\0';
-      print_input_mark(buffer); // @note organizar reimpressão da marcação inicial
+      print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
     }
     else if (iscntrl(c))
     {
       if (c == BACKSPACE)
       {
-        if (position > 0)
+        if (buffer_pop(buffer))
         {
           builtin_clear(NULL);
-          position--;
-          buffer[position] = '\0';
-          print_input_mark(buffer); // @note organizar reimpressão da marcação inicial
+          print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
         }
       };
     }
     else
     {
       printf("%c", c);// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
-      buffer[position] = c;
-      position++;
-    }
-
-    if (position >= buffer_size)
-    {
-      buffer_size += LINE_BUFFER_SIZE;
-      char *new_buffer = realloc(buffer, buffer_size);
-      if (!new_buffer)
-      {
-        fprintf(stderr, "Internal: Erro de alocação");
-        free(buffer); // @note Embora vai ser encerrado o processo, vou deixar o comando de `free` aqui pra não esquecer
-        // @note Muito prematura esse encerramento, mas por hora fica assim.
-        exit(EXIT_FAILURE);
-      }
-      else
-      {
-        buffer = new_buffer;
-      }
+      buffer_push(buffer, c); // @todo João, testar
     }
   }
 }
