@@ -11,6 +11,8 @@
 #include <ctype.h>
 
 #include "./types.h"
+#include "./list.h"
+#include "./parser.h"
 #include "./builtins.c"
 
 // Desenvolvimento
@@ -73,6 +75,15 @@ char *shell_wait_command_input(void)
       buffer_push(buffer, c); // @todo João, testar
     }
   }
+}
+
+void shell_parse_command(const char *input_command)
+{
+  Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
+  Parse_Context context = create_parse_context(input_command);
+  Token token_test = { 0 };
+  push(tokens, token_test);
+  printf("%d %d", context.index, token_test.type);
 }
 
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
@@ -200,6 +211,7 @@ void read_eval_shell_loop()
   do 
   {
     readed_line = shell_wait_command_input();
+    shell_parse_command(readed_line);
     splitted_by_delimiter = shell_split_command_into_args(readed_line);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
