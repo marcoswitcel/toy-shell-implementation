@@ -16,7 +16,7 @@
 #include "./builtins.c"
 
 // Desenvolvimento
-#define DEBUG_INFO false
+#define DEBUG_INFO true
 
 #define LINE_BUFFER_SIZE 1024
 
@@ -79,11 +79,13 @@ char *shell_wait_command_input(void)
 
 void shell_parse_command(const char *input_command)
 {
-  Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
   Parse_Context context = create_parse_context(input_command);
-  Token token_test = { 0 };
-  push(tokens, token_test);
-  printf("%d %d", context.index, token_test.type);
+  Sequence_Of_Tokens *tokens = parse(&context);
+  if (DEBUG_INFO) printf("[[ tokens size: %d ]]", tokens->index);
+  
+  // Token token_test = { 0 };
+  // push(tokens, token_test);
+  // printf("[[ %d %d ]]", context.index, token_test.type);
 }
 
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
