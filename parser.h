@@ -171,7 +171,7 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
 {
   Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
 
-  while (context->index < context->length)
+  while (!is_finished(context))
   {
     bool success_parsing = false;
     Token token = { 0 };
