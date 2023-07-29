@@ -120,7 +120,10 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
       }
       else
       {
-        completed_string = true;
+        if (buffer->index > 0)
+        {
+          completed_string = true;
+        }
         break;
       }
     }
