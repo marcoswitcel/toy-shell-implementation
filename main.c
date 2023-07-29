@@ -84,18 +84,30 @@ char **shell_parse_command_into_args(const char *input_command)
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
-  char **args = malloc((tokens->index + 1) * sizeof(char *));
+  unsigned arg_count = 0;
   for (unsigned i = 0; i < tokens->index; i++)
   {
-    args[i] = (char *) tokens->sequence[i].data.string.cstring;
+    if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
+    {
+      arg_count++;
+    }
   }
-  args[tokens->index] = NULL;
+  char **args = malloc((arg_count + 1) * sizeof(char *));
 
   if (!args)
   {
     fprintf(stderr, "Internal: Erro de alocação");
     exit(EXIT_FAILURE);
   }
+
+  for (unsigned i = 0; i < tokens->index; i++)
+  {
+    if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
+    {
+      args[i] = (char *) tokens->sequence[i].data.string.cstring;
+    }
+  }
+  args[tokens->index] = NULL;
 
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
