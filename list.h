@@ -2,17 +2,22 @@
 #include <stdio.h>
 
 typedef enum Token_Type {
-  STRING
+  STRING, GLOBBING,
 } Token_Type;
 
 typedef struct String_Token {
   const char *cstring;
 } String_Token;
 
+typedef struct Globbing_Token {
+  const char *cstring;
+} Globbing_Token;
+
 typedef struct Token {
   Token_Type type;
   union {
     String_Token string;
+    Globbing_Token Globbing;
   } data;
 } Token;
 

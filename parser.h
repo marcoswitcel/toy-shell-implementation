@@ -167,6 +167,21 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   *success = completed_string;
 }
 
+void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
+{
+  // @todo João, terminar de implementar esse parser implementar
+  *success = false;
+}
+
+typedef void (*Parse_Function)(Parse_Context *, Token *, bool *);
+
+const Parse_Function parse_functions[] = {
+  &try_parse_string,
+  &try_parse_globbing,
+};
+
+#define SIZEO_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
+
 Sequence_Of_Tokens *parse(Parse_Context *context)
 {
   Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
@@ -178,20 +193,23 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
 
     skip_whitespace(context);
 
-    try_parse_string(context, &token, &success_parsing);
-    // @todo João, falta parsear símbolos como ">" ">>" separadamente para poder tratar como comandos
-
-    if (success_parsing)
+    for (unsigned i = 0; i < SIZEO_OF_ARRAY(parse_functions); i++)
     {
-      push(tokens, token);
-      if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
-    }
-    else
-    {
-      // @note por hora encerra aqui como não tem mais tipos de tokens
-      break;
-    }
+      Parse_Function parse_function = parse_functions[i];
 
+      parse_function(context, &token, &success_parsing);
+
+      if (success_parsing)
+      {
+        push(tokens, token);
+        if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
+      }
+      else
+      {
+        // @note por hora encerra aqui como não tem mais tipos de tokens
+        break;
+      }
+    }
   }
 
   return tokens;
