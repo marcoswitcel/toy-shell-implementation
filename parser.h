@@ -67,6 +67,7 @@ void eat_char(Parse_Context *context)
   context->index++;
 }
 
+// @todo João, testar mais a fundo essa função
 void try_parse_string(Parse_Context *context, Token *token, bool *success)
 {
   Parse_Context internal_context = *context;
@@ -166,6 +167,7 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
     skip_whitespace(context);
 
     try_parse_string(context, &token, &success_parsing);
+    // @todo João, falta parsear símbolos como ">" ">>" separadamente para poder tratar como comandos
 
     if (success_parsing)
     {
