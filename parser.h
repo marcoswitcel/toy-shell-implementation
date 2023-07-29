@@ -62,9 +62,15 @@ static inline char peek_char(Parse_Context *context)
 {
   return context->source[context->index];
 }
+
 void eat_char(Parse_Context *context)
 {
   context->index++;
+}
+
+static inline bool is_finished(Parse_Context *context)
+{
+  return context->index >= context->length;
 }
 
 // @todo João, testar mais a fundo essa função
@@ -81,8 +87,14 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   {
     eat_char(&internal_context);
   }
+  else if (is_whitespace(peek_char(&internal_context)) || is_finished(&internal_context))
+  {
+    destroy_buffer(buffer);
+    *success = false;
+    return;
+  }
 
-  while (internal_context.index < internal_context.length)
+  while (!is_finished(&internal_context))
   {
     char current_char = peek_char(&internal_context);
 
@@ -120,10 +132,7 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
       }
       else
       {
-        if (buffer->index > 0)
-        {
-          completed_string = true;
-        }
+        completed_string = true;
         break;
       }
     }
