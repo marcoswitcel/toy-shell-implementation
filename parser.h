@@ -62,7 +62,7 @@ static inline char peek_char(Parse_Context *context)
 {
   return context->source[context->index];
 }
-char eat_char(Parse_Context *context)
+void eat_char(Parse_Context *context)
 {
   context->index++;
 }
