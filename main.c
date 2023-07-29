@@ -3,20 +3,20 @@
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <termios.h>
 #include <ctype.h>
 
+// Desenvolvimento
+#define DEBUG_INFO true
+
 #include "./types.h"
 #include "./list.h"
 #include "./parser.h"
 #include "./builtins.c"
 
-// Desenvolvimento
-#define DEBUG_INFO true
 
 #define LINE_BUFFER_SIZE 1024
 
@@ -81,11 +81,8 @@ void shell_parse_command(const char *input_command)
 {
   Parse_Context context = create_parse_context(input_command);
   Sequence_Of_Tokens *tokens = parse(&context);
-  if (DEBUG_INFO) printf("[[ tokens size: %d ]]", tokens->index);
-  
-  // Token token_test = { 0 };
-  // push(tokens, token_test);
-  // printf("[[ %d %d ]]", context.index, token_test.type);
+
+  if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 }
 
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64

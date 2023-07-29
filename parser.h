@@ -73,44 +73,84 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   bool quoted = peek_char(&internal_context) == '\'' || peek_char(&internal_context) == '"';
   char type_of_quote = quoted ? peek_char(&internal_context) : '\0';
   bool completed_string = false;
+  bool escaped_quote = false;
+  Buffer *buffer = create_buffer(1024, 1024);
 
   if (quoted)
   {
     eat_char(&internal_context);
   }
-  else if (!is_valid_string_char(peek_char(&internal_context)))
-  {
-    *success = false;
-    return;
-  }
 
-  while (true)
+  while (internal_context.index < internal_context.length)
   {
-    if (is_valid_string_char(peek_char(&internal_context)))
+    char current_char = peek_char(&internal_context);
+
+    if (current_char == '\\')
     {
+      if (escaped_quote) break;
+
+      escaped_quote = true;
       eat_char(&internal_context);
       continue;
     }
-    else if (quoted && peek_char(&internal_context) == type_of_quote)
+    else if (quoted && current_char == type_of_quote)
+    {
+      if (escaped_quote)
+      {
+        escaped_quote = false;
+        eat_char(&internal_context);
+        buffer_push(buffer, current_char);
+        continue;
+      }
+      else
+      {
+        eat_char(&internal_context);
+        completed_string = true;
+        break;
+      }
+    }
+    else if (is_whitespace(current_char))
+    {
+      if (quoted)
+      {
+        eat_char(&internal_context);
+        buffer_push(buffer, current_char);
+        continue;
+      }
+      else
+      {
+        completed_string = true;
+        break;
+      }
+    }
+    else if (is_valid_string_char(current_char))
     {
       eat_char(&internal_context);
-      completed_string = true;
-      break;
+      buffer_push(buffer, current_char);
+      continue;
     }
-    else if (is_whitespace(peek_char(&internal_context)) && !quoted)
+
+    assert(true && "Por hora devo ter coberto todos os casos nas ramificações do IFs");
+  }
+
+  if (internal_context.index == internal_context.length)
+  {
+    if (!quoted)
     {
-
+      completed_string = true;
     }
-
-    break;
   }
 
   if (completed_string)
   {
     token->type = STRING;
-    token->data.string = (String_Token) { .cstring = "Oi" }; // @todo João, terminar aqui
+    token->data.string = (String_Token) { .cstring = NULL }; // @todo João, terminar aqui
+    token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer)); // @todo João, ajustar leak aqui, ninguém está desalocando essa string
+
+    *context = internal_context;
   }
 
+  destroy_buffer(buffer);
   *success = completed_string;
 }
 
@@ -130,6 +170,7 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
     if (success_parsing)
     {
       push(tokens, token);
+      if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
     }
     else
     {
