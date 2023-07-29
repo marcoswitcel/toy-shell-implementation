@@ -10,7 +10,7 @@
 #include <ctype.h>
 
 // Desenvolvimento
-#define DEBUG_INFO true
+#define DEBUG_INFO false
 
 #include "./types.h"
 #include "./list.h"
@@ -77,17 +77,44 @@ char *shell_wait_command_input(void)
   }
 }
 
-void shell_parse_command(const char *input_command)
+char **shell_parse_command_into_args(const char *input_command)
 {
   Parse_Context context = create_parse_context(input_command);
   Sequence_Of_Tokens *tokens = parse(&context);
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
+
+  char **args = malloc((tokens->index + 1) * sizeof(char *));
+  for (unsigned i = 0; i < tokens->index; i++)
+  {
+    args[i] = (char *) tokens->sequence[i].data.string.cstring;
+  }
+  args[tokens->index] = NULL;
+
+  if (!args)
+  {
+    fprintf(stderr, "Internal: Erro de alocação");
+    exit(EXIT_FAILURE);
+  }
+
+  // @note o bloco abaixo é apenas para visualizar o resultado
+  if (DEBUG_INFO)
+  {
+    char **token = args;
+    while (*token != NULL)
+    {
+      printf("argumento extraído: [%s]\n", *token);
+      token++;
+    }
+  }
+  return args;
 }
 
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
 #define SHELL_SPLIT_COMMAND_TOKEN_DELIMITER " \t\r\n\a"
 
+// @note usar `shell_parse_command_into_args`
+// @deprecated
 char **shell_split_command_into_args(char *commands)
 {
   int buffer_size = SHELL_SPLIT_COMMAND_BUFFER_SIZE;
@@ -210,8 +237,8 @@ void read_eval_shell_loop()
   do 
   {
     readed_line = shell_wait_command_input();
-    shell_parse_command(readed_line);
-    splitted_by_delimiter = shell_split_command_into_args(readed_line);
+    //splitted_by_delimiter = shell_split_command_into_args(readed_line);
+    splitted_by_delimiter = shell_parse_command_into_args(readed_line);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     status = shell_execute_command(splitted_by_delimiter);
