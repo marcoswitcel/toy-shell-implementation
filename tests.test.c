@@ -25,6 +25,7 @@ void test_try_parse_string(void)
   
   try_parse_string(&context, &token, &success);
   assert(success);
+  assert(token.type == STRING);
   assert(token.data.string.cstring);
   assert(strcmp("ls", token.data.string.cstring) == 0);
   assert(context.index == 2);
@@ -38,6 +39,7 @@ void test_try_parse_string(void)
   
   try_parse_string(&context, &token, &success);
   assert(success);
+  assert(token.type == STRING);
   assert(context.index == 7);
   assert(token.data.string.cstring);
   assert(strcmp("-lha", token.data.string.cstring) == 0);
@@ -45,7 +47,11 @@ void test_try_parse_string(void)
 
 int main(void)
 {
+  printf("Executando testes\n");
+
   test_try_parse_string();
+  
+  printf("Testes executados com sucesso! Nenhum erro detectado.");
 
   return EXIT_SUCCESS;
 }
