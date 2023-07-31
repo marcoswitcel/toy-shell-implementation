@@ -10,3 +10,7 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-waitpid-wait-specific-child-process-end](https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-waitpid-wait-specific-child-process-end)
 * [https://medium.com/@nimeshneema/typedef-function-in-c-programming-language-968573e4cfc1](https://medium.com/@nimeshneema/typedef-function-in-c-programming-language-968573e4cfc1)
 * [https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html](https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html)
+* [https://c-for-dummies.com/blog/?p=3246](https://c-for-dummies.com/blog/?p=3246)
+* [https://stackoverflow.com/questions/4204666/how-to-list-files-in-a-directory-in-a-c-program](https://stackoverflow.com/questions/4204666/how-to-list-files-in-a-directory-in-a-c-program)
+* [https://stackoverflow.com/questions/69689586/dt-reg-undeclared-even-when-using-dirent-h-header-file-in-function](https://stackoverflow.com/questions/69689586/dt-reg-undeclared-even-when-using-dirent-h-header-file-in-function)
+* [https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html)

@@ -1,3 +1,5 @@
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -8,6 +10,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <ctype.h>
+#include <dirent.h>
 
 // Desenvolvimento
 #define DEBUG_INFO false
@@ -77,6 +80,30 @@ char *shell_wait_command_input(void)
   }
 }
 
+// @todo João, continuar implementando aqui
+unsigned get_dir_entries_names()
+{
+  unsigned count = 0;
+  DIR *current_dir = opendir(".");
+  struct dirent *dir_entry;
+  if (current_dir)
+  {
+    while(dir_entry = readdir(current_dir))
+    {
+      if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
+      {
+        if (dir_entry->d_name[0] != '.')
+        {
+          count++;
+        }
+      }
+    }
+    closedir(current_dir);
+  }
+
+  return count;
+}
+
 char **shell_parse_command_into_args(const char *input_command)
 {
   Parse_Context context = create_parse_context(input_command);
@@ -90,6 +117,25 @@ char **shell_parse_command_into_args(const char *input_command)
     if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
     {
       arg_count++;
+    }
+    if (tokens->sequence[i].type == GLOBBING && tokens->sequence[i].data.globbing.cstring)
+    {
+      DIR *current_dir = opendir(".");
+      struct dirent *dir_entry;
+      if (current_dir)
+      {
+        while(dir_entry = readdir(current_dir))
+        {
+          if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
+          {
+            if (dir_entry->d_name[0] != '.')
+            {
+              // @todo João, aqui fazer a contagem e a cópia do nome
+            }
+          }
+        }
+        closedir(current_dir);
+      }
     }
   }
   char **args = malloc((arg_count + 1) * sizeof(char *));
