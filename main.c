@@ -100,14 +100,15 @@ char **shell_parse_command_into_args(const char *input_command)
     exit(EXIT_FAILURE);
   }
 
-  for (unsigned i = 0; i < tokens->index; i++)
+  for (unsigned i = 0, j = 0; i < tokens->index; i++)
   {
     if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
     {
-      args[i] = (char *) tokens->sequence[i].data.string.cstring;
+      args[j] = (char *) tokens->sequence[i].data.string.cstring;
+      j++;
     }
   }
-  args[tokens->index] = NULL;
+  args[arg_count] = NULL;
 
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
