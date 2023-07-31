@@ -35,6 +35,7 @@ STRUCT_NAME *create_##STRUCT_NAME_LOWER_CASE(unsigned internal_memory_size, unsi
   list->index = 0;                                                                                \
   return list;                                                                                    \
 }                                                                                                 \
+                                                                                                  \
 void destroy_##STRUCT_NAME_LOWER_CASE(STRUCT_NAME *list)                                          \
 {                                                                                                 \
   assert(list->data && "Sempre deve ser válido");                                                 \

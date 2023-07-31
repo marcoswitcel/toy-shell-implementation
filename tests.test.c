@@ -16,9 +16,7 @@
 #include "./list.h"
 #include "./parser.h"
 #include "./list.macro.h"
-
-MAKE_LIST_IMPLEMENTATION(List_Of_Strings, list_of_strings, char *)
-MAKE_LIST_IMPLEMENTATION(List_Of_Floats, list_of_floats, float)
+#include "./list.implementations.h"
 
 void test_list_char_prt_implementation(void)
 {
@@ -70,6 +68,7 @@ void test_list_of_floats_implementation(void)
   list_of_floats_push(list, float_value_b);
   assert(list->index == 3);
   assert(list->data[2] == float_value_b);
+  list_of_floats_ensure_enough_space(list);
 }
 
 
