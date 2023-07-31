@@ -176,8 +176,8 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 typedef void (*Parse_Function)(Parse_Context *, Token *, bool *);
 
 const Parse_Function parse_functions[] = {
-  &try_parse_string,
   &try_parse_globbing,
+  &try_parse_string,
 };
 
 #define SIZEO_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
