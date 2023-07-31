@@ -169,7 +169,16 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
 
 void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 {
-  // @todo João, terminar de implementar esse parser implementar
+  if (peek_char(context) == '*')
+  {
+    eat_char(context);
+    *success = true;
+    token->type = GLOBBING;
+    token->data.globbing = (Globbing_Token) { .cstring = NULL };
+    token->data.globbing.cstring = copy("*");
+    return;
+  }
+
   *success = false;
 }
 
@@ -193,6 +202,7 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
 
     skip_whitespace(context);
 
+    bool progressed = false;
     for (unsigned i = 0; i < SIZEO_OF_ARRAY(parse_functions); i++)
     {
       Parse_Function parse_function = parse_functions[i];
@@ -201,15 +211,13 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
 
       if (success_parsing)
       {
+        progressed = true;
         push(tokens, token);
         if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
-      }
-      else
-      {
-        // @note por hora encerra aqui como não tem mais tipos de tokens
         break;
       }
     }
+    if (!progressed) break;
   }
 
   return tokens;

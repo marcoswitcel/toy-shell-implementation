@@ -17,7 +17,7 @@ typedef struct Token {
   Token_Type type;
   union {
     String_Token string;
-    Globbing_Token Globbing;
+    Globbing_Token globbing;
   } data;
 } Token;
 
