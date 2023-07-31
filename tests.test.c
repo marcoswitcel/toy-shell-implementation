@@ -46,6 +46,33 @@ void test_list_char_prt_implementation(void)
   assert(list->data[0] == test_name);
 }
 
+void test_list_of_floats_implementation(void)
+{
+  List_Of_Floats *list = create_list_of_floats(1024, 1024);
+  float float_value_a = 0.5;
+  float float_value_b = 0.3;
+
+  assert(list->index == 0);
+  list_of_floats_pop(list);
+  assert(list->index == 0);
+
+  list_of_floats_push(list, float_value_a);
+  assert(list->data[0] == float_value_a);
+  assert(list->index == 1);
+  list_of_floats_push(list, float_value_a);
+  assert(list->data[1] == float_value_a);
+  assert(list->index == 2);
+
+  list_of_floats_push(list, float_value_a);
+  list_of_floats_pop(list);
+  assert(list->index == 2);
+
+  list_of_floats_push(list, float_value_b);
+  assert(list->index == 3);
+  assert(list->data[2] == float_value_b);
+}
+
+
 void test_try_parse_string_01(void)
 {
   Parse_Context context = create_parse_context("ls -lha");
@@ -105,6 +132,7 @@ int main(void)
   test_try_parse_string_01();
   test_try_parse_string_02();
   test_list_char_prt_implementation();
+  test_list_of_floats_implementation();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
