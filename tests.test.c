@@ -15,7 +15,36 @@
 #include "./types.h"
 #include "./list.h"
 #include "./parser.h"
+#include "./list.macro.h"
 
+MAKE_LIST_IMPLEMENTATION(List_Of_Strings, list_of_strings, char *)
+MAKE_LIST_IMPLEMENTATION(List_Of_Floats, list_of_floats, float)
+
+void test_list_char_prt_implementation(void)
+{
+  List_Of_Strings *list = create_list_of_strings(1024, 1024);
+  char test_name[] = "Tux";
+
+  assert(list->index == 0);
+  list_of_strings_pop(list);
+  assert(list->index == 0);
+
+  list_of_strings_push(list, test_name);
+  assert(list->index == 1);
+  list_of_strings_push(list, test_name);
+  assert(list->index == 2);
+
+  list_of_strings_push(list, test_name);
+  list_of_strings_pop(list);
+
+  assert(list->index == 2);
+
+  assert(list->data[0] && list->data[1]);
+
+  assert(list->data[0] == list->data[1]);
+
+  assert(list->data[0] == test_name);
+}
 
 void test_try_parse_string_01(void)
 {
@@ -75,6 +104,7 @@ int main(void)
 
   test_try_parse_string_01();
   test_try_parse_string_02();
+  test_list_char_prt_implementation();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
