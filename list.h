@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 typedef enum Token_Type {
-  STRING, GLOBBING,
+  UNINITIALIZED = 0, STRING = 1, GLOBBING = 2,
 } Token_Type;
 
 typedef struct String_Token {
