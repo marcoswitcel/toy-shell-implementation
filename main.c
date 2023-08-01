@@ -17,6 +17,8 @@
 
 #include "./types.h"
 #include "./list.h"
+#include "./list.macro.h"
+#include "./list.implementations.h"
 #include "./parser.h"
 #include "./builtins.c"
 
@@ -80,43 +82,19 @@ char *shell_wait_command_input(void)
   }
 }
 
-// @todo João, continuar implementando aqui
-unsigned get_dir_entries_names()
-{
-  unsigned count = 0;
-  DIR *current_dir = opendir(".");
-  struct dirent *dir_entry;
-  if (current_dir)
-  {
-    while(dir_entry = readdir(current_dir))
-    {
-      if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
-      {
-        if (dir_entry->d_name[0] != '.')
-        {
-          count++;
-        }
-      }
-    }
-    closedir(current_dir);
-  }
-
-  return count;
-}
-
 char **shell_parse_command_into_args(const char *input_command)
 {
   Parse_Context context = create_parse_context(input_command);
+  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   Sequence_Of_Tokens *tokens = parse(&context);
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
-  unsigned arg_count = 0;
   for (unsigned i = 0; i < tokens->index; i++)
   {
     if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
     {
-      arg_count++;
+      list_of_strings_push(list_of_args, tokens->sequence[i].data.string.cstring);
     }
     if (tokens->sequence[i].type == GLOBBING && tokens->sequence[i].data.globbing.cstring)
     {
@@ -124,13 +102,13 @@ char **shell_parse_command_into_args(const char *input_command)
       struct dirent *dir_entry;
       if (current_dir)
       {
-        while(dir_entry = readdir(current_dir))
+        while((dir_entry = readdir(current_dir)))
         {
           if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
           {
             if (dir_entry->d_name[0] != '.')
             {
-              // @todo João, aqui fazer a contagem e a cópia do nome
+              list_of_strings_push(list_of_args, copy((const char *) &dir_entry->d_name));
             }
           }
         }
@@ -138,7 +116,7 @@ char **shell_parse_command_into_args(const char *input_command)
       }
     }
   }
-  char **args = malloc((arg_count + 1) * sizeof(char *));
+  char **args = malloc((list_of_args->index + 1) * sizeof(char *));
 
   if (!args)
   {
@@ -146,15 +124,11 @@ char **shell_parse_command_into_args(const char *input_command)
     exit(EXIT_FAILURE);
   }
 
-  for (unsigned i = 0, j = 0; i < tokens->index; i++)
+  for (unsigned i = 0; i < list_of_args->index; i++)
   {
-    if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
-    {
-      args[j] = (char *) tokens->sequence[i].data.string.cstring;
-      j++;
-    }
+    args[i] = (char *) list_of_args->data[i];
   }
-  args[arg_count] = NULL;
+  args[list_of_args->index] = NULL;
 
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
