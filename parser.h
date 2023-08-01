@@ -182,10 +182,26 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
   *success = false;
 }
 
+void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
+{
+  if (peek_char(context) == '>')
+  {
+    eat_char(context);
+    *success = true;
+    token->type = REDIRECT;
+    token->data.redirect = (Redirect_Token) { .cstring = NULL };
+    token->data.redirect.cstring = copy(">");
+    return;
+  }
+
+  *success = false;
+}
+
 typedef void (*Parse_Function)(Parse_Context *, Token *, bool *);
 
 const Parse_Function parse_functions[] = {
   &try_parse_globbing,
+  &try_parse_redirect,
   &try_parse_string,
 };
 
