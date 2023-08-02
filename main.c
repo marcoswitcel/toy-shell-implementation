@@ -317,7 +317,7 @@ void read_eval_shell_loop()
     }
     else
     {
-      printf("Erro ao executar o comando: %s", error);
+      printf("Erro ao executar o comando: %s\n", error);
       free((void *) error);
     }
 
@@ -329,7 +329,6 @@ void read_eval_shell_loop()
     {
       free(splitted_by_delimiter);
     }
-    printf("\n");
     // @note loop infinito por enquanto
   } while (status);
 }
