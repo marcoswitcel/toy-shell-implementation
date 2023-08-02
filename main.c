@@ -38,6 +38,34 @@ static inline void print_input_mark(const char *cstring)
   printf("|>");
 }
 
+static inline List_Of_Strings *get_all_files_for_dir(const char *path, List_Of_Strings *list_or_null, bool include_hidden)
+{
+  List_Of_Strings *list = list_or_null;
+  if (list_or_null == NULL)
+  {
+    list = create_list_of_strings(128, 128);
+  }
+
+  DIR *current_dir = opendir(path);
+  struct dirent *dir_entry;
+  if (current_dir)
+  {
+    while((dir_entry = readdir(current_dir)))
+    {
+      if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
+      {
+        if (include_hidden || dir_entry->d_name[0] != '.')
+        {
+          list_of_strings_push(list, copy((const char *) &dir_entry->d_name));
+        }
+      }
+    }
+    closedir(current_dir);
+  }
+
+  return list;
+}
+
 char *shell_wait_command_input(void)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
@@ -98,22 +126,7 @@ char **shell_parse_command_into_args(const char *input_command)
     }
     if (tokens->sequence[i].type == GLOBBING && tokens->sequence[i].data.globbing.cstring)
     {
-      DIR *current_dir = opendir(".");
-      struct dirent *dir_entry;
-      if (current_dir)
-      {
-        while((dir_entry = readdir(current_dir)))
-        {
-          if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
-          {
-            if (dir_entry->d_name[0] != '.')
-            {
-              list_of_strings_push(list_of_args, copy((const char *) &dir_entry->d_name));
-            }
-          }
-        }
-        closedir(current_dir);
-      }
+      get_all_files_for_dir(".", list_of_args, false);
     }
   }
   char **args = malloc((list_of_args->index + 1) * sizeof(char *));
