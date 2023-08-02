@@ -110,7 +110,7 @@ char *shell_wait_command_input(void)
   }
 }
 
-char **shell_parse_command_into_args(const char *input_command ,const char **error)
+char **shell_parse_command(const char *input_command ,const char **error)
 {
   Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -182,7 +182,7 @@ char **shell_parse_command_into_args(const char *input_command ,const char **err
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
 #define SHELL_SPLIT_COMMAND_TOKEN_DELIMITER " \t\r\n\a"
 
-// @note usar `shell_parse_command_into_args`
+// @note usar `shell_parse_command`
 // @deprecated
 char **shell_split_command_into_args(char *commands)
 {
@@ -308,7 +308,7 @@ void read_eval_shell_loop()
     const char *error = NULL;
     readed_line = shell_wait_command_input();
     //splitted_by_delimiter = shell_split_command_into_args(readed_line);
-    splitted_by_delimiter = shell_parse_command_into_args(readed_line, &error);
+    splitted_by_delimiter = shell_parse_command(readed_line, &error);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     if (error == NULL)
