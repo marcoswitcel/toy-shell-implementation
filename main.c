@@ -110,7 +110,7 @@ char *shell_wait_command_input(void)
   }
 }
 
-char **shell_parse_command_into_args(const char *input_command)
+char **shell_parse_command_into_args(const char *input_command ,const char **error)
 {
   Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -118,15 +118,38 @@ char **shell_parse_command_into_args(const char *input_command)
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
+  // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
+  // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
+  bool has_redirec_token = false;
+  bool redirect_expect_file_name = false;
   for (unsigned i = 0; i < tokens->index; i++)
   {
-    if (tokens->sequence[i].type == STRING && tokens->sequence[i].data.string.cstring)
+    Token token = tokens->sequence[i];
+
+    if (token.type == STRING && token.data.string.cstring)
     {
-      list_of_strings_push(list_of_args, tokens->sequence[i].data.string.cstring);
+      if (redirect_expect_file_name)
+      {
+        redirect_expect_file_name = false;
+        // @todo João, aqui precisa consumir o nome do arquivo quando `redirect_expect_file_name` for `true`
+      }
+      else
+      {
+        list_of_strings_push(list_of_args, token.data.string.cstring);
+      }
     }
-    if (tokens->sequence[i].type == GLOBBING && tokens->sequence[i].data.globbing.cstring)
+    if (token.type == GLOBBING && token.data.globbing.cstring)
     {
       get_all_files_for_dir(".", list_of_args, false);
+    }
+    if (token.type == REDIRECT && token.data.redirect.cstring)
+    {
+      if (has_redirec_token)
+      {
+        *error = copy("Token > encontrado mais de uma vez");
+      }
+      has_redirec_token = true;
+      redirect_expect_file_name = true;
     }
   }
   char **args = malloc((list_of_args->index + 1) * sizeof(char *));
@@ -282,12 +305,21 @@ void read_eval_shell_loop()
 
   do 
   {
+    const char *error = NULL;
     readed_line = shell_wait_command_input();
     //splitted_by_delimiter = shell_split_command_into_args(readed_line);
-    splitted_by_delimiter = shell_parse_command_into_args(readed_line);
+    splitted_by_delimiter = shell_parse_command_into_args(readed_line, &error);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
-    status = shell_execute_command(splitted_by_delimiter);
+    if (error == NULL)
+    {
+      status = shell_execute_command(splitted_by_delimiter);
+    }
+    else
+    {
+      printf("Erro ao executar o comando: %s", error);
+      free((void *) error);
+    }
 
     if (readed_line)
     {
