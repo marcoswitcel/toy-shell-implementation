@@ -109,7 +109,7 @@ char *shell_wait_command_input(void)
   }
 }
 
-char **shell_parse_command(const char *input_command ,const char **error)
+Process_Parameter shell_parse_command(const char *input_command, const char **error)
 {
   Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -121,6 +121,7 @@ char **shell_parse_command(const char *input_command ,const char **error)
   // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
+  const char *output_filename = NULL;
   for (unsigned i = 0; i < tokens->index; i++)
   {
     Token token = tokens->sequence[i];
@@ -131,6 +132,7 @@ char **shell_parse_command(const char *input_command ,const char **error)
       {
         redirect_expect_file_name = false;
         // @todo João, aqui precisa consumir o nome do arquivo quando `redirect_expect_file_name` for `true`
+        output_filename = token.data.string.cstring;
       }
       else
       {
@@ -175,7 +177,18 @@ char **shell_parse_command(const char *input_command ,const char **error)
       token++;
     }
   }
-  return args;
+
+  Process_Parameter process = { .args = args, .fd_stdout = -1, };
+  if (output_filename)
+  {
+    int fd = open(output_filename, O_RDWR|O_CREAT, 0600);
+    if (fd == -1)
+    {
+      printf("Internal: Erro abrindo arquivo '%s'", output_filename);
+    }
+    process.fd_stdout = fd;
+  }
+  return process;
 }
 
 #define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
@@ -246,8 +259,10 @@ Builtin_Function has_builtin_for(const char *cstring)
   return NULL;
 }
 
-int shell_execute_command(char **args)
+int shell_execute_command(const Process_Parameter process_parameter)
 {
+  char **args = process_parameter.args;
+
   if (args[0] == NULL)
   {
     // @note De fato acontece?
@@ -260,7 +275,6 @@ int shell_execute_command(char **args)
     return builtin_func(args);
   }
 
-  Process_Parameter process_parameter = { .args = args, .fd_stdout = -1, };
   return launch_process(process_parameter);
 }
 
@@ -268,7 +282,6 @@ int shell_execute_command(char **args)
 void read_eval_shell_loop()
 {
   char *readed_line;
-  char **splitted_by_delimiter;
   int status = 0;
 
   do 
@@ -276,12 +289,12 @@ void read_eval_shell_loop()
     const char *error = NULL;
     readed_line = shell_wait_command_input();
     //splitted_by_delimiter = shell_split_command_into_args(readed_line);
-    splitted_by_delimiter = shell_parse_command(readed_line, &error);
+    Process_Parameter process_parameter = shell_parse_command(readed_line, &error);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     if (error == NULL)
     {
-      status = shell_execute_command(splitted_by_delimiter);
+      status = shell_execute_command(process_parameter);
     }
     else
     {
@@ -293,9 +306,10 @@ void read_eval_shell_loop()
     {
       free(readed_line);
     }
-    if (splitted_by_delimiter)
+    if (process_parameter.args)
     {
-      free(splitted_by_delimiter);
+      free(process_parameter.args);
+      process_parameter.args = NULL;
     }
     // @note loop infinito por enquanto
   } while (status);
