@@ -62,7 +62,7 @@ int builtin_help(char **args)
     printf("  %s\n", builtin_cstring[i]);
   }
 
-  printf("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.");
+  printf("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n");
   
   return 1;
 }
@@ -93,4 +93,15 @@ int builtin_clear(char **args)
   return 1;
 }
 
+Builtin_Function has_builtin_for(const char *cstring)
+{
+  for (int i = 0; i < number_of_builtins; i++)
+  {
+    if (strcmp(cstring, builtin_cstring[i]) == 0)
+    {
+      return builtin_func[i];
+    }
+  }
 
+  return NULL;
+}

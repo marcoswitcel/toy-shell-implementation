@@ -191,19 +191,6 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   return process;
 }
 
-Builtin_Function has_builtin_for(const char *cstring)
-{
-  for (int i = 0; i < number_of_builtins; i++)
-  {
-    if (strcmp(cstring, builtin_cstring[i]) == 0)
-    {
-      return builtin_func[i];
-    }
-  }
-
-  return NULL;
-}
-
 int shell_execute_command(const Process_Parameter process_parameter)
 {
   char **args = process_parameter.args;
