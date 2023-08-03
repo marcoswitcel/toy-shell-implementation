@@ -260,7 +260,8 @@ int shell_execute_command(char **args)
     return builtin_func(args);
   }
 
-  return launch_process(args, -1);
+  Process_Parameter process_parameter = { .args = args, .fd_stdout = -1, };
+  return launch_process(process_parameter);
 }
 
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.

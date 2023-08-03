@@ -11,7 +11,7 @@ typedef struct Process_Parameter {
     int fd_stdout;
 } Process_Parameter;
 
-int launch_process(char **args, int fd_stdout)
+int launch_process(const Process_Parameter process_parameter)
 {
   pid_t pid;
   int status;
@@ -20,12 +20,13 @@ int launch_process(char **args, int fd_stdout)
 
   if (pid == 0)
   {
-    if (fd_stdout > 0)
+    if (process_parameter.fd_stdout > 0)
     {
-      dup2(fd_stdout, STDOUT_FILENO);
+      dup2(process_parameter.fd_stdout, STDOUT_FILENO);
     }
+
     // processo filho
-    if (execvp(args[0], args) == -1)
+    if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {
       printf("Internal: Processo filho não pode executar o programa alvo");
     }
@@ -44,7 +45,7 @@ int launch_process(char **args, int fd_stdout)
 
   }
 
-  close(fd_stdout);
+  close(process_parameter.fd_stdout);
 
   return 1;
 }
