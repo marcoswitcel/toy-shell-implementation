@@ -81,8 +81,7 @@ int builtin_exit(char **args)
 int builtin_clear(char **args)
 {
   // @todo João, reimplementar a limpeza de tela de outra forma, sem o comando clear
-  char *program = "clear";
-  char *clear_process[2] = { program, NULL };
+  char *clear_process[2] = { "clear", NULL };
   Process_Parameter process_parameter = { .args = clear_process, .fd_stdout = -1, };
   launch_process(process_parameter);
 
