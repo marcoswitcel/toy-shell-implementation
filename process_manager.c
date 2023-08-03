@@ -1,14 +1,22 @@
 #ifndef PROCESS_MANAGER_C
 #define PROCESS_MANAGER_C
 
+#include <assert.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "./list.implementations.h"
+
+/**
+ * @brief o argv da família de comandos `exec` recebe um array de ponteiros para char terminado com null
+ */
+typedef char** Null_Terminated_Pointer_Array;
+
 typedef struct Process_Parameter {
-    char **args;
-    int fd_stdout;
+  Null_Terminated_Pointer_Array args;
+  int fd_stdout;
 } Process_Parameter;
 
 int launch_process(const Process_Parameter process_parameter)
@@ -50,5 +58,24 @@ int launch_process(const Process_Parameter process_parameter)
   return 1;
 }
 
+Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
+{
+  assert(list);
+  Null_Terminated_Pointer_Array args = malloc((list->index + 1) * sizeof(char *));
+
+  if (!args)
+  {
+    fprintf(stderr, "Internal: Erro de alocação");
+    exit(EXIT_FAILURE);
+  }
+
+  for (unsigned i = 0; i < list->index; i++)
+  {
+    args[i] = (char *) list->data[i];
+  }
+  args[list->index] = NULL;
+
+  return args;
+}
 
 #endif // PROCESS_MANAGER_C

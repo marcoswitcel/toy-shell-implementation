@@ -15,11 +15,10 @@
 // Desenvolvimento
 #define DEBUG_INFO false
 
+#include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./types.h"
 #include "./list.h"
-#include "./list.macro.h"
-#include "./list.implementations.h"
 #include "./parser.h"
 #include "./builtins.c"
 
@@ -153,19 +152,8 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
       redirect_expect_file_name = true;
     }
   }
-  char **args = malloc((list_of_args->index + 1) * sizeof(char *));
-
-  if (!args)
-  {
-    fprintf(stderr, "Internal: Erro de alocação");
-    exit(EXIT_FAILURE);
-  }
-
-  for (unsigned i = 0; i < list_of_args->index; i++)
-  {
-    args[i] = (char *) list_of_args->data[i];
-  }
-  args[list_of_args->index] = NULL;
+  
+  Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
 
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
