@@ -15,6 +15,7 @@
 // Desenvolvimento
 #define DEBUG_INFO false
 
+#include "./process_manager.c"
 #include "./types.h"
 #include "./list.h"
 #include "./list.macro.h"
@@ -24,8 +25,6 @@
 
 
 #define LINE_BUFFER_SIZE 1024
-
-int shell_launch_process(char **args);
 
 static inline void print_input_mark(const char *cstring)
 {
@@ -234,38 +233,6 @@ char **shell_split_command_into_args(char *commands)
   return tokens;
 }
 
-int shell_launch_process(char **args)
-{
-  pid_t pid;
-  int status;
-
-  pid = fork();
-
-  if (pid == 0)
-  {
-    // processo filho
-    if (execvp(args[0], args) == -1)
-    {
-      printf("Internal: Processo filho não pode executar o programa alvo");
-    }
-    exit(EXIT_FAILURE);
-  }
-  else if (pid < 0)
-  {
-    printf("Internal: Processo filho não iniciou");
-  }
-  else
-  {
-    do
-    {
-      waitpid(pid, &status, WUNTRACED);
-    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
-  }
-
-  return 1;
-}
-
 Builtin_Function has_builtin_for(const char *cstring)
 {
   for (int i = 0; i < number_of_builtins; i++)
@@ -293,7 +260,7 @@ int shell_execute_command(char **args)
     return builtin_func(args);
   }
 
-  return shell_launch_process(args);
+  return launch_process(args, -1);
 }
 
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
