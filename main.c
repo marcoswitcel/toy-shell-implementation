@@ -191,61 +191,6 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   return process;
 }
 
-#define SHELL_SPLIT_COMMAND_BUFFER_SIZE 64
-#define SHELL_SPLIT_COMMAND_TOKEN_DELIMITER " \t\r\n\a"
-
-// @note usar `shell_parse_command`
-// @deprecated
-char **shell_split_command_into_args(char *commands)
-{
-  int buffer_size = SHELL_SPLIT_COMMAND_BUFFER_SIZE;
-  int position = 0;
-  char **tokens = malloc(buffer_size * sizeof(char *));
-  char *token;
-
-  if (!tokens)
-  {
-    fprintf(stderr, "Internal: Erro de alocação");
-    exit(EXIT_FAILURE);
-  }
-
-  /**
-   * @note strtok retorna ponteiros para dentro da string provida, ele altera a string colocando '\0' aonde encontrar o delimitador provido.
-   */
-  token = strtok(commands, SHELL_SPLIT_COMMAND_TOKEN_DELIMITER);
-  while (token != NULL)
-  {
-    tokens[position] = token;
-    position++;
-
-    if (position >= buffer_size)
-    {
-      buffer_size += SHELL_SPLIT_COMMAND_BUFFER_SIZE;
-      tokens = realloc(tokens, buffer_size * sizeof(char *));
-      if (!tokens)
-      {
-        fprintf(stderr, "Internal: Erro de alocação");
-        exit(EXIT_FAILURE);
-      }
-    }
-
-    token = strtok(NULL, SHELL_SPLIT_COMMAND_TOKEN_DELIMITER);
-  }
-
-  tokens[position] = NULL;
-  // @note o bloco abaixo é apenas para visualizar o resultado
-  if (DEBUG_INFO)
-  {
-    char **token = tokens;
-    while (*token != NULL)
-    {
-      printf("argumento extraído: [%s]\n", *token);
-      token++;
-    }
-  }
-  return tokens;
-}
-
 Builtin_Function has_builtin_for(const char *cstring)
 {
   for (int i = 0; i < number_of_builtins; i++)
@@ -281,14 +226,12 @@ int shell_execute_command(const Process_Parameter process_parameter)
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
-  char *readed_line;
   int status = 0;
 
   do 
   {
     const char *error = NULL;
-    readed_line = shell_wait_command_input();
-    //splitted_by_delimiter = shell_split_command_into_args(readed_line);
+    char *readed_line = shell_wait_command_input();
     Process_Parameter process_parameter = shell_parse_command(readed_line, &error);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
