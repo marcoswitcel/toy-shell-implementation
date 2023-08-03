@@ -15,7 +15,6 @@
 #include "./types.h"
 #include "./list.h"
 #include "./parser.h"
-#include "./list.macro.h"
 #include "./list.implementations.h"
 
 void test_list_char_prt_implementation(void)
