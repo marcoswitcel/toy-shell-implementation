@@ -123,9 +123,46 @@ void test_try_parse_string_02(void)
   assert(success == false);
 }
 
-void test_parse(void)
+void test_parse_01(void)
 {
-  const char parse_input_sample[] = "echo teste * > arquivo.txt";
+  const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  assert(context.error == NULL);
+  assert(context.index == 0);
+  assert(context.length == strlen(parse_input_sample));
+
+  Sequence_Of_Tokens *tokens = parse(&context);
+
+  assert(tokens->index == 6);
+
+  assert(context.error == NULL);
+  assert(context.index == context.length);
+  assert(context.length == strlen(parse_input_sample));
+
+  
+  assert(tokens->data[0].type == STRING);
+  assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
+
+  assert(tokens->data[1].type == STRING);
+  assert(tokens->data[1].data.string.cstring && strcmp(tokens->data[1].data.string.cstring, "teste") == 0);
+
+  assert(tokens->data[2].type == STRING);
+  assert(tokens->data[2].data.string.cstring && strcmp(tokens->data[2].data.string.cstring, "teste2") == 0);
+
+  assert(tokens->data[3].type == GLOBBING);
+  assert(tokens->data[3].data.globbing.cstring && strcmp(tokens->data[3].data.globbing.cstring, "*") == 0);
+
+  assert(tokens->data[4].type == REDIRECT);
+  assert(tokens->data[4].data.redirect.cstring && strcmp(tokens->data[4].data.redirect.cstring, ">") == 0);
+
+  assert(tokens->data[5].type == STRING);
+  assert(tokens->data[5].data.string.cstring && strcmp(tokens->data[5].data.string.cstring, "arquivo.txt") == 0);
+}
+
+void test_parse_02(void)
+{
+  const char parse_input_sample[] = "echo \"teste' teste2\" * > arquivo.txt";
 
   Parse_Context context = create_parse_context(parse_input_sample);
   assert(context.error == NULL);
@@ -145,7 +182,7 @@ void test_parse(void)
   assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
 
   assert(tokens->data[1].type == STRING);
-  assert(tokens->data[1].data.string.cstring && strcmp(tokens->data[1].data.string.cstring, "teste") == 0);
+  assert(tokens->data[1].data.string.cstring && strcmp(tokens->data[1].data.string.cstring, "teste' teste2") == 0);
 
   assert(tokens->data[2].type == GLOBBING);
   assert(tokens->data[2].data.globbing.cstring && strcmp(tokens->data[2].data.globbing.cstring, "*") == 0);
@@ -165,7 +202,8 @@ int main(void)
   test_try_parse_string_02();
   test_list_char_prt_implementation();
   test_list_of_floats_implementation();
-  test_parse();
+  test_parse_01();
+  test_parse_02();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
