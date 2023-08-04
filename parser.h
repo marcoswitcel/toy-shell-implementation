@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "./list.implementations.h"
+
 typedef struct Parse_Context {
   const char *source;
   unsigned length;
@@ -228,7 +230,7 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
       if (success_parsing)
       {
         progressed = true;
-        push(tokens, token);
+        sequence_of_tokens_push(tokens, token);
         if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
         break;
       }

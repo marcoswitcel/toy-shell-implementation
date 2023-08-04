@@ -13,7 +13,7 @@
 #define DEBUG_INFO true
 
 #include "./types.h"
-#include "./list.h"
+#include "./tokens.h"
 #include "./parser.h"
 #include "./list.implementations.h"
 

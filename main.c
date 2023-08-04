@@ -18,7 +18,7 @@
 #include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./types.h"
-#include "./list.h"
+#include "./tokens.h"
 #include "./parser.h"
 #include "./builtins.c"
 
@@ -127,7 +127,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   const char *output_filename = NULL;
   for (unsigned i = 0; i < tokens->index; i++)
   {
-    Token token = tokens->sequence[i];
+    Token token = tokens->data[i];
 
     if (token.type == STRING && token.data.string.cstring)
     {
