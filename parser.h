@@ -209,6 +209,9 @@ const Parse_Function parse_functions[] = {
 
 #define SIZEO_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
 
+// @note João, bug para corrigir, possivelmente mais bugs relacionados
+// |>echo asd "asdads \' asd"
+// asd
 Sequence_Of_Tokens *parse(Parse_Context *context)
 {
   Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
