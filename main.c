@@ -118,6 +118,12 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
   Sequence_Of_Tokens *tokens = parse(&context);
 
+  if (context.error)
+  {
+    *error = context.error;
+    return (Process_Parameter) { .args = NULL, .fd_stdout = -1, };
+  }
+
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
   // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
@@ -205,9 +211,7 @@ int shell_execute_command(const Process_Parameter process_parameter)
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
-  int status = 0;
-
-  do 
+  while (true)
   {
     const char *error = NULL;
     char *readed_line = shell_wait_command_input();
@@ -216,7 +220,7 @@ void read_eval_shell_loop()
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     if (error == NULL)
     {
-      status = shell_execute_command(process_parameter);
+      shell_execute_command(process_parameter);
     }
     else
     {
@@ -233,8 +237,7 @@ void read_eval_shell_loop()
       free(process_parameter.args);
       process_parameter.args = NULL;
     }
-    // @note loop infinito por enquanto
-  } while (status);
+  }
 }
 
 static struct termios original_config;

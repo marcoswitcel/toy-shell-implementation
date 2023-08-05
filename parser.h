@@ -164,6 +164,10 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
 
     *context = internal_context;
   }
+  else if (quoted)
+  {
+    context->error = copy("Error tokeniznado string.");
+  }
 
   destroy_buffer(buffer);
   *success = completed_string;
@@ -235,6 +239,10 @@ Sequence_Of_Tokens *parse(Parse_Context *context)
         progressed = true;
         sequence_of_tokens_push(tokens, token);
         if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
+        break;
+      }
+      else if (context->error)
+      {
         break;
       }
     }
