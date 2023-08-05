@@ -123,6 +123,27 @@ void test_try_parse_string_02(void)
   assert(success == false);
 }
 
+
+void test_try_parse_string_03(void)
+{
+  Parse_Context context = create_parse_context("echo \"ads");
+  Token token = { 0 };
+  bool success = false;
+  
+  try_parse_string(&context, &token, &success);
+  assert(success);
+  assert(token.type == STRING);
+  assert(token.data.string.cstring);
+  assert(strcmp("echo", token.data.string.cstring) == 0);
+  assert(context.index == 4);
+
+  skip_whitespace(&context);
+  assert(context.index == 5);
+  try_parse_string(&context, &token, &success);
+  assert(context.index == 5);
+  assert(success == false);
+}
+
 void test_parse_01(void)
 {
   const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
@@ -200,6 +221,7 @@ int main(void)
 
   test_try_parse_string_01();
   test_try_parse_string_02();
+  test_try_parse_string_03();
   test_list_char_prt_implementation();
   test_list_of_floats_implementation();
   test_parse_01();
