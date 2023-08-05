@@ -1,4 +1,6 @@
 
+bool exit_requested = false;
+
 typedef int (*Builtin_Function)(char **);
 
 // Definições
@@ -75,6 +77,8 @@ int builtin_exit(char **args)
   }
 
   printf("saindo, até mais!!!");
+  exit_requested = true;
+  
   return 0;
 }
 

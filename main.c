@@ -211,7 +211,7 @@ int shell_execute_command(const Process_Parameter process_parameter)
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
-  while (true)
+  while (!exit_requested)
   {
     const char *error = NULL;
     char *readed_line = shell_wait_command_input();
