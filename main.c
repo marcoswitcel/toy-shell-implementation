@@ -149,17 +149,31 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
     }
     if (token.type == GLOBBING && token.data.globbing.cstring)
     {
-      get_all_files_for_dir(".", list_of_args, false);
+      if (redirect_expect_file_name)
+      {
+        *error = copy("Token * não é um argumento válido para o redirect.");
+        break;
+      }
+      else
+      {
+        get_all_files_for_dir(".", list_of_args, false);
+      }
     }
     if (token.type == REDIRECT && token.data.redirect.cstring)
     {
       if (has_redirec_token)
       {
-        *error = copy("Token > encontrado mais de uma vez");
+        *error = copy("Token > encontrado mais de uma vez.");
+        break;
       }
       has_redirec_token = true;
       redirect_expect_file_name = true;
     }
+  }
+
+  if (*error)
+  {
+    return (Process_Parameter) { .args = NULL, .fd_stdout = -1, };
   }
   
   Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
