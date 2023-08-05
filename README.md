@@ -14,3 +14,5 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://stackoverflow.com/questions/4204666/how-to-list-files-in-a-directory-in-a-c-program](https://stackoverflow.com/questions/4204666/how-to-list-files-in-a-directory-in-a-c-program)
 * [https://stackoverflow.com/questions/69689586/dt-reg-undeclared-even-when-using-dirent-h-header-file-in-function](https://stackoverflow.com/questions/69689586/dt-reg-undeclared-even-when-using-dirent-h-header-file-in-function)
 * [https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html)
+* [https://stackoverflow.com/questions/8516823/redirecting-output-to-a-file-in-c](https://stackoverflow.com/questions/8516823/redirecting-output-to-a-file-in-c)
+* [https://stackoverflow.com/questions/5517913/redirecting-stdout-to-file-after-a-fork](https://stackoverflow.com/questions/5517913/redirecting-stdout-to-file-after-a-fork)
