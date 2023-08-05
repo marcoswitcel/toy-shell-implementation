@@ -153,7 +153,7 @@ void test_parse_01(void)
   assert(context.index == 0);
   assert(context.length == strlen(parse_input_sample));
 
-  Sequence_Of_Tokens *tokens = parse(&context);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
 
   assert(tokens->index == 6);
 
@@ -190,7 +190,7 @@ void test_parse_02(void)
   assert(context.index == 0);
   assert(context.length == strlen(parse_input_sample));
 
-  Sequence_Of_Tokens *tokens = parse(&context);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
 
   assert(tokens->index == 5);
 

@@ -112,11 +112,10 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
 {
   Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
-  // @note João, na verdade a função `parse` usada abaixo é uma função de tokenização apenas,
-  // outro ponto, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
+  // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
   // direto para a função de análise sintática/semântica, pra evitar tokenizar tudo e depois falhar no primeiro 
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
-  Sequence_Of_Tokens *tokens = parse(&context);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
 
   if (context.error)
   {
