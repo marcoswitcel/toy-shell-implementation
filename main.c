@@ -237,7 +237,7 @@ void read_eval_shell_loop()
     }
     else
     {
-      printf("Erro ao executar o comando: %s\n", error);
+      printf("Erro ao executar o comando:\n%s\n", error);
       free((void *) error);
     }
 

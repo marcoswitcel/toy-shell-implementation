@@ -166,7 +166,7 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   }
   else if (quoted)
   {
-    context->error = copy("Error tokeniznado string.");
+    context->error = copy("String incompleta, àspas de fechamento faltando.");
   }
 
   destroy_buffer(buffer);
