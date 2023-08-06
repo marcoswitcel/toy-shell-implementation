@@ -84,6 +84,24 @@ char *shell_wait_command_input(void)
       destroy_buffer(buffer);
       return result;
     }
+    else if (c == '\t')
+    {
+      List_Of_Strings *list = create_list_of_strings(64, 64);
+      
+      get_all_files_for_dir(".", list, true);
+      if (list->index > 0)
+      {
+        printf("\n");
+        for (unsigned i = 0; i < list->index; i++)
+        {
+          printf("%s ", list->data[i]);
+        }
+        printf("\n");
+        print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
+      }
+      
+      destroy_list_of_strings(list);
+    }
     else if (c == FORM_FEED) // @note Crtl + L
     {
       builtin_clear(NULL);
