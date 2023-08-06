@@ -38,7 +38,7 @@ int builtin_cd(char **args)
   {
     if (chdir(target_folder) != 0)
     {
-      fprintf(stderr, "cd: não consegiu trocar para o diretório \"%s\"", target_folder);
+      fprintf(stderr, "cd: não foi possível acessar o diretório \"%s\"\n", target_folder);
       return 0; // @note por hora uma falha no cd encerra o terminal... mudar
     }
   }
