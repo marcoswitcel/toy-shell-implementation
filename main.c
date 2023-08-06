@@ -36,6 +36,14 @@ static inline void print_input_mark(const char *cstring)
   printf("|>");
 }
 
+/**
+ * @brief Retorna o nome dos arquivos contidos no diretório provido.
+ * 
+ * @param path caminho do diretório
+ * @param list_or_null lista aonde os nomes devem ser inserido caso já possua uma
+ * @param include_hidden flag boleana para controlar se deve ou não inserir nome de arquivos ocultos
+ * @return A referência da lista preenchida, caso o calle tenha provido a lista, a mesma será retornada aqui. List_Of_Strings* 
+ */
 static inline List_Of_Strings *get_all_files_for_dir(const char *path, List_Of_Strings *list_or_null, bool include_hidden)
 {
   List_Of_Strings *list = list_or_null;
