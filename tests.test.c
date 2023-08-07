@@ -136,12 +136,14 @@ void test_try_parse_string_03(void)
   assert(token.data.string.cstring);
   assert(strcmp("echo", token.data.string.cstring) == 0);
   assert(context.index == 4);
+  assert(context.error_start_index == -1);
 
   skip_whitespace(&context);
   assert(context.index == 5);
   try_parse_string(&context, &token, &success);
   assert(context.index == 5);
   assert(success == false);
+  assert(context.error_start_index == 9);
 }
 
 void test_parse_01(void)
