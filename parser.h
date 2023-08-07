@@ -9,6 +9,7 @@ typedef struct Parse_Context {
   unsigned length;
   unsigned index;
   const char *error;
+  signed error_start_index;
 } Parse_Context;
 
 
@@ -19,6 +20,7 @@ Parse_Context create_parse_context(const char *source)
     .length = strlen(source),
     .index = 0,
     .error = NULL,
+    .error_start_index = -1,
   };
 }
 
@@ -167,6 +169,7 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   else if (quoted)
   {
     context->error = copy("String incompleta, àspas de fechamento faltando.");
+    context->error_start_index = internal_context.index;
   }
 
   destroy_buffer(buffer);

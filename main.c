@@ -134,7 +134,7 @@ char *shell_wait_command_input(void)
   }
 }
 
-Process_Parameter shell_parse_command(const char *input_command, const char **error)
+Process_Parameter shell_parse_command(const char *input_command, const char **error, signed *error_start_index)
 {
   Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -146,6 +146,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   if (context.error)
   {
     *error = context.error;
+    *error_start_index = context.error_start_index;
     return (Process_Parameter) { .args = NULL, .fd_stdout = -1, };
   }
 
@@ -254,7 +255,8 @@ void read_eval_shell_loop()
   {
     const char *error = NULL;
     char *readed_line = shell_wait_command_input();
-    Process_Parameter process_parameter = shell_parse_command(readed_line, &error);
+    signed error_start_index = -1;
+    Process_Parameter process_parameter = shell_parse_command(readed_line, &error, &error_start_index);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
     if (error == NULL)
@@ -263,7 +265,26 @@ void read_eval_shell_loop()
     }
     else
     {
-      printf("Erro ao executar o comando:\n%s\n", error);
+      if (error_start_index > -1)
+      {
+        printf("  ");
+        for (signed i = 0; i < error_start_index+1; i++)
+        {
+          if (i == error_start_index)
+          {
+            printf("^");
+          }
+          else
+          {
+            printf("-");
+          }
+        }
+        printf("\n  Descrição: %s\n", error);
+      }
+      else
+      {
+        printf("Erro ao executar comando:\n%s\n", error);
+      }
       free((void *) error);
     }
 
