@@ -254,7 +254,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   while (!is_finished(context))
   {
     bool success_parsing = false;
-    Token token = { 0 };
+    Token token = STATIC_TOKEN(UNINITIALIZED);
 
     skip_whitespace(context);
 

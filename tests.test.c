@@ -74,7 +74,7 @@ void test_list_of_floats_implementation(void)
 void test_try_parse_string_01(void)
 {
   Parse_Context context = create_parse_context("ls -lha");
-  Token token = { 0 };
+  Token token = STATIC_TOKEN(UNINITIALIZED);
   bool success = false;
   
   try_parse_string(&context, &token, &success);
@@ -102,7 +102,7 @@ void test_try_parse_string_01(void)
 void test_try_parse_string_02(void)
 {
   Parse_Context context = create_parse_context("ls ");
-  Token token = { 0 };
+  Token token = STATIC_TOKEN(UNINITIALIZED);
   bool success = false;
   
   try_parse_string(&context, &token, &success);
@@ -127,7 +127,7 @@ void test_try_parse_string_02(void)
 void test_try_parse_string_03(void)
 {
   Parse_Context context = create_parse_context("echo \"ads");
-  Token token = { 0 };
+  Token token = STATIC_TOKEN(UNINITIALIZED);
   bool success = false;
   
   try_parse_string(&context, &token, &success);
