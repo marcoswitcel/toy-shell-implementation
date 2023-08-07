@@ -114,17 +114,26 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
 
     if (current_char == '\\')
     {
-      if (escaped_quote)
+      if (quoted)
       {
-        escaped_quote = false;
+        if (escaped_quote)
+        {
+          escaped_quote = false;
+          eat_char(&internal_context);
+          buffer_push(buffer, current_char);
+          continue;
+        }
+
+        escaped_quote = true;
         eat_char(&internal_context);
-        buffer_push(buffer, current_char);
         continue;
       }
-
-      escaped_quote = true;
-      eat_char(&internal_context);
-      continue;
+      else
+      {
+        context->error = copy("Caractere inesperado.");
+        context->error_start_index = internal_context.index;
+        break;
+      }
     }
     else if (quoted && current_char == type_of_quote)
     {
