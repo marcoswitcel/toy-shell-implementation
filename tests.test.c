@@ -134,6 +134,7 @@ void test_try_parse_string_03(void)
   assert(success);
   assert(token.type == STRING);
   assert(token.data.string.cstring);
+  assert(token.token_index_start == 0);
   assert(strcmp("echo", token.data.string.cstring) == 0);
   assert(context.index == 4);
   assert(context.error_start_index == -1);
@@ -166,21 +167,27 @@ void test_parse_01(void)
   
   assert(tokens->data[0].type == STRING);
   assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
+  assert(tokens->data[0].token_index_start == 0);
 
   assert(tokens->data[1].type == STRING);
   assert(tokens->data[1].data.string.cstring && strcmp(tokens->data[1].data.string.cstring, "teste") == 0);
+  assert(tokens->data[1].token_index_start == 5);
 
   assert(tokens->data[2].type == STRING);
   assert(tokens->data[2].data.string.cstring && strcmp(tokens->data[2].data.string.cstring, "teste2") == 0);
+  assert(tokens->data[2].token_index_start == 11);
 
   assert(tokens->data[3].type == GLOBBING);
   assert(tokens->data[3].data.globbing.cstring && strcmp(tokens->data[3].data.globbing.cstring, "*") == 0);
+  assert(tokens->data[3].token_index_start == 18);
 
   assert(tokens->data[4].type == REDIRECT);
   assert(tokens->data[4].data.redirect.cstring && strcmp(tokens->data[4].data.redirect.cstring, ">") == 0);
+  assert(tokens->data[4].token_index_start == 20);
 
   assert(tokens->data[5].type == STRING);
   assert(tokens->data[5].data.string.cstring && strcmp(tokens->data[5].data.string.cstring, "arquivo.txt") == 0);
+  assert(tokens->data[5].token_index_start == 22);
 }
 
 void test_parse_02(void)

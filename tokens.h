@@ -27,4 +27,24 @@ typedef struct Token {
   } data;
 } Token;
 
+/*
+void restore_token_to_default(Token *token)
+{
+  *token = (Token) {
+    .type = UNINITIALIZED,
+    .token_index_start = -1,
+    .data = { 0 }, // @note continuar aqui
+  };
+}
+
+Token create_default_empty_token()
+{
+  Token token;
+
+  restore_token_to_default(&token);
+
+  return  token;
+}
+*/
+
 #endif // TOKENS_H
