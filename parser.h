@@ -104,7 +104,12 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
 
     if (current_char == '\\')
     {
-      if (escaped_quote) break;
+      if (escaped_quote)
+      {
+        context->error = copy("String incompleta, àspas de fechamento faltando.");
+        context->error_start_index = internal_context.index;
+        break;
+      }
 
       escaped_quote = true;
       eat_char(&internal_context);
@@ -166,7 +171,7 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
 
     *context = internal_context;
   }
-  else if (quoted)
+  else if (quoted && is_finished(&internal_context))
   {
     context->error = copy("String incompleta, àspas de fechamento faltando.");
     context->error_start_index = internal_context.index;
