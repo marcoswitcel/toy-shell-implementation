@@ -102,13 +102,24 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   {
     char current_char = peek_char(&internal_context);
 
+    if (escaped_quote && (current_char != '\\' && current_char != type_of_quote))
+    {
+      char message[] = "Escape inválido, deve ser seguido de uma \\ ou ?";
+      message[47] = type_of_quote;
+
+      context->error = copy(message);
+      context->error_start_index = internal_context.index - 1;
+      break;
+    }
+
     if (current_char == '\\')
     {
       if (escaped_quote)
       {
-        context->error = copy("String incompleta, àspas de fechamento faltando.");
-        context->error_start_index = internal_context.index;
-        break;
+        escaped_quote = false;
+        eat_char(&internal_context);
+        buffer_push(buffer, current_char);
+        continue;
       }
 
       escaped_quote = true;
