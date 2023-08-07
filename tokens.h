@@ -19,6 +19,7 @@ typedef struct Redirect_Token {
 
 typedef struct Token {
   Token_Type type;
+  signed token_index_start;
   union {
     String_Token string;
     Globbing_Token globbing;

@@ -179,6 +179,10 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
       if (redirect_expect_file_name)
       {
         *error = copy("Token * não é um argumento válido para o redirect.");
+        if (token.token_index_start > -1)
+        {
+          *error_start_index = token.token_index_start;
+        }
         break;
       }
       else
@@ -196,6 +200,12 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
       has_redirec_token = true;
       redirect_expect_file_name = true;
     }
+  }
+
+  if (redirect_expect_file_name)
+  {
+    *error = copy("Nome do arquivo que deve receber o output não especificado.");
+    *error_start_index = context.length;
   }
 
   if (*error)

@@ -179,6 +179,7 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
     token->type = STRING;
     token->data.string = (String_Token) { .cstring = NULL }; // @todo João, terminar aqui
     token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer)); // @todo João, ajustar leak aqui, ninguém está desalocando essa string
+    token->token_index_start = context->index;
 
     *context = internal_context;
   }
@@ -196,6 +197,7 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '*')
   {
+    token->token_index_start = context->index;
     eat_char(context);
     *success = true;
     token->type = GLOBBING;
@@ -211,6 +213,7 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '>')
   {
+    token->token_index_start = context->index;
     eat_char(context);
     *success = true;
     token->type = REDIRECT;
