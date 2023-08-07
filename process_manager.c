@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -56,6 +57,41 @@ int launch_process(const Process_Parameter process_parameter)
   close(process_parameter.fd_stdout);
 
   return 1;
+}
+
+bool wait_child_process(pid_t pid)
+{
+  int status;
+
+  do
+  {
+    waitpid(pid, &status, WUNTRACED);
+  } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+  return true;
+}
+
+pid_t fork_and_run(void (*func)(void), bool wait)
+{
+  pid_t pid = fork();
+
+  if (pid == 0)
+  {
+    // processo filho
+    func();
+
+    exit(EXIT_SUCCESS);
+  }
+  else if (pid < 0)
+  {
+    printf("Thread não iniciada com sucesso.");
+  }
+  else if (wait)
+  {
+    wait_child_process(pid);
+  }
+
+  return pid;
 }
 
 Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
