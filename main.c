@@ -166,7 +166,6 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
       if (redirect_expect_file_name)
       {
         redirect_expect_file_name = false;
-        // @todo João, aqui precisa consumir o nome do arquivo quando `redirect_expect_file_name` for `true`
         output_filename = token.data.string.cstring;
       }
       else
@@ -201,6 +200,8 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
       redirect_expect_file_name = true;
     }
   }
+
+  destroy_sequence_of_tokens(tokens);
 
   if (redirect_expect_file_name)
   {
@@ -314,13 +315,14 @@ static struct termios original_config;
 
 void deactivate_raw_mode()
 {
+  // @todo João, analisar aqui, está disparando mais de uma vez aparentemente, mas acho que é nos processos filhos
+  // verificar se isso pode causar problemas.
   if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\n");
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
 }
 
 void activate_raw_mode()
 {
-  // @todo João, precisa restaurar antes de sair?
   tcgetattr(STDIN_FILENO, &original_config);
   atexit(deactivate_raw_mode);
 

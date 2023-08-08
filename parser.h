@@ -77,7 +77,6 @@ static inline bool is_finished(Parse_Context *context)
   return context->index >= context->length;
 }
 
-// @todo João, testar mais a fundo essa função
 void try_parse_string(Parse_Context *context, Token *token, bool *success)
 {
   Parse_Context internal_context = *context;
@@ -186,8 +185,10 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   if (completed_string)
   {
     token->type = STRING;
-    token->data.string = (String_Token) { .cstring = NULL }; // @todo João, terminar aqui
-    token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer)); // @todo João, ajustar leak aqui, ninguém está desalocando essa string
+    token->data.string = (String_Token) { .cstring = NULL };
+    // @todo João, ajustar leak aqui, ninguém está desalocando essa string
+    // essa memória vai para na função `launch_process` como o args. Desalocar após a execução seria o mais correto
+    token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer));
     token->token_index_start = context->index;
 
     *context = internal_context;
