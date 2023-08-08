@@ -206,7 +206,7 @@ void test_try_parse_string_07(void)
   assert(context.error_start_index == 3);
 }
 
-void test_parse_01(void)
+void test_tokenize_01(void)
 {
   const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
 
@@ -249,7 +249,7 @@ void test_parse_01(void)
   assert(tokens->data[5].token_index_start == 22);
 }
 
-void test_parse_02(void)
+void test_tokenize_02(void)
 {
   const char parse_input_sample[] = "echo \"teste' teste2\" * > arquivo.txt";
 
@@ -296,8 +296,8 @@ int main(void)
   test_try_parse_string_07();
   test_list_char_prt_implementation();
   test_list_of_floats_implementation();
-  test_parse_01();
-  test_parse_02();
+  test_tokenize_01();
+  test_tokenize_02();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
