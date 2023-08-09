@@ -208,6 +208,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   }
   
   Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
+  destroy_list_of_strings(list_of_args);
 
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
