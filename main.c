@@ -136,7 +136,6 @@ char *shell_wait_command_input(void)
 
 Process_Parameter shell_parse_command(Parse_Context *context)
 {
-  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
   // direto para a função de análise sintática/semântica, pra evitar tokenizar tudo e depois falhar no primeiro 
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
@@ -151,6 +150,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
 
   // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
   // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
+  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
   const char *output_filename = NULL;
