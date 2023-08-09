@@ -157,6 +157,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   for (unsigned i = 0; i < tokens->index; i++)
   {
     Token token = tokens->data[i];
+    assert(token.token_index_start > -1); // @note só para garantir que não estou errando nada
 
     if (token.type == STRING && token.data.string.cstring)
     {
@@ -174,11 +175,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
     {
       if (redirect_expect_file_name)
       {
-        context->error = copy("Token * não é um argumento válido para o redirect.");
-        if (token.token_index_start > -1)
-        {
-          context->error_start_index = token.token_index_start;
-        }
+        parse_context_report_error(context, "Token * não é um argumento válido para o redirect.", token.token_index_start);
         break;
       }
       else
@@ -190,7 +187,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
     {
       if (has_redirec_token)
       {
-        context->error = copy("Token > encontrado mais de uma vez.");
+        parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
         break;
       }
       has_redirec_token = true;
@@ -200,10 +197,9 @@ Process_Parameter shell_parse_command(Parse_Context *context)
 
   destroy_sequence_of_tokens(tokens);
 
-  if (redirect_expect_file_name)
+  if (redirect_expect_file_name && context->error == NULL)
   {
-    context->error = copy("Nome do arquivo que deve receber o output não especificado.");
-    context->error_start_index = context->length;
+    parse_context_report_error(context, "Nome do arquivo que deve receber o output não foi especificado.", context->length);
   }
 
   if (context->error)

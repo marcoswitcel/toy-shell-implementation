@@ -24,6 +24,12 @@ Parse_Context create_parse_context(const char *source)
   };
 }
 
+void parse_context_report_error(Parse_Context *context, const char *message, signed error_start_index)
+{
+  context->error = copy(message);
+  context->error_start_index = error_start_index;
+}
+
 static inline const char* get_current_address(Parse_Context *context)
 {
   return &context->source[context->index];
