@@ -134,19 +134,16 @@ char *shell_wait_command_input(void)
   }
 }
 
-Process_Parameter shell_parse_command(const char *input_command, const char **error, signed *error_start_index)
+Process_Parameter shell_parse_command(Parse_Context *context)
 {
-  Parse_Context context = create_parse_context(input_command);
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
   // direto para a função de análise sintática/semântica, pra evitar tokenizar tudo e depois falhar no primeiro 
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
-  Sequence_Of_Tokens *tokens = tokenize(&context);
+  Sequence_Of_Tokens *tokens = tokenize(context);
 
-  if (context.error)
+  if (context->error)
   {
-    *error = context.error;
-    *error_start_index = context.error_start_index;
     return STATIC_PROCESS_PARAMETER(NULL);
   }
 
@@ -177,10 +174,10 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
     {
       if (redirect_expect_file_name)
       {
-        *error = copy("Token * não é um argumento válido para o redirect.");
+        context->error = copy("Token * não é um argumento válido para o redirect.");
         if (token.token_index_start > -1)
         {
-          *error_start_index = token.token_index_start;
+          context->error_start_index = token.token_index_start;
         }
         break;
       }
@@ -193,7 +190,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
     {
       if (has_redirec_token)
       {
-        *error = copy("Token > encontrado mais de uma vez.");
+        context->error = copy("Token > encontrado mais de uma vez.");
         break;
       }
       has_redirec_token = true;
@@ -205,11 +202,11 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
 
   if (redirect_expect_file_name)
   {
-    *error = copy("Nome do arquivo que deve receber o output não especificado.");
-    *error_start_index = context.length;
+    context->error = copy("Nome do arquivo que deve receber o output não especificado.");
+    context->error_start_index = context->length;
   }
 
-  if (*error)
+  if (context->error)
   {
     return STATIC_PROCESS_PARAMETER(NULL);
   }
@@ -264,24 +261,23 @@ void read_eval_shell_loop()
 {
   while (!exit_requested)
   {
-    const char *error = NULL;
     char *readed_line = shell_wait_command_input();
-    signed error_start_index = -1;
-    Process_Parameter process_parameter = shell_parse_command(readed_line, &error, &error_start_index);
+    Parse_Context context = create_parse_context(readed_line);
+    Process_Parameter process_parameter = shell_parse_command(&context);
     // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
     // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
-    if (error == NULL)
+    if (context.error == NULL)
     {
       shell_execute_command(process_parameter);
     }
     else
     {
-      if (error_start_index > -1)
+      if (context.error_start_index > -1)
       {
         printf("  ");
-        for (signed i = 0; i < error_start_index+1; i++)
+        for (signed i = 0; i < context.error_start_index+1; i++)
         {
-          if (i == error_start_index)
+          if (i == context.error_start_index)
           {
             printf("^");
           }
@@ -290,13 +286,13 @@ void read_eval_shell_loop()
             printf("-");
           }
         }
-        printf("\n  Descrição: %s\n", error);
+        printf("\n  Descrição: %s\n", context.error);
       }
       else
       {
-        printf("Erro ao executar comando:\n%s\n", error);
+        printf("Erro ao executar comando:\n%s\n", context.error);
       }
-      free((void *) error);
+      free((void *) context.error);
     }
 
     if (readed_line)
