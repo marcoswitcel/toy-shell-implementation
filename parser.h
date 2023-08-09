@@ -3,6 +3,9 @@
 #include <string.h>
 
 #include "./list.implementations.h"
+#include "./process_manager.c"
+#include "./utils.c"
+#include "./nodes.h"
 
 typedef struct Parse_Context {
   const char *source;
@@ -288,4 +291,65 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   }
 
   return tokens;
+}
+
+Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
+{
+  // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
+  // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
+  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
+  bool has_redirec_token = false;
+  bool redirect_expect_file_name = false;
+  const char *output_filename = NULL;
+  for (unsigned i = 0; i < tokens->index; i++)
+  {
+    Token token = tokens->data[i];
+    assert(token.token_index_start > -1); // @note só para garantir que não estou errando nada
+
+    if (token.type == STRING && token.data.string.cstring)
+    {
+      if (redirect_expect_file_name)
+      {
+        redirect_expect_file_name = false;
+        output_filename = token.data.string.cstring;
+      }
+      else
+      {
+        list_of_strings_push(list_of_args, token.data.string.cstring);
+      }
+    }
+    if (token.type == GLOBBING && token.data.globbing.cstring)
+    {
+      if (redirect_expect_file_name)
+      {
+        parse_context_report_error(context, "Token * não é um argumento válido para o redirect.", token.token_index_start);
+        break;
+      }
+      else
+      {
+        get_all_files_for_dir(".", list_of_args, false);
+      }
+    }
+    if (token.type == REDIRECT && token.data.redirect.cstring)
+    {
+      if (has_redirec_token)
+      {
+        parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
+        break;
+      }
+      has_redirec_token = true;
+      redirect_expect_file_name = true;
+    }
+  }
+
+  if (redirect_expect_file_name && context->error == NULL)
+  {
+    parse_context_report_error(context, "Nome do arquivo que deve receber o output não foi especificado.", context->length);
+  }
+
+  Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
+
+  destroy_list_of_strings(list_of_args);
+
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, };
 }

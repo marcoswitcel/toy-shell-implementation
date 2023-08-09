@@ -17,6 +17,7 @@
 
 #include "./list.implementations.h"
 #include "./process_manager.c"
+#include "./utils.c"
 #include "./types.h"
 #include "./tokens.h"
 #include "./parser.h"
@@ -34,42 +35,6 @@ static inline void print_input_mark(const char *cstring)
   }
 
   printf("|>");
-}
-
-/**
- * @brief Retorna o nome dos arquivos contidos no diretório provido.
- * 
- * @param path caminho do diretório
- * @param list_or_null lista aonde os nomes devem ser inserido caso já possua uma
- * @param include_hidden flag boleana para controlar se deve ou não inserir nome de arquivos ocultos
- * @return A referência da lista preenchida, caso o calle tenha provido a lista, a mesma será retornada aqui. List_Of_Strings* 
- */
-static inline List_Of_Strings *get_all_files_for_dir(const char *path, List_Of_Strings *list_or_null, bool include_hidden)
-{
-  List_Of_Strings *list = list_or_null;
-  if (list_or_null == NULL)
-  {
-    list = create_list_of_strings(128, 128);
-  }
-
-  DIR *current_dir = opendir(path);
-  struct dirent *dir_entry;
-  if (current_dir)
-  {
-    while((dir_entry = readdir(current_dir)))
-    {
-      if (dir_entry->d_type == DT_REG || dir_entry->d_type == DT_DIR)
-      {
-        if (include_hidden || dir_entry->d_name[0] != '.')
-        {
-          list_of_strings_push(list, copy((const char *) &dir_entry->d_name));
-        }
-      }
-    }
-    closedir(current_dir);
-  }
-
-  return list;
 }
 
 char *shell_wait_command_input(void)
@@ -148,72 +113,19 @@ Process_Parameter shell_parse_command(Parse_Context *context)
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
-  // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
-  // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
-  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
-  bool has_redirec_token = false;
-  bool redirect_expect_file_name = false;
-  const char *output_filename = NULL;
-  for (unsigned i = 0; i < tokens->index; i++)
-  {
-    Token token = tokens->data[i];
-    assert(token.token_index_start > -1); // @note só para garantir que não estou errando nada
-
-    if (token.type == STRING && token.data.string.cstring)
-    {
-      if (redirect_expect_file_name)
-      {
-        redirect_expect_file_name = false;
-        output_filename = token.data.string.cstring;
-      }
-      else
-      {
-        list_of_strings_push(list_of_args, token.data.string.cstring);
-      }
-    }
-    if (token.type == GLOBBING && token.data.globbing.cstring)
-    {
-      if (redirect_expect_file_name)
-      {
-        parse_context_report_error(context, "Token * não é um argumento válido para o redirect.", token.token_index_start);
-        break;
-      }
-      else
-      {
-        get_all_files_for_dir(".", list_of_args, false);
-      }
-    }
-    if (token.type == REDIRECT && token.data.redirect.cstring)
-    {
-      if (has_redirec_token)
-      {
-        parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
-        break;
-      }
-      has_redirec_token = true;
-      redirect_expect_file_name = true;
-    }
-  }
+  Execute_Command_Node execute_command_node = parse_execute_command_node(context, tokens);
 
   destroy_sequence_of_tokens(tokens);
-
-  if (redirect_expect_file_name && context->error == NULL)
-  {
-    parse_context_report_error(context, "Nome do arquivo que deve receber o output não foi especificado.", context->length);
-  }
 
   if (context->error)
   {
     return STATIC_PROCESS_PARAMETER(NULL);
   }
   
-  Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
-  destroy_list_of_strings(list_of_args);
-
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
   {
-    char **token = args;
+    char **token = execute_command_node.args;
     while (*token != NULL)
     {
       printf("argumento extraído: [%s]\n", *token);
@@ -221,13 +133,13 @@ Process_Parameter shell_parse_command(Parse_Context *context)
     }
   }
 
-  Process_Parameter process = STATIC_PROCESS_PARAMETER(args);
-  if (output_filename)
+  Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node.args);
+  if (execute_command_node.output_filename)
   {
-    int fd = open(output_filename, O_RDWR|O_CREAT, 0600);
+    int fd = open(execute_command_node.output_filename, O_RDWR|O_CREAT, 0600);
     if (fd == -1)
     {
-      printf("Internal: Erro abrindo arquivo '%s'", output_filename);
+      printf("Internal: Erro abrindo arquivo '%s'", execute_command_node.output_filename);
     }
     process.fd_stdout = fd;
   }

@@ -81,11 +81,3 @@ const char *buffer_ensure_null_terminated_view(Buffer *buffer)
 
   return &buffer->buffer[0];
 }
-
-char * copy(const char *source)
-{
-  size_t size = strlen(source);
-  char * copy = (char *) malloc(size + 1);
-  memcpy(copy, source, size + 1);
-  return copy;
-}
