@@ -147,7 +147,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
   {
     *error = context.error;
     *error_start_index = context.error_start_index;
-    return (Process_Parameter) { .args = NULL, .fd_stdout = -1, };
+    return STATIC_PROCESS_PARAMETER(NULL);
   }
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
@@ -211,7 +211,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
 
   if (*error)
   {
-    return (Process_Parameter) { .args = NULL, .fd_stdout = -1, };
+    return STATIC_PROCESS_PARAMETER(NULL);
   }
   
   Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
@@ -227,7 +227,7 @@ Process_Parameter shell_parse_command(const char *input_command, const char **er
     }
   }
 
-  Process_Parameter process = { .args = args, .fd_stdout = -1, };
+  Process_Parameter process = STATIC_PROCESS_PARAMETER(args);
   if (output_filename)
   {
     int fd = open(output_filename, O_RDWR|O_CREAT, 0600);

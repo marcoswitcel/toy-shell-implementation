@@ -20,6 +20,8 @@ typedef struct Process_Parameter {
   int fd_stdout;
 } Process_Parameter;
 
+#define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdout = -1, }
+
 int launch_process(const Process_Parameter process_parameter)
 {
   pid_t pid;
