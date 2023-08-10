@@ -125,12 +125,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
   {
-    char **token = execute_command_node.args;
-    while (*token != NULL)
-    {
-      printf("argumento extraído: [%s]\n", *token);
-      token++;
-    }
+    print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
   }
 
   Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node.args);
