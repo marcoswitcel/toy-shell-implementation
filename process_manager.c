@@ -9,11 +9,7 @@
 #include <fcntl.h>
 
 #include "./list.implementations.h"
-
-/**
- * @brief o argv da família de comandos `exec` recebe um array de ponteiros para char terminado com null
- */
-typedef char** Null_Terminated_Pointer_Array;
+#include "./utils.c"
 
 typedef struct Process_Parameter {
   Null_Terminated_Pointer_Array args;
@@ -94,26 +90,6 @@ pid_t fork_and_run(void (*func)(void), bool wait)
   }
 
   return pid;
-}
-
-Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
-{
-  assert(list);
-  Null_Terminated_Pointer_Array args = malloc((list->index + 1) * sizeof(char *));
-
-  if (!args)
-  {
-    fprintf(stderr, "Internal: Erro de alocação");
-    exit(EXIT_FAILURE);
-  }
-
-  for (unsigned i = 0; i < list->index; i++)
-  {
-    args[i] = (char *) list->data[i];
-  }
-  args[list->index] = NULL;
-
-  return args;
 }
 
 #endif // PROCESS_MANAGER_C

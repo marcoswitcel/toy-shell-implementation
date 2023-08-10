@@ -11,6 +11,11 @@
 
 #include "./list.implementations.h"
 
+/**
+ * @brief o argv da família de comandos `exec` recebe um array de ponteiros para char terminado com null
+ */
+typedef char** Null_Terminated_Pointer_Array;
+
 char* copy(const char *source)
 {
   size_t size = strlen(source);
@@ -53,6 +58,26 @@ static inline List_Of_Strings *get_all_files_for_dir(const char *path, List_Of_S
   }
 
   return list;
+}
+
+Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
+{
+  assert(list);
+  Null_Terminated_Pointer_Array args = malloc((list->index + 1) * sizeof(char *));
+
+  if (!args)
+  {
+    fprintf(stderr, "Internal: Erro de alocação");
+    exit(EXIT_FAILURE);
+  }
+
+  for (unsigned i = 0; i < list->index; i++)
+  {
+    args[i] = (char *) list->data[i];
+  }
+  args[list->index] = NULL;
+
+  return args;
 }
 
 #endif // UTILS_C
