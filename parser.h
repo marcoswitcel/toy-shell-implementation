@@ -5,6 +5,7 @@
 #include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./utils.c"
+#include "./utils.macro.h"
 #include "./nodes.h"
 
 typedef struct Parse_Context {
@@ -263,8 +264,6 @@ const Parse_Function parse_functions[] = {
   &try_parse_redirect,
   &try_parse_string,
 };
-
-#define SIZE_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
 
 // @note João, bug para corrigir, possivelmente mais bugs relacionados
 // |>echo asd "asdads \' asd"
