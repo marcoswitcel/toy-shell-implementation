@@ -7,7 +7,7 @@
 /**
  * @brief Macro que gera a estrutura da lista e o typedef
  * @param STRUCT_NAME Nome da `struct` que será criada
- * @param TYPE Tipo de dados aramzenado an lista
+ * @param TYPE Tipo de dados que serão contidos na lista
  */
 #define MAKE_LIST_STRUCT_IMPLEMENTATION(STRUCT_NAME, TYPE)                                        \
 typedef struct STRUCT_NAME                                                                        \
@@ -22,7 +22,7 @@ typedef struct STRUCT_NAME                                                      
  * @brief Macro que gera todo o código necessário para realizar operações na lista
  * @param STRUCT_NAME Nome da `struct` que será criada
  * @param STRUCT_NAME_LOWER_CASE Nome usado como prefixo para as funções da estrutura da lista
- * @param TYPE Tipo de dados aramzenado an lista
+ * @param TYPE Tipo de dados que serão contidos na lista
  */
 #define MAKE_LIST_FUNCTIONS_IMPLEMENTATION(STRUCT_NAME, STRUCT_NAME_LOWER_CASE, TYPE)             \
 STRUCT_NAME *create_##STRUCT_NAME_LOWER_CASE(unsigned internal_memory_size, unsigned grouth_by)   \
@@ -88,7 +88,7 @@ bool STRUCT_NAME_LOWER_CASE##_pop(STRUCT_NAME *list)                            
  * @brief Macro que gera todo o código necessário para ter uma lista funcional
  * @param STRUCT_NAME Nome da `struct` que será criada
  * @param STRUCT_NAME_LOWER_CASE Nome usado como prefixo para as funções da estrutura da lista
- * @param TYPE Tipo de dados aramzenado an lista
+ * @param TYPE Tipo de dados que serão contidos na lista
  */
 #define MAKE_LIST_IMPLEMENTATION(STRUCT_NAME, STRUCT_NAME_LOWER_CASE, TYPE)                       \
   MAKE_LIST_STRUCT_IMPLEMENTATION(STRUCT_NAME, TYPE)                                              \
