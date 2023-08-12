@@ -264,7 +264,7 @@ const Parse_Function parse_functions[] = {
   &try_parse_string,
 };
 
-#define SIZEO_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
+#define SIZE_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
 
 // @note João, bug para corrigir, possivelmente mais bugs relacionados
 // |>echo asd "asdads \' asd"
@@ -281,7 +281,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
     skip_whitespace(context);
 
     bool progressed = false;
-    for (unsigned i = 0; i < SIZEO_OF_ARRAY(parse_functions); i++)
+    for (unsigned i = 0; i < SIZE_OF_ARRAY(parse_functions); i++)
     {
       Parse_Function parse_function = parse_functions[i];
 
