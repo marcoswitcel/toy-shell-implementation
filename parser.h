@@ -76,6 +76,12 @@ static inline char peek_char(Parse_Context *context)
   return context->source[context->index];
 }
 
+static inline char peek_next_char(Parse_Context *context)
+{
+  if (context->index + 1 >= context->length) return '\0';
+  return context->source[context->index + 1];
+}
+
 static inline void eat_char(Parse_Context *context)
 {
   context->index++;
@@ -216,13 +222,19 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '*')
   {
-    token->token_index_start = context->index;
-    eat_char(context);
-    *success = true;
-    token->type = GLOBBING;
-    token->data.globbing = (Globbing_Token) { .cstring = NULL };
-    token->data.globbing.cstring = copy("*");
-    return;
+    if (is_whitespace(peek_next_char(context)) || peek_next_char(context) == '\0')
+    {
+      token->token_index_start = context->index;
+      eat_char(context);
+      *success = true;
+      token->type = GLOBBING;
+      token->data.globbing = (Globbing_Token) { .cstring = NULL };
+      token->data.globbing.cstring = copy("*");
+      return;
+    }
+
+    context->error = copy("Esperava espaço em branco após *.");
+    context->error_start_index = context->index + 1;
   }
 
   *success = false;
