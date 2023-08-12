@@ -279,7 +279,7 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
     }
 
     context->error = copy("Esperava espaço em branco após >.");
-    context->error_start_index = context->index + 1;
+    context->error_start_index = context->index + n_char_forward;
   }
 
   *success = false;

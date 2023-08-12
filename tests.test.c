@@ -254,6 +254,52 @@ void test_try_parse_redirect_03(void)
   assert(context.error_start_index == 1);
 }
 
+void test_try_parse_redirect_04(void)
+{
+  Parse_Context context = create_parse_context(">>");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_parse_redirect_05(void)
+{
+  Parse_Context context = create_parse_context(">> texto");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_parse_redirect_06(void)
+{
+  Parse_Context context = create_parse_context(">>texto");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(!success);
+  assert(token.token_index_start == -1);
+  assert(context.index == 0);
+  assert(context.error_start_index == 2);
+}
+
 void test_try_parse_globbing_01(void)
 {
   Parse_Context context = create_parse_context("*");
@@ -391,6 +437,9 @@ int main(void)
   test_try_parse_redirect_01();
   test_try_parse_redirect_02();
   test_try_parse_redirect_03();
+  test_try_parse_redirect_04();
+  test_try_parse_redirect_05();
+  test_try_parse_redirect_06();
   test_try_parse_globbing_01();
   test_try_parse_globbing_02();
   test_try_parse_globbing_03();
