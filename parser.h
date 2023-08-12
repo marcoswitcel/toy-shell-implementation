@@ -248,13 +248,19 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '>')
   {
-    token->token_index_start = context->index;
-    eat_char(context);
-    *success = true;
-    token->type = REDIRECT;
-    token->data.redirect = (Redirect_Token) { .cstring = NULL };
-    token->data.redirect.cstring = copy(">");
-    return;
+    if (is_whitespace(peek_next_char(context)) || peek_next_char(context) == '\0')
+    {
+      token->token_index_start = context->index;
+      eat_char(context);
+      *success = true;
+      token->type = REDIRECT;
+      token->data.redirect = (Redirect_Token) { .cstring = NULL };
+      token->data.redirect.cstring = copy(">");
+      return;
+    }
+
+    context->error = copy("Esperava espaço em branco após >.");
+    context->error_start_index = context->index + 1;
   }
 
   *success = false;
