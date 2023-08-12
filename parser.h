@@ -86,6 +86,12 @@ static inline char peek_next_char(Parse_Context *context)
   return context->source[context->index + 1];
 }
 
+static inline char peek_char_forward(const Parse_Context *context, unsigned index)
+{
+  if (context->index + index >= context->length) return '\0';
+  return context->source[context->index + index];
+}
+
 static inline void eat_char(Parse_Context *context)
 {
   context->index++;
@@ -246,16 +252,29 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 
 void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
 {
+  bool appending = false;
+  unsigned n_char_forward = 1;
   if (peek_char(context) == '>')
   {
-    if (is_whitespace(peek_next_char(context)) || peek_next_char(context) == '\0')
+    if (peek_next_char(context) == '>')
+    {
+      appending = true;
+      n_char_forward = 2;
+    }
+
+    if (is_whitespace(peek_char_forward(context, n_char_forward)) || peek_char_forward(context, n_char_forward) == '\0')
     {
       token->token_index_start = context->index;
       eat_char(context);
+      if (appending)
+      {
+        eat_char(context);
+      }
       *success = true;
       token->type = REDIRECT;
       token->data.redirect = (Redirect_Token) { .cstring = NULL };
       token->data.redirect.cstring = copy(">");
+      token->data.redirect.appending = appending;
       return;
     }
 
@@ -321,6 +340,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
   const char *output_filename = NULL;
+  bool append_mode = false;
   for (unsigned i = 0; i < tokens->index; i++)
   {
     Token token = tokens->data[i];
@@ -358,6 +378,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
         break;
       }
       has_redirec_token = true;
+      append_mode = token.data.redirect.appending;
       redirect_expect_file_name = true;
     }
   }
@@ -371,7 +392,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, };
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .append_mode = append_mode, };
 }
 
 #endif // PARSER_H

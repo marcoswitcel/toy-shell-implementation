@@ -1,6 +1,8 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
+#include <stdbool.h>
+
 typedef enum Token_Type {
   UNINITIALIZED = 0, STRING = 1, GLOBBING = 2, REDIRECT = 3,
 } Token_Type;
@@ -15,6 +17,7 @@ typedef struct Globbing_Token {
 
 typedef struct Redirect_Token {
   const char *cstring;
+  bool appending;
 } Redirect_Token;
 
 typedef struct Token {

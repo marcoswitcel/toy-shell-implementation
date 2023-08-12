@@ -131,7 +131,10 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node.args);
   if (execute_command_node.output_filename)
   {
-    int fd = open(execute_command_node.output_filename, O_RDWR|O_CREAT, 0600);
+    int oflags = O_RDWR|O_CREAT;
+    if (execute_command_node.append_mode) oflags |= O_APPEND;
+    
+    int fd = open(execute_command_node.output_filename, oflags, 0600);
     if (fd == -1)
     {
       printf("Internal: Erro abrindo arquivo '%s'", execute_command_node.output_filename);
