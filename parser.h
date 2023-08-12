@@ -1,3 +1,6 @@
+#ifndef PARSER_H
+#define PARSER_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -364,3 +367,5 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
 
   return (Execute_Command_Node) { .args = args, .output_filename = output_filename, };
 }
+
+#endif // PARSER_H
