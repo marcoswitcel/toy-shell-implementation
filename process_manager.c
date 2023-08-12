@@ -18,11 +18,21 @@ typedef struct Process_Parameter {
 
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdout = -1, }
 
+bool wait_child_process(pid_t pid)
+{
+  int status;
+
+  do
+  {
+    waitpid(pid, &status, WUNTRACED);
+  } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+  return true;
+}
+
 int launch_process(const Process_Parameter process_parameter)
 {
   pid_t pid;
-  int status;
-
   pid = fork();
 
   if (pid == 0)
@@ -45,28 +55,12 @@ int launch_process(const Process_Parameter process_parameter)
   }
   else
   {
-    do
-    {
-      waitpid(pid, &status, WUNTRACED);
-    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
+    wait_child_process(pid);
   }
 
   close(process_parameter.fd_stdout);
 
   return 1;
-}
-
-bool wait_child_process(pid_t pid)
-{
-  int status;
-
-  do
-  {
-    waitpid(pid, &status, WUNTRACED);
-  } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
-  return true;
 }
 
 pid_t fork_and_run(void (*func)(void), bool wait)
