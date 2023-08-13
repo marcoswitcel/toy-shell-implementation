@@ -21,7 +21,7 @@
 #include "./types.h"
 #include "./tokens.h"
 #include "./parser.h"
-#include "./builtins.c"
+#include "./shell_builtins.c"
 
 
 #define LINE_BUFFER_SIZE 1024
