@@ -37,7 +37,7 @@ void parse_context_report_error(Parse_Context *context, const char *message, sig
   context->error_start_index = error_start_index;
 }
 
-static inline const char* get_current_address(Parse_Context *context)
+static inline const char* get_current_address(const Parse_Context *context)
 {
   return &context->source[context->index];
 }
@@ -75,12 +75,12 @@ void skip_whitespace(Parse_Context *context)
   context->index += source - get_current_address(context);
 }
 
-static inline char peek_char(Parse_Context *context)
+static inline char peek_char(const Parse_Context *context)
 {
   return context->source[context->index];
 }
 
-static inline char peek_next_char(Parse_Context *context)
+static inline char peek_next_char(const Parse_Context *context)
 {
   if (context->index + 1 >= context->length) return '\0';
   return context->source[context->index + 1];
@@ -97,7 +97,7 @@ static inline void eat_char(Parse_Context *context)
   context->index++;
 }
 
-static inline bool is_finished(Parse_Context *context)
+static inline bool is_finished(const Parse_Context *context)
 {
   return context->index >= context->length;
 }
