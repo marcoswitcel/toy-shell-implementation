@@ -8,6 +8,14 @@
 * globing e patter matching
 * implementar limpeza de terminal com crtl + l
 
+# Bugs
+
+* problema quando input e output iguais
+```bash
+|>cat a.txt > a.txt
+cat: a.txt: input file is output file
+```
+
 ## Onde parei
 
 Onde parei: "Wrap up ...".
