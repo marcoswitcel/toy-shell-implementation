@@ -1,3 +1,8 @@
+#ifndef SHELL_BUILTINS_C
+#define SHELL_BUILTINS_C
+
+#include <stdbool.h>
+#include <stdio.h>
 
 bool exit_requested = false;
 
@@ -106,3 +111,5 @@ Builtin_Function has_builtin_for(const char *cstring)
 
   return NULL;
 }
+
+#endif // SHELL_BUILTINS_C
