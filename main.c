@@ -77,8 +77,7 @@ char *shell_wait_command_input(void)
     }
     else if (c == FORM_FEED) // @note Crtl + L
     {
-      Process_Handles handles = STATIC_PROCESS_HANDLES();
-      builtin_clear(NULL, &handles); // @todo João, trocar pela função de limpeza
+      clear_terminal();
       print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
     }
     else if (iscntrl(c))
@@ -87,8 +86,7 @@ char *shell_wait_command_input(void)
       {
         if (buffer_pop(buffer))
         {
-          Process_Handles handles = STATIC_PROCESS_HANDLES();
-          builtin_clear(NULL, &handles); // @todo João, trocar pela função de limpeza
+          clear_terminal();
           print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
         }
       };
