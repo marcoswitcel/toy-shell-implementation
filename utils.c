@@ -92,4 +92,18 @@ Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
   return args;
 }
 
+void clear_terminal()
+{
+  // @note http://vt100.net/docs/vt100-ug/chapter3.html#ED
+  printf("\x1b[2J");
+  // @note http://vt100.net/docs/vt100-ug/chapter3.html#CUP
+  printf("\x1b[H");
+}
+
+void emmit_ring_bell()
+{
+  // o char BEL é o valor decimal 7 e hex 07
+  write(STDOUT_FILENO, "\x7", 1);
+}
+
 #endif // UTILS_C

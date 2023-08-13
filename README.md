@@ -16,3 +16,7 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html)
 * [https://stackoverflow.com/questions/8516823/redirecting-output-to-a-file-in-c](https://stackoverflow.com/questions/8516823/redirecting-output-to-a-file-in-c)
 * [https://stackoverflow.com/questions/5517913/redirecting-stdout-to-file-after-a-fork](https://stackoverflow.com/questions/5517913/redirecting-stdout-to-file-after-a-fork)
+* [https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html](https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html)
+* [https://vt100.net/docs/vt100-ug/chapter3.html#ED](https://vt100.net/docs/vt100-ug/chapter3.html#ED)
+* [https://en.wikipedia.org/wiki/VT100](https://en.wikipedia.org/wiki/VT100)
+* [https://vt100.net/docs/vt100-ug/chapter3.html#CUP](https://vt100.net/docs/vt100-ug/chapter3.html#CUP)
