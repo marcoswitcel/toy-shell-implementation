@@ -77,7 +77,8 @@ char *shell_wait_command_input(void)
     }
     else if (c == FORM_FEED) // @note Crtl + L
     {
-      builtin_clear(NULL);
+      Process_Handles handles = STATIC_PROCESS_HANDLES();
+      builtin_clear(NULL, &handles); // @todo João, trocar pela função de limpeza
       print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
     }
     else if (iscntrl(c))
@@ -86,7 +87,8 @@ char *shell_wait_command_input(void)
       {
         if (buffer_pop(buffer))
         {
-          builtin_clear(NULL);
+          Process_Handles handles = STATIC_PROCESS_HANDLES();
+          builtin_clear(NULL, &handles); // @todo João, trocar pela função de limpeza
           print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
         }
       };
@@ -157,7 +159,15 @@ int shell_execute_command(const Process_Parameter process_parameter)
   Builtin_Function builtin_func = has_builtin_for(args[0]);
   if (builtin_func)
   {
-    return builtin_func(args);
+    Process_Handles handles = STATIC_PROCESS_HANDLES();
+    if (process_parameter.fd_stdout != -1)
+    {
+      handles.stdout = fdopen(process_parameter.fd_stdout, "w");
+      int result = builtin_func(args, &handles);
+      fclose(handles.stdout);
+      return result;
+    }
+    return builtin_func(args, &handles);
   }
 
   return launch_process(process_parameter);

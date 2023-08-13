@@ -4,15 +4,17 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "./process_manager.c"
+
 bool exit_requested = false;
 
-typedef int (*Builtin_Function)(char **);
+typedef int (*Builtin_Function)(char **, Process_Handles *);
 
 // Definições
-int builtin_cd(char **args);
-int builtin_help(char **args);
-int builtin_exit(char **args);
-int builtin_clear(char **args);
+int builtin_cd(char **args, Process_Handles *handles);
+int builtin_help(char **args, Process_Handles *handles);
+int builtin_exit(char **args, Process_Handles *handles);
+int builtin_clear(char **args, Process_Handles *handles);
 
 const char *builtin_cstring[] = {
   "cd",
@@ -31,19 +33,19 @@ const Builtin_Function builtin_func[] = {
 const int number_of_builtins = sizeof(builtin_cstring) / sizeof(char *);
 
 // Implementações
-int builtin_cd(char **args)
+int builtin_cd(char **args, Process_Handles *handles)
 {
   char *target_folder = args[1];
 
   if (target_folder == NULL)
   {
-    fprintf(stderr, "cd: esperava argumento");
+    fprintf(handles->stderr, "cd: esperava argumento");
   }
   else
   {
     if (chdir(target_folder) != 0)
     {
-      fprintf(stderr, "cd: não foi possível acessar o diretório \"%s\"\n", target_folder);
+      fprintf(handles->stderr, "cd: não foi possível acessar o diretório \"%s\"\n", target_folder);
       return 0; // @note por hora uma falha no cd encerra o terminal... mudar
     }
   }
@@ -51,49 +53,49 @@ int builtin_cd(char **args)
   return 1;
 }
 
-int builtin_help(char **args)
+int builtin_help(char **args, Process_Handles *handles)
 {
-  printf("Toy Shell Implementation - João Marcos\n");
-  printf("Baseado no tutorial de Stephen Brennan\n");
-  printf("Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n");
+  fprintf(handles->stdout, "Toy Shell Implementation - João Marcos\n");
+  fprintf(handles->stdout, "Baseado no tutorial de Stephen Brennan\n");
+  fprintf(handles->stdout, "Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n");
 
   if (args[1] != NULL)
   {
-    printf("Por hora o comando \"help\" não consegue explicar \"%s\".\n", args[1]);  
+    fprintf(handles->stdout, "Por hora o comando \"help\" não consegue explicar \"%s\".\n", args[1]);  
     return 1;
   }
 
-  printf("Comandos builtin básicos:\n");
+  fprintf(handles->stdout, "Comandos builtin básicos:\n");
   for (int i = 0; i < number_of_builtins; i++)
   {
-    printf("  %s\n", builtin_cstring[i]);
+    fprintf(handles->stdout, "  %s\n", builtin_cstring[i]);
   }
 
-  printf("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n");
+  fprintf(handles->stdout, "\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n");
   
   return 1;
 }
 
-int builtin_exit(char **args)
+int builtin_exit(char **args, Process_Handles *handles)
 {
   if (args[1] != NULL)
   {
-    printf("Warning: Ignorando argumentos.\n");  
+    fprintf(handles->stdout, "Warning: Ignorando argumentos.\n");  
   }
 
-  printf("saindo, até mais!!!");
+  fprintf(handles->stdout, "saindo, até mais!!!");
   exit_requested = true;
   
   return 0;
 }
 
-int builtin_clear(char **args)
+int builtin_clear(char **args, Process_Handles *handles)
 {
   clear_terminal();
 
   if (args && args[1] != NULL)
   {
-    printf("Warning: Ignorando argumentos para clear .\n");  //@note apenas para evitar avisos do compilador sobre variáveis não usadas
+    fprintf(handles->stdout, "Warning: Ignorando argumentos para clear .\n");  //@note apenas para evitar avisos do compilador sobre variáveis não usadas
   }
 
   return 1;

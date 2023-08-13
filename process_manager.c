@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 #include "./list.implementations.h"
 #include "./utils.c"
@@ -16,7 +17,14 @@ typedef struct Process_Parameter {
   int fd_stdout;
 } Process_Parameter;
 
+typedef struct Process_Handles {
+  FILE *stdin;
+  FILE *stdout;
+  FILE *stderr;
+} Process_Handles;
+
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdout = -1, }
+#define STATIC_PROCESS_HANDLES() (Process_Handles) { .stdin = stdin, .stdout = stdout, .stderr = stderr, }
 
 bool wait_child_process(pid_t pid)
 {
