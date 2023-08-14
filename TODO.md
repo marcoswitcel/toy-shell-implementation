@@ -7,6 +7,7 @@
 * mais comandos builtin?
 * globing e patter matching
 * implementar limpeza de terminal com crtl + l
+* fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui
 
 # Bugs
 
