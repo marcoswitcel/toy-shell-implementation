@@ -207,18 +207,11 @@ void read_eval_shell_loop()
       {
         printf("Erro ao executar comando:\n%s\n", context.error);
       }
-      free((void *) context.error);
+      FREE_AND_NULLIFY(context.error);
     }
 
-    if (readed_line)
-    {
-      free(readed_line);
-    }
-    if (process_parameter.args)
-    {
-      free(process_parameter.args);
-      process_parameter.args = NULL;
-    }
+    FREE_AND_NULLIFY(readed_line);
+    FREE_AND_NULLIFY(process_parameter.args);
   }
 }
 
