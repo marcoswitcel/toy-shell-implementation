@@ -2,6 +2,15 @@
 
 O código contigo nesse repositório não está completo e serve apenas como espaço criativo para executar a prática de programação.
 
+## Alguns features
+
+* Executar comandos com argumentos
+* Suporte a redirect de output, com alguns bugs e limitações mas implementado
+* Espanção de asteriscos para a lista de arquivos contigos na pasta
+* Suporte a argumentos com àspas
+* Reporte de alguns erros de sintaxe e semântica
+* Testes rudimentares para os recursos principais (feitos com asserts e sem framework alguns)
+
 ## Referências
 
 * Tutorial que guiou o processo explorativo: [https://brennan.io/2015/01/16/write-a-shell-in-c/](https://brennan.io/2015/01/16/write-a-shell-in-c/)
