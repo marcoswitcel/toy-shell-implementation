@@ -14,11 +14,12 @@
 // Desenvolvimento
 #define DEBUG_INFO false
 
-#include "./types.h"
-#include "./tokens.h"
-#include "./parser.h"
-#include "./list.implementations.h"
-#include "./utils.macro.h"
+// @todo João, deselegante incluir assim? porém por hora fica...
+#include "../src/types.h"
+#include "../src/tokens.h"
+#include "../src/parser.h"
+#include "../src/list.implementations.h"
+#include "../src/utils.macro.h"
 
 void test_list_char_prt_implementation(void)
 {

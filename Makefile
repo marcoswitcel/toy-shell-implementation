@@ -1,11 +1,18 @@
 CFLAGS = -Wall -Wextra -pedantic -std=c17
 MARKER="========================"
+
+# Pastas de código fonte
+SHELL_SOURCE_FOLDER=src
+TESTS_SOURCE_FOLDER=tests
+
+# Pasta aonde o artefacto fica após o build
 BUILD_FOLDER_NAME=bin
 
-main: main.c
-	$(CC) main.c -o $(BUILD_FOLDER_NAME)/main $(CFLAGS)
-tests: tests.test.c
-	$(CC) tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
+main: $(SHELL_SOURCE_FOLDER)/main.c
+	$(CC) $(SHELL_SOURCE_FOLDER)/main.c -o $(BUILD_FOLDER_NAME)/main $(CFLAGS)
+
+tests: $(TESTS_SOURCE_FOLDER)/tests.test.c
+	$(CC) $(TESTS_SOURCE_FOLDER)/tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
 
 run: main
 	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main"
