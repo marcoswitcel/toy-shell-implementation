@@ -18,6 +18,7 @@
 #include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./utils.c"
+#include "./utils.macro.h"
 #include "./types.h"
 #include "./tokens.h"
 #include "./parser.h"
@@ -211,6 +212,9 @@ void read_eval_shell_loop()
     }
 
     FREE_AND_NULLIFY(readed_line);
+    // @todo João, a função parece funcionar, mas alguém está guardando referência para alguma dessas strings
+    // pois está dando segfault em alguns casos... Debugar mais.
+    // release_cstring_from_null_terminated_pointer_array(process_parameter.args);
     FREE_AND_NULLIFY(process_parameter.args);
   }
 }

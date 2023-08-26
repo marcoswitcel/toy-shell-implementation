@@ -10,6 +10,7 @@
 #include <dirent.h>
 
 #include "./list.implementations.h"
+#include "./utils.macro.h"
 
 
 /**
@@ -90,6 +91,15 @@ Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
   args[list->index] = NULL;
 
   return args;
+}
+
+void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_array)
+{
+  while (*pointer_array != NULL)
+  {
+    FREE_AND_NULLIFY(*pointer_array);
+    pointer_array++;
+  }
 }
 
 void clear_terminal()

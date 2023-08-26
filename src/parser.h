@@ -211,8 +211,8 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   {
     token->type = STRING;
     token->data.string = (String_Token) { .cstring = NULL };
-    // @todo João, ajustar leak aqui, ninguém está desalocando essa string
-    // essa memória vai para na função `launch_process` como o args. Desalocar após a execução seria o mais correto
+    // @todo João, essa memória vai para na função `launch_process` como o args. Desalocar após a execução seria o mais correto
+    // até está sendo feito isso, porém, muito fácil de esquecer e reintroduzir o bug
     token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer));
     token->token_index_start = context->index;
 
