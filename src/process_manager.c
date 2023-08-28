@@ -53,13 +53,13 @@ int launch_process(const Process_Parameter process_parameter)
     // processo filho
     if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {
-      printf("Internal: Processo filho não pode executar o programa alvo");
+      printf("Internal: Processo filho não pode executar o programa alvo.\n");
     }
     exit(EXIT_FAILURE);
   }
   else if (pid < 0)
   {
-    printf("Internal: Processo filho não iniciou");
+    printf("Internal: Processo filho não iniciou.");
   }
   else
   {
