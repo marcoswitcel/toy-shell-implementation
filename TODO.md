@@ -24,6 +24,11 @@ intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo 
 |>cat a.txt > a.txt
 cat: a.txt: input file is output file
 ```
+* unicode (utf8) ainda não é suportado, mas quando coloco um comando com caracteres especiais entra em loop
+```bash
+|>echo "olá joão" > output.txt
+```
+
 
 ## Onde parei
 
