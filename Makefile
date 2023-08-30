@@ -8,6 +8,7 @@ TESTS_SOURCE_FOLDER=tests
 # parâmetros condicionais do comando "run-debug"
 # ativa Address Sanitizers e emissão de informação de debug
 run-debug: CFLAGS += -fsanitize=address -g
+run-gdb: CFLAGS += -fsanitize=address -g
 
 # Pasta aonde o artefacto fica após o build
 BUILD_FOLDER_NAME=bin
@@ -28,6 +29,12 @@ run-debug: main
 	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main"
 	@echo $(MARKER)
 	@cd ./$(BUILD_FOLDER_NAME) && ./main
+	@echo "\n$(MARKER)\n"
+
+run-gdb: main
+	@echo "cd ./$(BUILD_FOLDER_NAME) && gdb ./main"
+	@echo $(MARKER)
+	@cd ./$(BUILD_FOLDER_NAME) && gdb ./main
 	@echo "\n$(MARKER)\n"
 
 run-tests: tests
