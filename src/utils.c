@@ -95,6 +95,8 @@ Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
 
 void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_array)
 {
+  assert(pointer_array);
+
   while (*pointer_array != NULL)
   {
     FREE_AND_NULLIFY(*pointer_array);
