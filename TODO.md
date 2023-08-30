@@ -28,15 +28,7 @@ cat: a.txt: input file is output file
 ```bash
 |>echo "olá joão" > output.txt
 ```
-* segfault acontecendo ao tentar exibir mensagens de parse com erro
-* * Tentar usar o GDB para trackear o erro: https://stackoverflow.com/questions/2876357/determine-the-line-of-code-that-causes-a-segmentation-fault
-```bash
-|>echo "jo
-  --------^
-  Descrição: String incompleta, àspas de fechamento faltando.
-Segmentation fault (core dumped)
-make: *** [Makefile:20: run] Error 139
-```
+* segfault acontecendo ao tentar exibir mensagens de parse com erro -- FIXADO
 
 
 ## Onde parei
