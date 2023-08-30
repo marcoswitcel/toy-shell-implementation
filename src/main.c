@@ -212,8 +212,11 @@ void read_eval_shell_loop()
     }
 
     FREE_AND_NULLIFY(readed_line);
-    release_cstring_from_null_terminated_pointer_array(process_parameter.args);
-    FREE_AND_NULLIFY(process_parameter.args);
+    if (process_parameter.args != NULL)
+    {
+      release_cstring_from_null_terminated_pointer_array(process_parameter.args);
+      FREE_AND_NULLIFY(process_parameter.args);
+    }
   }
 }
 
