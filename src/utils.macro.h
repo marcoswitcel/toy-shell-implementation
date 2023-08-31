@@ -12,4 +12,6 @@
  */
 #define FREE_AND_NULLIFY(LHSREF) { free((void *) LHSREF); LHSREF = NULL; }
 
+#define ALLOC(TYPE, HOW_MANY) ((TYPE *) malloc(sizeof(TYPE) * HOW_MANY))
+
 #endif // UTILS_MACRO_H

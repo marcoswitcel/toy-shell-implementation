@@ -172,6 +172,30 @@ int shell_execute_command(const Process_Parameter process_parameter)
   return launch_process(process_parameter);
 }
 
+void shell_report_parse_error(Parse_Context *context)
+{
+  if (context->error_start_index > -1)
+  {
+    printf("  ");
+    for (signed i = 0; i < context->error_start_index+1; i++)
+    {
+      if (i == context->error_start_index)
+      {
+        printf("^");
+      }
+      else
+      {
+        printf("-");
+      }
+    }
+    printf("\n  Descrição: %s\n", context->error);
+  }
+  else
+  {
+    printf("Erro ao executar comando:\n%s\n", context->error);
+  }
+}
+
 // @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
@@ -188,26 +212,7 @@ void read_eval_shell_loop()
     }
     else
     {
-      if (context.error_start_index > -1)
-      {
-        printf("  ");
-        for (signed i = 0; i < context.error_start_index+1; i++)
-        {
-          if (i == context.error_start_index)
-          {
-            printf("^");
-          }
-          else
-          {
-            printf("-");
-          }
-        }
-        printf("\n  Descrição: %s\n", context.error);
-      }
-      else
-      {
-        printf("Erro ao executar comando:\n%s\n", context.error);
-      }
+      shell_report_parse_error(&context);
       FREE_AND_NULLIFY(context.error);
     }
 
