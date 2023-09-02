@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "./compilation_definitions.h"
 #include "./parser.h"
 #include "./process_manager.c"
 #include "./types.h"

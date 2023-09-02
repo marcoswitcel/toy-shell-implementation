@@ -1,4 +1,4 @@
-#define _DEFAULT_SOURCE
+#include "./compilation_definitions.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +12,6 @@
 #include <ctype.h>
 #include <dirent.h>
 
-// Desenvolvimento
-#define DEBUG_INFO false
 
 #include "./list.implementations.h"
 #include "./process_manager.c"
