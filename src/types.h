@@ -1,3 +1,7 @@
+#ifndef _TYPES_H_
+#define _TYPES_H_
+
+#include <stdlib.h>
 
 typedef enum ASCII_Control_Characters {
   BACKSPACE = 127,
@@ -81,3 +85,5 @@ const char *buffer_ensure_null_terminated_view(Buffer *buffer)
 
   return &buffer->buffer[0];
 }
+
+#endif // _TYPES_H_
