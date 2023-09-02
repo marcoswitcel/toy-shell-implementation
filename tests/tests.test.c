@@ -1,4 +1,4 @@
-#define _DEFAULT_SOURCE
+#include "../src/compilation_definitions.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,9 +10,6 @@
 #include <unistd.h>
 #include <termios.h>
 #include <ctype.h>
-
-// Desenvolvimento
-#define DEBUG_INFO false
 
 // @todo João, deselegante incluir assim? porém por hora fica...
 #include "../src/types.h"
