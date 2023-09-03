@@ -73,8 +73,7 @@ bool buffer_push_at(Buffer *buffer, char value, int index)
 {
   buffer_ensure_enough_space(buffer);
 
-  // @todo João, esse memcpy é seguro e garantido em todas as implementações?
-  memcpy(&buffer->buffer[index+1], &buffer->buffer[index], buffer->buffer_size - index);
+  memmove(&buffer->buffer[index+1], &buffer->buffer[index], buffer->index - index);
 
   buffer->buffer[index] = value;
   buffer->index++;
