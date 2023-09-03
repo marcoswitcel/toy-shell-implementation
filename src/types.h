@@ -91,6 +91,12 @@ bool buffer_pop(Buffer *buffer)
   return false;
 }
 
+/**
+ * @brief adiciona um null ao final do buffer, mas não incrementa o index
+ * 
+ * @param buffer 
+ * @return const char* 
+ */
 const char *buffer_ensure_null_terminated_view(Buffer *buffer)
 {
   buffer_ensure_enough_space(buffer);
