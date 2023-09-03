@@ -24,6 +24,36 @@ static inline void print_input_mark(const char *cstring)
   printf("|>");
 }
 
+typedef enum Key_Pressed {
+  ARROW_UP,
+  ARROW_DOWN,
+  ARROW_LEFT,
+  ARROW_RIGHT,
+  UNKNOWN,
+} Key_Pressed;
+
+static Key_Pressed handle_escape_sequence()
+{
+  int c = getchar();
+  if (c == '[')
+  {
+    c = getchar();
+    switch(c)
+    {
+      case 'A': return ARROW_UP;
+      case 'B': return ARROW_DOWN;
+      case 'C': return ARROW_RIGHT;
+      case 'D': return ARROW_LEFT;
+    }
+    return UNKNOWN;
+  }
+  else
+  {
+    assert(false && "não lidando com sequências inválidas ainda");
+    return UNKNOWN;
+  }
+}
+
 char *shell_wait_command_input(void)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
@@ -34,7 +64,19 @@ char *shell_wait_command_input(void)
   {
     c = getchar();
 
-    if (c == EOF || c == '\n')
+    if (c == 27)
+    {
+      // @todo João, falta lidar com sequências inválidas e keys desconhecidas
+      int key = handle_escape_sequence();
+      switch (key)
+      {
+        case ARROW_UP: emmit_ring_bell(); break;
+        case ARROW_DOWN: emmit_ring_bell(); break;
+        case ARROW_RIGHT: emmit_ring_bell(); break;
+        case ARROW_LEFT: emmit_ring_bell(); break;
+      }
+    }
+    else if (c == EOF || c == '\n')
     {
       printf("\n");// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
