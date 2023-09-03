@@ -2,6 +2,7 @@
 #define _TYPES_H_
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef enum ASCII_Control_Characters {
   BACKSPACE = 127,
@@ -62,6 +63,20 @@ bool buffer_push(Buffer *buffer, char value)
   buffer_ensure_enough_space(buffer);
 
   buffer->buffer[buffer->index] = value;
+  buffer->index++;
+
+  return true;
+}
+
+
+bool buffer_push_at(Buffer *buffer, char value, int index)
+{
+  buffer_ensure_enough_space(buffer);
+
+  // @todo João, esse memcpy é seguro e garantido em todas as implementações?
+  memcpy(&buffer->buffer[index+1], &buffer->buffer[index], buffer->buffer_size - index);
+
+  buffer->buffer[index] = value;
   buffer->index++;
 
   return true;

@@ -58,6 +58,7 @@ char *shell_wait_command_input(void)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
   int c;
+  int cursor_position = 0;
 
   print_input_mark(NULL);
   while (true)
@@ -115,6 +116,7 @@ char *shell_wait_command_input(void)
       {
         if (buffer_pop(buffer))
         {
+          cursor_position--;
           clear_terminal();
           print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
         }
@@ -123,7 +125,8 @@ char *shell_wait_command_input(void)
     else
     {
       printf("%c", c);// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
-      buffer_push(buffer, c); // @todo João, testar
+      buffer_push_at(buffer, c, cursor_position); // @todo João, testar
+      cursor_position++;
     }
   }
 }
