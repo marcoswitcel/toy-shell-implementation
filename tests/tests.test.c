@@ -17,6 +17,7 @@
 #include "../src/parser.h"
 #include "../src/list.implementations.h"
 #include "../src/utils.macro.h"
+#include "./buffer.test.c"
 
 void test_list_char_prt_implementation(void)
 {
@@ -445,6 +446,7 @@ int main(void)
   test_list_of_floats_implementation();
   test_tokenize_01();
   test_tokenize_02();
+  test_suit_buffer();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
