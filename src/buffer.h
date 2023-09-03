@@ -1,9 +1,11 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <assert.h>
 
 typedef struct Buffer {
   unsigned buffer_size;

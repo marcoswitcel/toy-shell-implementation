@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "./buffer.h"
-#include "./buffer.c"
 
 typedef enum ASCII_Control_Characters {
   BACKSPACE = 127,

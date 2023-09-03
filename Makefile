@@ -9,15 +9,19 @@ TESTS_SOURCE_FOLDER=tests
 # ativa Address Sanitizers e emissão de informação de debug
 run-debug: CFLAGS += -fsanitize=address -g
 run-gdb: CFLAGS += -fsanitize=address -g
+build-obj: CFLAGS += -c
 
 # Pasta aonde o artefacto fica após o build
 BUILD_FOLDER_NAME=bin
 
-main: $(SHELL_SOURCE_FOLDER)/main.c
-	$(CC) $(SHELL_SOURCE_FOLDER)/main.c -o $(BUILD_FOLDER_NAME)/main $(CFLAGS)
+build-obj:
+	$(CC) $(SHELL_SOURCE_FOLDER)/buffer.c -o $(BUILD_FOLDER_NAME)/buffer.o $(CFLAGS)
 
-tests: $(TESTS_SOURCE_FOLDER)/tests.test.c
-	$(CC) $(TESTS_SOURCE_FOLDER)/tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
+main: $(SHELL_SOURCE_FOLDER)/main.c build-obj
+	$(CC) $(BUILD_FOLDER_NAME)/buffer.o $(SHELL_SOURCE_FOLDER)/main.c -o $(BUILD_FOLDER_NAME)/main $(CFLAGS)
+
+tests: $(TESTS_SOURCE_FOLDER)/tests.test.c build-obj
+	$(CC) $(BUILD_FOLDER_NAME)/buffer.o $(TESTS_SOURCE_FOLDER)/tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
 
 run: main
 	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main"
