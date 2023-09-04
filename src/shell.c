@@ -32,7 +32,7 @@ typedef enum Key_Pressed {
   UNKNOWN,
 } Key_Pressed;
 
-static Key_Pressed handle_escape_sequence()
+static Key_Pressed try_process_escape_sequence()
 {
   int c = getchar();
   if (c == '[')
@@ -54,11 +54,31 @@ static Key_Pressed handle_escape_sequence()
   }
 }
 
+// @todo João, falta lidar com sequências inválidas e keys desconhecidas
+static void handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor_position)
+{
+  switch (key)
+  {
+    case ARROW_UP: emmit_ring_bell(); break;
+    case ARROW_DOWN: emmit_ring_bell(); break;
+    case ARROW_RIGHT:
+    {
+      if (*cursor_position < buffer->index) (*cursor_position)++;
+    }
+    break;
+    case ARROW_LEFT:
+    {
+      if (*cursor_position > 0) (*cursor_position)--;
+    }
+    break;
+  }
+}
+
 char *shell_wait_command_input(void)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
   int c;
-  int cursor_position = 0;
+  unsigned cursor_position = 0;
 
   print_input_mark(NULL);
   while (true)
@@ -67,15 +87,8 @@ char *shell_wait_command_input(void)
 
     if (c == 27)
     {
-      // @todo João, falta lidar com sequências inválidas e keys desconhecidas
-      int key = handle_escape_sequence();
-      switch (key)
-      {
-        case ARROW_UP: emmit_ring_bell(); break;
-        case ARROW_DOWN: emmit_ring_bell(); break;
-        case ARROW_RIGHT: emmit_ring_bell(); break;
-        case ARROW_LEFT: emmit_ring_bell(); break;
-      }
+      int key = try_process_escape_sequence();
+      handle_control_key_pressed(buffer, key, &cursor_position);
     }
     else if (c == EOF || c == '\n')
     {
