@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 
 #include "../src/types.h"
 
@@ -96,8 +97,42 @@ static void test_buffer_push_at(void)
   assert(buffer->index == 4);
 }
 
+static void test_buffer_remove_at(void)
+{
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
+  put_garbage_on_buffer(buffer);
+  char t = 't';
+  char u = 'u';
+  char x = 'x';
+  char texto[] = { t, u, x, '\0' };
+
+  assert(buffer->index == 0);
+  buffer_push(buffer, t);
+  assert(buffer->buffer[0] == t);
+  assert(buffer->index == 1);
+  buffer_push(buffer, u);
+  assert(buffer->index == 2);
+  assert(buffer->buffer[1] == u);
+  buffer_push(buffer, x);
+  assert(buffer->index == 3);
+  assert(buffer->buffer[2] == x);
+
+  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  buffer_pop_at(buffer, 1);
+  assert(buffer->index == 2);
+  assert(buffer->buffer[1] == x);
+  assert(strcmp("tx", buffer_ensure_null_terminated_view(buffer)) == 0);
+
+
+  buffer_push_at(buffer, u, 1);
+  assert(buffer->index == 3);
+  assert(buffer->buffer[1] == u);
+  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+}
+
 extern void test_suit_buffer()
 {
   test_buffer_implementation();
   test_buffer_push_at();
+  test_buffer_remove_at();
 }

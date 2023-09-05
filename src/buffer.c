@@ -55,7 +55,7 @@ bool buffer_push(Buffer *buffer, char value)
 }
 
 
-bool buffer_push_at(Buffer *buffer, char value, int index)
+bool buffer_push_at(Buffer *buffer, char value, unsigned index)
 {
   buffer_ensure_enough_space(buffer);
 
@@ -74,6 +74,21 @@ bool buffer_pop(Buffer *buffer)
     buffer->index--;
     return true;
   }
+  return false;
+}
+
+bool buffer_pop_at(Buffer *buffer, unsigned index)
+{
+  assert(index < buffer->index);
+
+  memmove(&buffer->buffer[index], &buffer->buffer[index + 1], buffer->index - index - 1);
+
+  if (buffer->index)
+  {
+    buffer->index--;
+    return true;
+  }
+  
   return false;
 }
 
