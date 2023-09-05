@@ -85,6 +85,9 @@ char *shell_wait_command_input(void)
   {
     c = getchar();
 
+    // @todo João, implementar page home
+    // @todo João, page end
+    // @todo João, del
     if (c == 27)
     {
       int key = try_process_escape_sequence();
