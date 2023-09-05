@@ -127,7 +127,7 @@ char *shell_wait_command_input(void)
     {
       if (c == BACKSPACE)
       {
-        if (buffer_pop_at(buffer, cursor_position - 1))
+        if (NO_UNDERFLOW_SUBTRACTING(cursor_position, 1) && buffer_pop_at(buffer, cursor_position - 1))
         {
           cursor_position--;
           erase_line();

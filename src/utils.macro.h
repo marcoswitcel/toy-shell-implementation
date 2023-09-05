@@ -14,4 +14,6 @@
 
 #define ALLOC(TYPE, HOW_MANY) ((TYPE *) malloc(sizeof(TYPE) * HOW_MANY))
 
+#define NO_UNDERFLOW_SUBTRACTING(NUMBER, VALUE) (NUMBER >= VALUE)
+
 #endif // UTILS_MACRO_H
