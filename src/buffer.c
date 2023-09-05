@@ -79,12 +79,13 @@ bool buffer_pop(Buffer *buffer)
 
 bool buffer_pop_at(Buffer *buffer, unsigned index)
 {
-  assert(index < buffer->index);
-
-  memmove(&buffer->buffer[index], &buffer->buffer[index + 1], buffer->index - index - 1);
-
-  if (buffer->index)
+  if (buffer->index && index < buffer->index)
   {
+    if (index < buffer->index - 1)
+    {
+      memmove(&buffer->buffer[index], &buffer->buffer[index + 1], buffer->index - index - 1);
+    }
+
     buffer->index--;
     return true;
   }

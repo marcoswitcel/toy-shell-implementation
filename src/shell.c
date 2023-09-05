@@ -127,7 +127,7 @@ char *shell_wait_command_input(void)
     {
       if (c == BACKSPACE)
       {
-        if (buffer_pop(buffer))
+        if (buffer_pop_at(buffer, cursor_position - 1))
         {
           cursor_position--;
           clear_terminal();
