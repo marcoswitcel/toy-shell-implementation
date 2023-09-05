@@ -130,7 +130,7 @@ char *shell_wait_command_input(void)
         if (buffer_pop_at(buffer, cursor_position - 1))
         {
           cursor_position--;
-          clear_terminal();
+          erase_line();
           print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
         }
       };
@@ -145,7 +145,7 @@ char *shell_wait_command_input(void)
       }
       else
       {
-        clear_terminal();
+        erase_line();
         print_input_mark(buffer_ensure_null_terminated_view(buffer));
       }
     }

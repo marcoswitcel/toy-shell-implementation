@@ -104,6 +104,12 @@ void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_
   }
 }
 
+// @note sugestão vinda do stackoverflow, conforme for evoluindo esse código revisar esse VT escape code
+void erase_line()
+{
+  printf("\33[2K\r");
+}
+
 void clear_terminal()
 {
   // @note http://vt100.net/docs/vt100-ug/chapter3.html#ED
