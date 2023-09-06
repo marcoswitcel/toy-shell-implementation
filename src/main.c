@@ -47,11 +47,11 @@ void activate_raw_mode()
 int main(void)
 {
   activate_raw_mode();
-  // @note Aceitar argumentos pela linha de comando? que argumentos
 
+  // @note Aceitar argumentos pela linha de comando? que argumentos?
   // @note talvez ler um arquivo de configuração? mas que configurações aceitar?
 
-  // Read Eval Loop
+  // loop principal, toda lógica roda aqui
   read_eval_shell_loop();
 
   // @note Cleanup se tiver algum para fazer
