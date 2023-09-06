@@ -30,9 +30,17 @@ typedef enum Key_Pressed {
   ARROW_LEFT,
   ARROW_RIGHT,
   DELETE,
+  HOME,
+  END,
   UNKNOWN,
 } Key_Pressed;
 
+/**
+ * @brief converte sequências de escape em um representação interna para a sequência
+ * @note https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#the-home-and-end-keys
+ * 
+ * @return Key_Pressed 
+ */
 static Key_Pressed try_process_escape_sequence()
 {
   int c = getchar();
@@ -45,13 +53,47 @@ static Key_Pressed try_process_escape_sequence()
       case 'B': return ARROW_DOWN;
       case 'C': return ARROW_RIGHT;
       case 'D': return ARROW_LEFT;
+      case 'H': return HOME;
+      case 'F': return END;
+      case '1':
+      {
+        c = getchar();
+        if (c == '~') return HOME;
+      } break;
       case '3':
       {
         c = getchar();
         if (c == '~') return DELETE;
       } break;
+      case '4':
+      {
+        c = getchar();
+        if (c == '~') return END;
+      } break;
+      case '7':
+      {
+        c = getchar();
+        if (c == '~') return HOME;
+      } break;
+      case '8':
+      {
+        c = getchar();
+        if (c == '~') return END;
+      } break;
     }
 
+    return UNKNOWN;
+  }
+  else if (c == 'O')
+  {
+    c = getchar();
+    switch(c)
+    {
+      case 'H': return HOME;
+      case 'F': return END;
+    }
+
+    assert(false && "não lidando com sequências inválidas ainda");
     return UNKNOWN;
   }
   else
@@ -96,6 +138,16 @@ static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor
       }
     }
     break;
+    case HOME:
+    {
+      *cursor_position = 0;
+    }
+    break;
+    case END:
+    {
+      *cursor_position = buffer->index;
+    }
+    break;
     default: assert(false && "Escape sequence inválida não tratada.");
   }
 
@@ -113,8 +165,6 @@ char *shell_wait_command_input(void)
   {
     c = getchar();
 
-    // @todo João, implementar page home
-    // @todo João, page end
     if (c == ESC)
     {
       int key = try_process_escape_sequence();
