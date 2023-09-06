@@ -29,6 +29,7 @@ typedef enum Key_Pressed {
   ARROW_DOWN,
   ARROW_LEFT,
   ARROW_RIGHT,
+  DELETE,
   UNKNOWN,
 } Key_Pressed;
 
@@ -44,7 +45,13 @@ static Key_Pressed try_process_escape_sequence()
       case 'B': return ARROW_DOWN;
       case 'C': return ARROW_RIGHT;
       case 'D': return ARROW_LEFT;
+      case '3':
+      {
+        c = getchar();
+        if (c == '~') return DELETE;
+      } break;
     }
+
     return UNKNOWN;
   }
   else
@@ -54,8 +61,17 @@ static Key_Pressed try_process_escape_sequence()
   }
 }
 
-// @todo João, falta lidar com sequências inválidas e keys desconhecidas
-static void handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor_position)
+/**
+ * @brief lida com teclas de controle de edição e outras sequencias de escape
+ * @todo João, falta lidar com sequências inválidas e keys desconhecidas
+ * 
+ * @param buffer 
+ * @param key 
+ * @param cursor_position 
+ * @return true 
+ * @return false 
+ */
+static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor_position)
 {
   switch (key)
   {
@@ -71,7 +87,19 @@ static void handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor
       if (*cursor_position > 0) (*cursor_position)--;
     }
     break;
+    case DELETE:
+    {
+      if (*cursor_position < buffer->buffer_size - 1)
+      {
+        buffer_pop_at(buffer, *cursor_position);
+        return true;
+      }
+    }
+    break;
+    default: assert(false && "Escape sequence inválida não tratada.");
   }
+
+  return false;
 }
 
 char *shell_wait_command_input(void)
@@ -87,11 +115,14 @@ char *shell_wait_command_input(void)
 
     // @todo João, implementar page home
     // @todo João, page end
-    // @todo João, del
-    if (c == 27)
+    if (c == ESC)
     {
       int key = try_process_escape_sequence();
-      handle_control_key_pressed(buffer, key, &cursor_position);
+      if (handle_control_key_pressed(buffer, key, &cursor_position))
+      {
+        erase_line();
+        print_input_mark(buffer_ensure_null_terminated_view(buffer));
+      }
     }
     else if (c == EOF || c == '\n')
     {
