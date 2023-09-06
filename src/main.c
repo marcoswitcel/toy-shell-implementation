@@ -13,13 +13,6 @@
 #include <dirent.h>
 
 
-#include "./list.implementations.h"
-#include "./process_manager.c"
-#include "./utils.c"
-#include "./utils.macro.h"
-#include "./types.h"
-#include "./tokens.h"
-#include "./parser.h"
 #include "./shell.c"
 
 

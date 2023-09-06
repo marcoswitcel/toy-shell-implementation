@@ -10,6 +10,7 @@
 #include "./utils.c"
 #include "./utils.macro.h"
 #include "./nodes.h"
+#include "./buffer.h"
 
 typedef struct Parse_Context {
   const char *source;
