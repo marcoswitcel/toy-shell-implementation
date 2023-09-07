@@ -83,7 +83,7 @@ int builtin_exit(char **args, Process_Handles *handles)
     fprintf(handles->stdout, "Warning: Ignorando argumentos.\n");  
   }
 
-  fprintf(handles->stdout, "saindo, até mais!!!");
+  fprintf(handles->stdout, "saindo, até mais!!!\n");
   exit_requested = true;
   
   return 0;
