@@ -4,9 +4,13 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <termios.h>
 
+#include "./compilation_definitions.h"
 #include "./types.h"
 #include "./terminal.h"
+
+static struct termios original_config;
 
 int get_cursor_position(int *row, int *column)
 {
@@ -43,6 +47,24 @@ bool set_cursor_position(int row, int col)
   int length = strlen(&buffer[0]);
 
   return write(STDOUT_FILENO, &buffer, length) == length;
+}
+
+
+void deactivate_raw_mode()
+{
+  if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\n");
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
+}
+
+void activate_raw_mode(bool set_cleanup_handler)
+{
+  tcgetattr(STDIN_FILENO, &original_config);
+
+  if (set_cleanup_handler) atexit(deactivate_raw_mode);
+
+  struct termios new_config = original_config;
+  new_config.c_lflag &= ~(ECHO | ICANON); // sem echo e buffer de saída
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &new_config);
 }
 
 #endif // TERMINAL_C
