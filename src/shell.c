@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "./compilation_definitions.h"
 #include "./parser.h"
@@ -256,6 +257,12 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
   Sequence_Of_Tokens *tokens = tokenize(context);
 
+  if (tokens->index == 0)
+  {
+    context->error = copy("Nenhum comando encontrado, possivelmente por se tratar de uma linha apenas com espaços.");
+    return STATIC_PROCESS_PARAMETER(NULL);
+  }
+
   if (context->error)
   {
     return STATIC_PROCESS_PARAMETER(NULL);
@@ -301,7 +308,8 @@ int shell_execute_command(const Process_Parameter process_parameter)
   if (args[0] == NULL)
   {
     // @note De fato acontece?
-    return 1; // comando vazio
+    assert(false && "Não deveria ser atingido nunca");
+    return 1;
   }
 
   Builtin_Function builtin_func = has_builtin_for(args[0]);
