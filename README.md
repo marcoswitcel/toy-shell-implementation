@@ -32,3 +32,5 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://stackoverflow.com/questions/2876357/determine-the-line-of-code-that-causes-a-segmentation-fault](https://stackoverflow.com/questions/2876357/determine-the-line-of-code-that-causes-a-segmentation-fault)
 * [https://stackoverflow.com/questions/1079832/how-can-i-configure-my-makefile-for-debug-and-release-builds](https://stackoverflow.com/questions/1079832/how-can-i-configure-my-makefile-for-debug-and-release-builds)
 * [https://stackoverflow.com/questions/12633039/shift-elements-in-array](https://stackoverflow.com/questions/12633039/shift-elements-in-array)
+* [https://vt100.net/docs/vt100-ug/chapter3.html#DSR](https://vt100.net/docs/vt100-ug/chapter3.html#DSR)
+* [https://vt100.net/docs/vt100-ug/chapter3.html#CPR](https://vt100.net/docs/vt100-ug/chapter3.html#CPR)
