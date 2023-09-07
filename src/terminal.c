@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "./types.h"
 #include "./terminal.h"
@@ -33,6 +34,15 @@ int get_cursor_position(int *row, int *column)
   if (sscanf(&buffer[2], "%d;%d", row, column) != 2) return -1;
 
   return 0;
+}
+
+bool set_cursor_position(int row, int col)
+{
+  char buffer[64];
+  sprintf(&buffer[0], "\x1b[%d;%dH", row, col);
+  int length = strlen(&buffer[0]);
+
+  return write(STDOUT_FILENO, &buffer, length) == length;
 }
 
 #endif // TERMINAL_C
