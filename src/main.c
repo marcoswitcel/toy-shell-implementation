@@ -11,8 +11,8 @@ static struct termios original_config;
 
 void deactivate_raw_mode()
 {
-  // @todo João, analisar aqui, está disparando mais de uma vez aparentemente, mas acho que é nos processos filhos
-  // verificar se isso pode causar problemas.
+  // @todo João, analisar aqui, está disparando mais de uma vez aparentemente, acho que é nos processos filhos.
+  // E importante verificar se isso pode causar problemas, aparentemente não está, mas é bom conferir.
   if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\n");
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
 }
