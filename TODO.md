@@ -34,7 +34,7 @@ cat: a.txt: input file is output file
 Internal: Processo filho não pode executar o programa alvo.
 |>^L
 ```
-* após rodar uma comando que resulte na mensagem  de erro interno acima, crt + l seguintes são emitidos como texto ao invés de ser processados. Acredito que alguma sequência de escape ficou pela mentade.
+* após rodar uma comando que resulte na mensagem  de erro interno acima, crt + l seguintes são emitidos como texto ao invés de ser processados. Acredito que alguma sequência de escape ficou pela mentade. -- FIXADO
 
 
 ## Onde parei
