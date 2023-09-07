@@ -50,12 +50,29 @@ int launch_process(const Process_Parameter process_parameter)
       dup2(process_parameter.fd_stdout, STDOUT_FILENO);
     }
 
-    // processo filho
+    /**
+     * @note Aqui entrega o controle do processo atual para o comando que o usuário
+     * tentou invocar, caso falhe os trechos abaixo do if cuidarão do encerramento da
+     * thread e do print da mensagem de erro para o stdout do processo pai.
+     * Por hora o processo pai está esperando a respota desse comando (sincronizado),
+     * então o printf será emitido na ordem certa.
+     * 
+     */
     if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {
       printf("Internal: Processo filho não pode executar o programa alvo.\n");
     }
-    exit(EXIT_FAILURE);
+
+    /**
+     * @note João, o ideial seria nem fazer o fork caso o programar não fosse encontrado,
+     * porém, não analisei se tem outro possível motivo para cair aqui, portanto não vou
+     * remover essa lógica aqui.
+     * Deixei o comando marcado como sucesso porquê o erro será tratado na thread principal
+     * então não tem porquê deixar esse processo terminar com código de erro.
+     * Outra coisa, substituí a chamada da função `exit` pela função `_Exit` porque ela não
+     * invoca os handlers registrados com a função `atexit`.
+     */
+    _Exit(EXIT_SUCCESS);
   }
   else if (pid < 0)
   {
