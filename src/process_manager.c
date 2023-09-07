@@ -97,7 +97,7 @@ pid_t fork_and_run(void (*func)(void), bool wait)
     // processo filho
     func();
 
-    exit(EXIT_SUCCESS);
+    _Exit(EXIT_SUCCESS);
   }
   else if (pid < 0)
   {
