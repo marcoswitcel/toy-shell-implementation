@@ -150,6 +150,11 @@ static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor
       *cursor_position = buffer->index;
     }
     break;
+    case UNKNOWN:
+    {
+      assert(false && "Escape sequence desconhecida não tratada.");
+    }
+    break;
     default: assert(false && "Escape sequence inválida não tratada.");
   }
 
