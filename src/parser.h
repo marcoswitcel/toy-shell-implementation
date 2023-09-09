@@ -296,9 +296,6 @@ const Parse_Function parse_functions[] = {
   &try_parse_string,
 };
 
-// @bugtrack João, bug para corrigir, possivelmente mais bugs relacionados
-// |>echo asd "asdads \' asd"
-// asd
 Sequence_Of_Tokens *tokenize(Parse_Context *context)
 {
   Sequence_Of_Tokens *tokens = create_sequence_of_tokens(64, 64);
