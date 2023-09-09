@@ -213,8 +213,9 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   {
     token->type = STRING;
     token->data.string = (String_Token) { .cstring = NULL };
-    // @todo João, essa memória vai para na função `launch_process` como o args. Desalocar após a execução seria o mais correto
-    // até está sendo feito isso, porém, muito fácil de esquecer e reintroduzir o bug
+    // @todo João, essa memória vai para na função `launch_process` como o args.
+    // Desalocar após a execução seria o mais correto até está sendo feito isso,
+    // porém, muito fácil de esquecer e reintroduzir o bug.
     token->data.string.cstring = copy(buffer_ensure_null_terminated_view(buffer));
     token->token_index_start = context->index;
 
@@ -295,7 +296,7 @@ const Parse_Function parse_functions[] = {
   &try_parse_string,
 };
 
-// @note João, bug para corrigir, possivelmente mais bugs relacionados
+// @bugtrack João, bug para corrigir, possivelmente mais bugs relacionados
 // |>echo asd "asdads \' asd"
 // asd
 Sequence_Of_Tokens *tokenize(Parse_Context *context)
@@ -336,17 +337,16 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
 
 Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
 {
-  // Aqui a tokenização acaba e começa o análise léxica acaba e começa a análise sintática
-  // após um token '>' deve sempre vir uma string, com o nome do arquivo, mas aí já é semântica
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
   const char *output_filename = NULL;
   bool append_mode = false;
+  
   for (unsigned i = 0; i < tokens->index; i++)
   {
     Token token = tokens->data[i];
-    assert(token.token_index_start > -1); // @note só para garantir que não estou errando nada
+    assert(token.token_index_start > -1);
 
     if (token.type == STRING && token.data.string.cstring)
     {

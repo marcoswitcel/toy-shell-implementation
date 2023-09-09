@@ -57,6 +57,8 @@ int launch_process(const Process_Parameter process_parameter)
      * Por hora o processo pai está esperando a respota desse comando (sincronizado),
      * então o printf será emitido na ordem certa.
      * 
+     * @note `execvp` procura pelo comando requisitado no `PATH`.
+     * @reference https://man7.org/linux/man-pages/man3/exec.3p.html
      */
     if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {

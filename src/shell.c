@@ -17,9 +17,10 @@
 
 static inline void print_input_mark(const char *cstring)
 {
+  // @todo João, acredito que o melhor seria mudar para o comando `write`
   if (cstring)
   {
-    printf("|>%s", cstring); // @note organizar reimpressão da marcação inicial
+    printf("|>%s", cstring);
     return;
   }
 
@@ -39,7 +40,7 @@ typedef enum Key_Pressed {
 
 /**
  * @brief converte sequências de escape em um representação interna para a sequência
- * @note https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#the-home-and-end-keys
+ * @reference https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#the-home-and-end-keys
  * 
  * @return Key_Pressed 
  */
@@ -163,7 +164,7 @@ static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor
 
 char *shell_wait_command_input(void)
 {
-  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE); // @note aqui para testar
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
   int c;
   unsigned cursor_position = 0;
 
@@ -189,10 +190,10 @@ char *shell_wait_command_input(void)
     }
     else if (c == EOF || c == '\n')
     {
-      printf("\n");// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
+      printf("\n");
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
-      if (DEBUG_INFO) printf("linha lida: [%s]\n", result); // @note apenas para debugar
+      if (DEBUG_INFO) printf("linha lida: [%s]\n", result);
 
       destroy_buffer(buffer);
       return result;
@@ -210,15 +211,15 @@ char *shell_wait_command_input(void)
           printf("%s ", list->data[i]);
         }
         printf("\n");
-        print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
+        print_input_mark(buffer_ensure_null_terminated_view(buffer));
       }
       
       destroy_list_of_strings(list);
     }
-    else if (c == FORM_FEED) // @note Crtl + L
+    else if (c == FORM_FEED) // Crtl + L
     {
       clear_terminal();
-      print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
+      print_input_mark(buffer_ensure_null_terminated_view(buffer));
     }
     else if (iscntrl(c))
     {
@@ -228,17 +229,17 @@ char *shell_wait_command_input(void)
         {
           cursor_position--;
           erase_line();
-          print_input_mark(buffer_ensure_null_terminated_view(buffer)); // @note organizar reimpressão da marcação inicial
+          print_input_mark(buffer_ensure_null_terminated_view(buffer));
         }
       };
     }
     else
     {
-      buffer_push_at(buffer, c, cursor_position); // @todo João, testar
+      buffer_push_at(buffer, c, cursor_position);
       cursor_position++;
       if (cursor_position == buffer->index)
       {
-        printf("%c", c);// @note deveria ser bufferizado do meu lado? por hora não está em "raw_mode" ainda, mas vai ficar.
+        printf("%c", c);
       }
       else
       {
@@ -358,7 +359,6 @@ void shell_report_parse_error(Parse_Context *context)
   }
 }
 
-// @note Não tenho certeza de nomes, nem de estrutura ainda, mas vamos ver como flui.
 void read_eval_shell_loop()
 {
   while (!exit_requested)
@@ -366,8 +366,7 @@ void read_eval_shell_loop()
     char *readed_line = shell_wait_command_input();
     Parse_Context context = create_parse_context(readed_line);
     Process_Parameter process_parameter = shell_parse_command(&context);
-    // @note já consegue iniciar processos, por hora precisam ser com o caminho absoluto "/usr/bin/ls"
-    // @note só precisava mudar para `execvp` para ele aceitar ls sem o caminho completo
+
     if (context.error == NULL)
     {
       shell_execute_command(process_parameter);

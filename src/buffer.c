@@ -18,7 +18,7 @@ Buffer *create_buffer(unsigned buffer_size, unsigned grouth_by)
 
 void destroy_buffer(Buffer *buffer)
 {
-  assert(buffer->buffer && "Sempre deve ser válido"); // @note poderia adicionar um guarda aqui
+  assert(buffer->buffer && "Sempre deve ser válido");
 
   free(buffer->buffer);
   free(buffer);
