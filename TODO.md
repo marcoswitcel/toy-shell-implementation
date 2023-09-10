@@ -8,6 +8,8 @@
 * globing e patter matching
 * implementar limpeza de terminal com crtl + l
 * fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui
+* acessar o último comando digitado apertando pra cima
+* emitir caracteres coloridos
 
 
 ## Anotações 15/08/2023
