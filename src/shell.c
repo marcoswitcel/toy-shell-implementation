@@ -7,11 +7,24 @@
 #include <assert.h>
 
 #include "./compilation_definitions.h"
+#include "./list.implementations.h"
 #include "./parser.h"
 #include "./process_manager.c"
 #include "./types.h"
 #include "./shell_builtins.c"
 #include "./terminal.c"
+
+typedef struct Shell_Context_Data
+{
+  List_Of_Strings *last_typed_commands;
+} Shell_Context_Data;
+
+Shell_Context_Data create_shell_context_data()
+{
+  return (Shell_Context_Data) {
+    .last_typed_commands = create_list_of_strings(64, 64),
+  };
+}
 
 #define LINE_BUFFER_SIZE 1024
 
@@ -116,11 +129,19 @@ static Key_Pressed try_process_escape_sequence()
  * @return true 
  * @return false 
  */
-static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor_position)
+static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buffer, int key, unsigned *cursor_position)
 {
   switch (key)
   {
-    case ARROW_UP: emmit_ring_bell(); break;
+    case ARROW_UP: {
+      emmit_ring_bell();
+      if (context->last_typed_commands->index > 0)
+      {
+        // @todo João, pra terminar aqui preciso conseguir limpar o buffer com facilidade e seria interessante poder pre-allocar 
+        // o espaço em bytes necessários pra string inteira
+        printf("última string digitada: %s", context->last_typed_commands->data[context->last_typed_commands->index - 1]);
+      }
+    }; break;
     case ARROW_DOWN: emmit_ring_bell(); break;
     case ARROW_RIGHT:
     {
@@ -162,7 +183,7 @@ static bool handle_control_key_pressed(Buffer *buffer, int key, unsigned *cursor
   return false;
 }
 
-char *shell_wait_command_input(void)
+char *shell_wait_command_input(Shell_Context_Data *context)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
   int c;
@@ -176,7 +197,7 @@ char *shell_wait_command_input(void)
     if (c == ESC)
     {
       int key = try_process_escape_sequence();
-      if (handle_control_key_pressed(buffer, key, &cursor_position))
+      if (handle_control_key_pressed(context, buffer, key, &cursor_position))
       {
         erase_line();
         print_input_mark(buffer_ensure_null_terminated_view(buffer));
@@ -361,9 +382,11 @@ void shell_report_parse_error(Parse_Context *context)
 
 void read_eval_shell_loop()
 {
+  Shell_Context_Data shell_context = create_shell_context_data();
+
   while (!exit_requested)
   {
-    char *readed_line = shell_wait_command_input();
+    char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
     Process_Parameter process_parameter = shell_parse_command(&context);
 
@@ -376,6 +399,10 @@ void read_eval_shell_loop()
       shell_report_parse_error(&context);
       FREE_AND_NULLIFY(context.error);
     }
+
+    // @todo João, por hora vou copiar a string, mas poderia muito bem pegar ela emprestada, pois esse é o ponto aonde ela não é mais necessária
+    // @todo João, indiferente de como eu implementar será necessário limpar as strings contidas nessa lista eventualmente
+    list_of_strings_push(shell_context.last_typed_commands, copy(readed_line));
 
     FREE_AND_NULLIFY(readed_line);
     if (process_parameter.args != NULL)
