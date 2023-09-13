@@ -22,6 +22,8 @@ bool buffer_push(Buffer *buffer, char value);
 
 bool buffer_push_at(Buffer *buffer, char value, unsigned index);
 
+void buffer_push_all(Buffer *buffer, const char *source, unsigned length);
+
 bool buffer_pop(Buffer *buffer);
 
 bool buffer_pop_at(Buffer *buffer, unsigned index);

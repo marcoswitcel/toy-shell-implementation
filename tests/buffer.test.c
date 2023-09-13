@@ -159,10 +159,37 @@ static void test_buffer_clear(void)
   assert(strcmp("", buffer_ensure_null_terminated_view(buffer)) == 0);
 }
 
+static void test_buffer_push_all(void)
+{
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
+  put_garbage_on_buffer(buffer);
+  char texto[] = "texto para adicionar";
+  unsigned length = strlen(texto);
+
+  assert(buffer->index == 0);
+
+  buffer_push_all(buffer, (const char *) &texto, length);
+  assert(buffer->index == length);
+
+  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+
+  buffer_push_all(buffer, (const char *) &texto, length);
+  assert(buffer->index == length * 2);
+
+  buffer_clear(buffer);
+  assert(buffer->index == 0);
+
+  buffer_push_all(buffer, (const char *) &texto, length);
+  assert(buffer->index == length);
+  
+  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+}
+
 extern void test_suit_buffer()
 {
   test_buffer_implementation();
   test_buffer_push_at();
   test_buffer_remove_at();
   test_buffer_clear();
+  test_buffer_push_all();
 }

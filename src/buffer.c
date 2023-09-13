@@ -98,6 +98,15 @@ void buffer_clear(Buffer *buffer)
   buffer->index = 0;
 }
 
+void buffer_push_all(Buffer *buffer, const char *source, unsigned length)
+{
+  // @todo João, implementar isso aqui de uma forma eficiente
+  for (unsigned i = 0; i < length; i++)
+  {
+    buffer_push(buffer, source[i]);
+  }
+}
+
 /**
  * @brief adiciona um null ao final do buffer, mas não incrementa o index
  * 
