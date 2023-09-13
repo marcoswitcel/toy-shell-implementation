@@ -130,9 +130,39 @@ static void test_buffer_remove_at(void)
   assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
 }
 
+static void test_buffer_clear(void)
+{
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
+  put_garbage_on_buffer(buffer);
+  char t = 't';
+  char u = 'u';
+  char x = 'x';
+  char texto[] = { t, u, x, '\0' };
+
+  assert(buffer->index == 0);
+
+  buffer_clear(buffer);
+  assert(buffer->index == 0);
+
+  buffer_push(buffer, t);
+  assert(buffer->index == 1);
+  buffer_push(buffer, u);
+  assert(buffer->index == 2);
+  buffer_push(buffer, x);
+  assert(buffer->index == 3);
+
+  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+
+  buffer_clear(buffer);
+  assert(buffer->index == 0);
+
+  assert(strcmp("", buffer_ensure_null_terminated_view(buffer)) == 0);
+}
+
 extern void test_suit_buffer()
 {
   test_buffer_implementation();
   test_buffer_push_at();
   test_buffer_remove_at();
+  test_buffer_clear();
 }

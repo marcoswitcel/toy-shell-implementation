@@ -93,6 +93,11 @@ bool buffer_pop_at(Buffer *buffer, unsigned index)
   return false;
 }
 
+void buffer_clear(Buffer *buffer)
+{
+  buffer->index = 0;
+}
+
 /**
  * @brief adiciona um null ao final do buffer, mas não incrementa o index
  * 
