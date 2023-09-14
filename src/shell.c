@@ -134,13 +134,20 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
   switch (key)
   {
     case ARROW_UP: {
-      emmit_ring_bell();
       if (context->last_typed_commands->index > 0)
       {
-        // @todo João, pra terminar aqui preciso conseguir limpar o buffer com facilidade e seria interessante poder pre-allocar 
-        // o espaço em bytes necessários pra string inteira
-        printf("última string digitada: %s", context->last_typed_commands->data[context->last_typed_commands->index - 1]);
+        buffer_clear(buffer);
+        const char *source = context->last_typed_commands->data[context->last_typed_commands->index - 1];
+        buffer_push_all(buffer, source, strlen(source));
+        *cursor_position = buffer->index;
+
+        return true;
       }
+      else
+      {
+        emmit_ring_bell();
+      }
+
     }; break;
     case ARROW_DOWN: emmit_ring_bell(); break;
     case ARROW_RIGHT:
