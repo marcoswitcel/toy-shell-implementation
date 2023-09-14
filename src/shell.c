@@ -258,6 +258,12 @@ char *shell_wait_command_input(Shell_Context_Data *context)
           cursor_position--;
           erase_line();
           print_input_mark(buffer_ensure_null_terminated_view(buffer));
+
+          int row = 1, col = 1;
+          if (get_cursor_position(&row, &col) > -1)
+          {
+            set_cursor_position(row, (int) cursor_position + 3);
+          }
         }
       };
     }
