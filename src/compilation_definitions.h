@@ -2,7 +2,7 @@
 #define _COMPILATION_DEFINITIONS_H_
 
 
-// @note Devido ao uso de alguns recursos unix não padronizados essa flag se faz necessária
+// Devido ao uso de alguns recursos unix não padronizados essa flag se faz necessária
 #define _DEFAULT_SOURCE
 
 // Habilita alguns logs especiais
