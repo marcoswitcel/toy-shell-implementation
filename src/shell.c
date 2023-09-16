@@ -13,6 +13,7 @@
 #include "./types.h"
 #include "./shell_builtins.c"
 #include "./terminal.c"
+#include "./utils.macro.h"
 
 typedef struct Shell_Context_Data
 {
@@ -32,20 +33,25 @@ Shell_Context_Data create_shell_context_data()
 
 static inline void print_input_mark(Shell_Context_Data *context, const char *cstring)
 {
+  // @note lindando com a bufferização por enquanto
+  // @reference https://stackoverflow.com/questions/41120879/mixing-syscall-write-with-printf-on-linux
+  // fflush(stdout); // @note esta linha e a abaixo resolvem o problema de bufferização
+  setbuf(stdout, NULL);
+
   // @todo João, acredito que o melhor seria mudar para o comando `write`
   // @note https://stackoverflow.com/questions/3585846/color-text-in-terminal-applications-in-unix
   static const char green[] = "\x1B[32m";
   static const char reset[] = "\x1B[0m";
 
-  if (context->colorful) printf(green);
+  if (context->colorful) write(STDOUT_FILENO, green, SIZE_OF_STATIC_STRING(green));
 
-  printf("|>");
+  write(STDOUT_FILENO, "|>", 2);
 
-  if (context->colorful) printf(reset);
+  if (context->colorful) write(STDOUT_FILENO, reset, SIZE_OF_STATIC_STRING(reset));
 
   if (cstring)
   {
-    printf("%s", cstring);
+    write(STDOUT_FILENO, cstring, strlen(cstring));
   }
 }
 
