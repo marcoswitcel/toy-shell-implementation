@@ -9,7 +9,7 @@
 #include "./terminal.c"
 
 typedef struct Command_Line_Arguments {
-  bool colorfull;
+  bool colorful;
 } Command_Line_Arguments;
 
 bool is_string_present_in_argv(const char *switch_name, int argc, const char *argv[])
@@ -27,21 +27,21 @@ bool is_string_present_in_argv(const char *switch_name, int argc, const char *ar
 
 void command_line_arguments_apply_argv(Command_Line_Arguments *arguments, int argc, const char *argv[])
 {
-  arguments->colorfull = is_string_present_in_argv("--colorful", argc, argv);
+  arguments->colorful = is_string_present_in_argv("--colorful", argc, argv);
 }
 
 int main(int argc, const char *argv[])
 {
+  // @note Aceitar argumentos pela linha de comando? que argumentos?
   Command_Line_Arguments arguments = { 0 };
   command_line_arguments_apply_argv(&arguments, argc, argv);
 
   activate_raw_mode(true);
 
-  // @note Aceitar argumentos pela linha de comando? que argumentos?
   // @note talvez ler um arquivo de configuração? mas que configurações aceitar?
 
   // loop principal, toda lógica roda aqui
-  read_eval_shell_loop();
+  read_eval_shell_loop(arguments.colorful);
 
   // @note Cleanup se tiver algum para fazer
 

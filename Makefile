@@ -24,9 +24,9 @@ tests: $(TESTS_SOURCE_FOLDER)/tests.test.c build-obj
 	$(CC) $(BUILD_FOLDER_NAME)/buffer.o $(TESTS_SOURCE_FOLDER)/tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
 
 run: main
-	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main"
+	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main $(EXEC_ARGS)"
 	@echo $(MARKER)
-	@cd ./$(BUILD_FOLDER_NAME) && ./main
+	@cd ./$(BUILD_FOLDER_NAME) && ./main $(EXEC_ARGS)
 	@echo "\n$(MARKER)\n"
 
 run-debug: main

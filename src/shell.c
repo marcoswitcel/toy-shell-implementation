@@ -16,28 +16,37 @@
 
 typedef struct Shell_Context_Data
 {
+  bool colorful;
   List_Of_Strings *last_typed_commands;
 } Shell_Context_Data;
 
 Shell_Context_Data create_shell_context_data()
 {
   return (Shell_Context_Data) {
+    .colorful = false,
     .last_typed_commands = create_list_of_strings(64, 64),
   };
 }
 
 #define LINE_BUFFER_SIZE 1024
 
-static inline void print_input_mark(const char *cstring)
+static inline void print_input_mark(Shell_Context_Data *context, const char *cstring)
 {
   // @todo João, acredito que o melhor seria mudar para o comando `write`
-  if (cstring)
-  {
-    printf("|>%s", cstring);
-    return;
-  }
+  // @note https://stackoverflow.com/questions/3585846/color-text-in-terminal-applications-in-unix
+  static const char green[] = "\x1B[32m";
+  static const char reset[] = "\x1B[0m";
+
+  if (context->colorful) printf(green);
 
   printf("|>");
+
+  if (context->colorful) printf(reset);
+
+  if (cstring)
+  {
+    printf("%s", cstring);
+  }
 }
 
 typedef enum Key_Pressed {
@@ -200,7 +209,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   int c;
   unsigned cursor_position = 0;
 
-  print_input_mark(NULL);
+  print_input_mark(context, NULL);
   while (true)
   {
     bool should_update_cursor = false;
@@ -212,7 +221,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       if (handle_control_key_pressed(context, buffer, key, &cursor_position))
       {
         erase_line();
-        print_input_mark(buffer_ensure_null_terminated_view(buffer));
+        print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
       }
 
       should_update_cursor = true;
@@ -240,7 +249,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
           printf("%s ", list->data[i]);
         }
         printf("\n");
-        print_input_mark(buffer_ensure_null_terminated_view(buffer));
+        print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
       }
       
       destroy_list_of_strings(list);
@@ -248,7 +257,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     else if (c == FORM_FEED) // Crtl + L
     {
       clear_terminal();
-      print_input_mark(buffer_ensure_null_terminated_view(buffer));
+      print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
     }
     else if (iscntrl(c))
     {
@@ -258,7 +267,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
         {
           cursor_position--;
           erase_line();
-          print_input_mark(buffer_ensure_null_terminated_view(buffer));
+          print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
 
           should_update_cursor = true;
         }
@@ -275,7 +284,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       else
       {
         erase_line();
-        print_input_mark(buffer_ensure_null_terminated_view(buffer));
+        print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
       }
 
       should_update_cursor = true;
@@ -395,9 +404,10 @@ void shell_report_parse_error(Parse_Context *context)
   }
 }
 
-void read_eval_shell_loop()
+void read_eval_shell_loop(bool colorful)
 {
   Shell_Context_Data shell_context = create_shell_context_data();
+  shell_context.colorful = colorful;
 
   while (!exit_requested)
   {
