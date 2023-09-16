@@ -23,6 +23,7 @@ main: $(SHELL_SOURCE_FOLDER)/main.c build-obj
 tests: $(TESTS_SOURCE_FOLDER)/tests.test.c build-obj
 	$(CC) $(BUILD_FOLDER_NAME)/buffer.o $(TESTS_SOURCE_FOLDER)/tests.test.c -o $(BUILD_FOLDER_NAME)/tests $(CFLAGS)
 
+# https://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
 run: main
 	@echo "cd ./$(BUILD_FOLDER_NAME) && ./main $(EXEC_ARGS)"
 	@echo $(MARKER)
