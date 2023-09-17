@@ -30,22 +30,57 @@ void destroy_buffer(Buffer *buffer)
   free(buffer);
 }
 
+static inline bool buffer_reallocate(Buffer *buffer)
+{
+  // @note João, acredito que o ideal seria usar um fator de escalonamento, não valor constante.
+  char *new_buffer = (char *) realloc(buffer->buffer, sizeof(char) * buffer->buffer_size);
+  if (new_buffer)
+  {
+    buffer->buffer = new_buffer;
+    return true;
+  }
+  else
+  {
+    write(STDERR_FILENO, EXPAND_STRING_REF_AND_COUNT("Erro alocando memória para buffer\n"));
+    exit(EXIT_FAILURE);
+  }
+
+  return false;
+}
+
 static inline bool buffer_ensure_enough_space_for_next_write(Buffer *buffer)
 {
   if (buffer->index >= buffer->buffer_size)
   {
     buffer->buffer_size += buffer->grouth_by;
-    char *new_buffer = (char *) realloc(buffer->buffer, sizeof(char) * buffer->buffer_size);
-    if (new_buffer)
+    return buffer_reallocate(buffer);
+  }
+
+  return false;
+}
+
+static inline bool buffer_ensure_enough_space_for_next_n_writes(Buffer *buffer, unsigned n_writes)
+{
+  unsigned index_after_writes = buffer->index + n_writes;
+
+  /**
+   * @note nesse caso se o buffer tiver o mesmo número de elementos que a posição final do index
+   * está tudo certo, pois o index pode terminar em uma posição "inválida", o próximo push ou
+   * push_all irá checar novamente.
+   */
+  /**
+   * @note seria possível, checar quantos slots vazios iriam sobrar no buffer e alocar mais memória
+   * porém, não tenho certeza se essa otimização não feriria algumas expectativas de uso.
+   * 
+   */
+  if (index_after_writes > buffer->buffer_size)
+  {
+    while (buffer->buffer_size < index_after_writes)
     {
-      buffer->buffer = new_buffer;
-      return true;
+      buffer->buffer_size += buffer->grouth_by;
     }
-    else
-    {
-      write(STDERR_FILENO, EXPAND_STRING_REF_AND_COUNT("Erro alocando memória para buffer\n"));
-      exit(EXIT_FAILURE);
-    }
+
+    return buffer_reallocate(buffer);
   }
 
   return false;
