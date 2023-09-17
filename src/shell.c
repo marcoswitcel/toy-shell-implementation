@@ -205,7 +205,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
   return false;
 }
 
-// @todo João, muita complexidade e duplicidade necessa rotina, seria interessante simplificar,
+// @todo João, muita complexidade e duplicidade nessa rotina, seria interessante simplificar,
 // mas antes talvez cobrir com testes. Pra poder testar vou precisar abstrair os comandos "printf"
 // pra escrever pra file descriptors previamente setados no processo ao invés de implicitamente
 // escrever pro stdout.
