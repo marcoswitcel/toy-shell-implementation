@@ -234,7 +234,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     }
     else if (c == EOF || c == '\n')
     {
-      printf("\n");
+      write(STDOUT_FILENO, "\n", 1);
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
       if (DEBUG_INFO) printf("linha lida: [%s]\n", result);
@@ -249,12 +249,12 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       get_all_files_for_dir(".", list, true);
       if (list->index > 0)
       {
-        printf("\n");
+        write(STDOUT_FILENO, "\n", 1);
         for (unsigned i = 0; i < list->index; i++)
         {
           printf("%s ", list->data[i]);
         }
-        printf("\n");
+        write(STDOUT_FILENO, "\n", 1);
         print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
       }
       
@@ -285,7 +285,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       cursor_position++;
       if (cursor_position == buffer->index)
       {
-        printf("%c", c);
+        write(STDOUT_FILENO, &c, 1);
       }
       else
       {
