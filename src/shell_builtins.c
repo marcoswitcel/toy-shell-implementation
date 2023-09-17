@@ -44,8 +44,7 @@ int builtin_cd(char **args, Process_Handles *handles)
 
   if (target_folder == NULL)
   {
-    const char mensagem[] = "cd: esperava argumento\n";
-    write(handles->stderr, mensagem, SIZE_OF_STATIC_STRING(mensagem));
+    write(handles->stderr, EXPAND_STRING_REF_AND_COUNT("cd: esperava argumento\n"));
   }
   else if (chdir(target_folder) != 0)
   {
