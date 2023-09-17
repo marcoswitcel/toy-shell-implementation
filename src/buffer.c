@@ -24,7 +24,7 @@ void destroy_buffer(Buffer *buffer)
   free(buffer);
 }
 
-static inline bool buffer_ensure_enough_space(Buffer *buffer)
+static inline bool buffer_ensure_enough_space_for_next_write(Buffer *buffer)
 {
   if (buffer->index >= buffer->buffer_size)
   {
@@ -46,7 +46,7 @@ static inline bool buffer_ensure_enough_space(Buffer *buffer)
 
 bool buffer_push(Buffer *buffer, char value)
 {
-  buffer_ensure_enough_space(buffer);
+  buffer_ensure_enough_space_for_next_write(buffer);
 
   buffer->buffer[buffer->index] = value;
   buffer->index++;
@@ -57,7 +57,7 @@ bool buffer_push(Buffer *buffer, char value)
 
 bool buffer_push_at(Buffer *buffer, char value, unsigned index)
 {
-  buffer_ensure_enough_space(buffer);
+  buffer_ensure_enough_space_for_next_write(buffer);
 
   memmove(&buffer->buffer[index+1], &buffer->buffer[index], buffer->index - index);
 
@@ -115,7 +115,7 @@ void buffer_push_all(Buffer *buffer, const char *source, unsigned length)
  */
 const char *buffer_ensure_null_terminated_view(Buffer *buffer)
 {
-  buffer_ensure_enough_space(buffer);
+  buffer_ensure_enough_space_for_next_write(buffer);
 
   buffer->buffer[buffer->index] = '\0';
 
