@@ -22,7 +22,7 @@ intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo 
 
 # Bugs
 
-* problema quando input e output iguais
+* problema quando input e output iguais (aparentemente isso ocorre no bash também, é um alerta do próprio cat, possivelmente esse bug seja um alarme falso)
 ```bash
 |>cat a.txt > a.txt
 cat: a.txt: input file is output file
