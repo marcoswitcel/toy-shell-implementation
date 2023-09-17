@@ -38,7 +38,6 @@ static inline void print_input_mark(Shell_Context_Data *context, const char *cst
   // fflush(stdout); // @note esta linha e a abaixo resolvem o problema de bufferização
   setbuf(stdout, NULL);
 
-  // @todo João, acredito que o melhor seria mudar para o comando `write`
   // @note https://stackoverflow.com/questions/3585846/color-text-in-terminal-applications-in-unix
   static const char green[] = "\x1B[32m";
   static const char reset[] = "\x1B[0m";
