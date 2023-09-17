@@ -1,7 +1,13 @@
 #ifndef _BUFFER_C_
 #define _BUFFER_C_
 
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include "./buffer.h"
+#include "./utils.macro.h"
 
 Buffer *create_buffer(unsigned buffer_size, unsigned grouth_by)
 {
@@ -37,7 +43,8 @@ static inline bool buffer_ensure_enough_space_for_next_write(Buffer *buffer)
     }
     else
     {
-      printf("Erro alocando memória para buffer\n");
+      write(STDERR_FILENO, EXPAND_STRING_REF_AND_COUNT("Erro alocando memória para buffer\n"));
+      exit(EXIT_FAILURE);
     }
   }
 
