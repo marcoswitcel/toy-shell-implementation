@@ -3,8 +3,11 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "./process_manager.c"
+#include "./utils.macro.h"
 
 bool exit_requested = false;
 
@@ -41,11 +44,14 @@ int builtin_cd(char **args, Process_Handles *handles)
 
   if (target_folder == NULL)
   {
-    fprintf(handles->stderr, "cd: esperava argumento\n");
+    const char mensagem[] = "cd: esperava argumento\n";
+    write(handles->stderr, mensagem, SIZE_OF_STATIC_STRING(mensagem));
   }
   else if (chdir(target_folder) != 0)
   {
-    fprintf(handles->stderr, "cd: não foi possível acessar o diretório \"%s\"\n", target_folder);
+    write(handles->stderr, EXPAND_STRING_REF_AND_COUNT("cd: não foi possível acessar o diretório \""));
+    write(handles->stderr, target_folder, strlen(target_folder));
+    write(handles->stderr, EXPAND_STRING_REF_AND_COUNT("\"\n"));
   }
 
   return 1;
@@ -53,23 +59,27 @@ int builtin_cd(char **args, Process_Handles *handles)
 
 int builtin_help(char **args, Process_Handles *handles)
 {
-  fprintf(handles->stdout, "Toy Shell Implementation - João Marcos\n");
-  fprintf(handles->stdout, "Baseado no tutorial de Stephen Brennan\n");
-  fprintf(handles->stdout, "Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n");
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Toy Shell Implementation - João Marcos\n"));
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Baseado no tutorial de Stephen Brennan\n"));
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Link: https://brennan.io/2015/01/16/write-a-shell-in-c/\n\n"));
 
   if (args[1] != NULL)
   {
-    fprintf(handles->stdout, "Por hora o comando \"help\" não consegue explicar \"%s\".\n", args[1]);  
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Por hora o comando \"help\" não consegue explicar \""));
+    write(handles->stdout, args[1], strlen(args[1]));  
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\".\n"));
     return 1;
   }
 
-  fprintf(handles->stdout, "Comandos builtin básicos:\n");
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Comandos builtin básicos:\n"));
   for (int i = 0; i < number_of_builtins; i++)
   {
-    fprintf(handles->stdout, "  %s\n", builtin_cstring[i]);
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("  "));
+    write(handles->stdout, builtin_cstring[i], strlen(builtin_cstring[i]));
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
   }
 
-  fprintf(handles->stdout, "\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n");
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n"));
   
   return 1;
 }
@@ -78,10 +88,10 @@ int builtin_exit(char **args, Process_Handles *handles)
 {
   if (args[1] != NULL)
   {
-    fprintf(handles->stdout, "Warning: Ignorando argumentos.\n");  
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Warning: Ignorando argumentos.\n"));
   }
 
-  fprintf(handles->stdout, "saindo, até mais!!!\n");
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!\n"));
   exit_requested = true;
   
   return 0;
@@ -93,7 +103,7 @@ int builtin_clear(char **args, Process_Handles *handles)
 
   if (args && args[1] != NULL)
   {
-    fprintf(handles->stdout, "Warning: Ignorando argumentos para clear .\n");
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Warning: Ignorando argumentos para clear .\n"));
   }
 
   return 1;

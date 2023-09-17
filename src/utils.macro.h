@@ -6,6 +6,8 @@
 #define SIZE_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
 #define SIZE_OF_STATIC_STRING(STRING) (SIZE_OF_ARRAY(STRING) - 1)
 
+#define EXPAND_STRING_REF_AND_COUNT(STRING) STRING, SIZE_OF_STATIC_STRING(STRING)
+
 /**
  * @brief Como invocar free e apagar a antiga referência é uma boa prática essa macro encapsula o conceito
  * @param LHSREF expressão que resulta no endereço a ser liberado

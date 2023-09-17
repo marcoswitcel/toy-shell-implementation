@@ -18,13 +18,13 @@ typedef struct Process_Parameter {
 } Process_Parameter;
 
 typedef struct Process_Handles {
-  FILE *stdin;
-  FILE *stdout;
-  FILE *stderr;
+  int stdin;
+  int stdout;
+  int stderr;
 } Process_Handles;
 
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdout = -1, }
-#define STATIC_PROCESS_HANDLES() (Process_Handles) { .stdin = stdin, .stdout = stdout, .stderr = stderr, }
+#define STATIC_PROCESS_HANDLES() (Process_Handles) { .stdin = STDIN_FILENO, .stdout = STDOUT_FILENO, .stderr = STDERR_FILENO, }
 
 bool wait_child_process(pid_t pid)
 {

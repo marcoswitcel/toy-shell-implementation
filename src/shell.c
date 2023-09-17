@@ -375,9 +375,8 @@ int shell_execute_command(const Process_Parameter process_parameter)
     Process_Handles handles = STATIC_PROCESS_HANDLES();
     if (process_parameter.fd_stdout != -1)
     {
-      handles.stdout = fdopen(process_parameter.fd_stdout, "w");
+      handles.stdout = process_parameter.fd_stdout;
       int result = builtin_func(args, &handles);
-      fclose(handles.stdout);
       return result;
     }
     return builtin_func(args, &handles);
