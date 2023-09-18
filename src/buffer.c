@@ -142,10 +142,12 @@ void buffer_clear(Buffer *buffer)
 
 void buffer_push_all(Buffer *buffer, const char *source, unsigned length)
 {
-  // @todo João, implementar isso aqui de uma forma eficiente
+  buffer_ensure_enough_space_for_next_n_writes(buffer, length);
+
   for (unsigned i = 0; i < length; i++)
   {
-    buffer_push(buffer, source[i]);
+    buffer->buffer[buffer->index] = source[i];
+    buffer->index++;
   }
 }
 
