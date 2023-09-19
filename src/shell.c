@@ -392,6 +392,8 @@ int shell_execute_command(const Process_Parameter process_parameter)
 
 void shell_report_parse_error(Parse_Context *context)
 {
+  // @todo joão, o ideal seria se livrar desses printf, talvez usar o write direto, porém,
+  // criando um buffer e fazendo um write apenas seria mais eficiente
   if (context->error_start_index > -1)
   {
     printf("  ");

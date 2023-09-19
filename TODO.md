@@ -19,6 +19,7 @@ Talvez eu dê um tempo desse projeto, talvez não, mas em todo caso vou deixar a
 intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo feito e possa ser retornado em caso de erro.
 * No shell em si seria interessante deixar o arquivo "main.c" apenas com a chamada para inicializar o shell.
 * Na rotina `shell_wait_command_input` tem bastante duplicidade e complexidade desnecessária.
+* Mensurar o tempo de algumas funções [https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c](https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c)
 
 # Bugs
 
