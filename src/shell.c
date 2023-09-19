@@ -211,14 +211,20 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
 char *shell_wait_command_input(Shell_Context_Data *context)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
-  int c;
+  char c;
   unsigned cursor_position = 0;
 
   print_input_mark(context, NULL);
   while (true)
   {
     bool should_update_cursor = false;
-    c = getchar();
+    
+    // @todo João, essa não é a versão final, mas precisava dar um passo
+    // para deixar esse código mais explícito e possível de alterar o stdin
+    if (read(STDIN_FILENO, &c, 1) != 1)
+    {
+      c = EOF;
+    }
 
     if (c == ESC)
     {
