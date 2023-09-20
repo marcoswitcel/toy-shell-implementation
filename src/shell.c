@@ -397,6 +397,9 @@ int shell_execute_command(const Process_Parameter process_parameter)
     return builtin_func(args, &handles);
   }
 
+  // @todo João, não necessariamente aqui, mas seria importante validar se o comando será encontrado
+  // antes de tentar executá-lo, seria mais rápido do que fazer o fork para falhar e seria mais fácil
+  // apresentar mensagens úteis.
   return launch_process(process_parameter);
 }
 
