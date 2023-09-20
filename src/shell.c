@@ -11,6 +11,7 @@
 #include "./parser.h"
 #include "./process_manager.c"
 #include "./types.h"
+#include "./nodes.h"
 #include "./shell_builtins.c"
 #include "./terminal.c"
 #include "./utils.macro.h"
@@ -312,7 +313,29 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   }
 }
 
-Process_Parameter shell_parse_command(Parse_Context *context)
+Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node)
+{
+  assert(execute_command_node->args != NULL);
+
+  Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node->args);
+  if (execute_command_node->output_filename)
+  {
+    int oflags = O_RDWR|O_CREAT;
+    if (execute_command_node->append_mode) oflags |= O_APPEND;
+    
+    int fd = open(execute_command_node->output_filename, oflags, 0600);
+    // @todo João, na verdade deveria avisar o usuário e não rodar o comando nesse caso.
+    if (fd == -1)
+    {
+      printf("Internal: Erro abrindo arquivo '%s'", execute_command_node->output_filename);
+    }
+    process.fd_stdout = fd;
+  }
+
+  return process;
+}
+
+Execute_Command_Node shell_parse_command(Parse_Context *context)
 {
   // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
   // direto para a função de análise sintática/semântica, pra evitar tokenizar tudo e depois falhar no primeiro 
@@ -322,12 +345,12 @@ Process_Parameter shell_parse_command(Parse_Context *context)
   if (tokens->index == 0)
   {
     context->error = copy("Nenhum comando encontrado, possivelmente por se tratar de uma linha apenas com espaços.");
-    return STATIC_PROCESS_PARAMETER(NULL);
+    return STATIC_EXECUTE_COMMAND_NODE();
   }
 
   if (context->error)
   {
-    return STATIC_PROCESS_PARAMETER(NULL);
+    return STATIC_EXECUTE_COMMAND_NODE();
   }
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
@@ -338,7 +361,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
 
   if (context->error)
   {
-    return STATIC_PROCESS_PARAMETER(NULL);
+    return STATIC_EXECUTE_COMMAND_NODE();
   }
   
   // @note o bloco abaixo é apenas para visualizar o resultado
@@ -347,20 +370,7 @@ Process_Parameter shell_parse_command(Parse_Context *context)
     print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
   }
 
-  Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node.args);
-  if (execute_command_node.output_filename)
-  {
-    int oflags = O_RDWR|O_CREAT;
-    if (execute_command_node.append_mode) oflags |= O_APPEND;
-    
-    int fd = open(execute_command_node.output_filename, oflags, 0600);
-    if (fd == -1)
-    {
-      printf("Internal: Erro abrindo arquivo '%s'", execute_command_node.output_filename);
-    }
-    process.fd_stdout = fd;
-  }
-  return process;
+  return execute_command_node;
 }
 
 int shell_execute_command(const Process_Parameter process_parameter)
@@ -425,10 +435,12 @@ void read_eval_shell_loop(bool colorful)
   {
     char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
-    Process_Parameter process_parameter = shell_parse_command(&context);
+    Execute_Command_Node execute_command_node = shell_parse_command(&context);
+    Process_Parameter process_parameter = STATIC_PROCESS_PARAMETER(NULL);
 
     if (context.error == NULL)
     {
+      process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node);
       shell_execute_command(process_parameter);
     }
     else
