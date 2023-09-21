@@ -339,7 +339,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   }
 }
 
-Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node)
+Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
 {
   assert(execute_command_node->args != NULL);
 
@@ -353,7 +353,9 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
     // @todo João, na verdade deveria avisar o usuário e não rodar o comando nesse caso.
     if (fd == -1)
     {
-      printf("Internal: Erro abrindo arquivo '%s'", execute_command_node->output_filename);
+      *tried_opening_file_and_failed = true;
+      // @todo João, analisar se precisa reportar
+      // printf("Internal: Erro abrindo arquivo '%s'", execute_command_node->output_filename);
     }
     process.fd_stdout = fd;
   }
@@ -469,8 +471,18 @@ void read_eval_shell_loop(bool colorful)
 
     if (context.error == NULL)
     {
-      process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node);
-      shell_execute_command(process_parameter);
+      bool tried_opening_file_and_failed = false;
+      process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node, &tried_opening_file_and_failed);
+      if (tried_opening_file_and_failed)
+      {
+        // @todo João, usar um printf e imprimir o nome do arquivo ou anexar o token ao Execute_Command_Node para ter informação de coluna
+        context.error = "Problema ao abrir o arquivo.";
+        shell_report_parse_error(&context);
+      }
+      else
+      {
+        shell_execute_command(process_parameter);
+      }
     }
     else
     {
