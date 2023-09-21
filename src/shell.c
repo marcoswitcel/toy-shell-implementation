@@ -20,6 +20,7 @@ typedef struct Shell_Context_Data
 {
   bool colorful;
   List_Of_Strings *last_typed_commands;
+  int next_typed_command_to_show;
 } Shell_Context_Data;
 
 Shell_Context_Data create_shell_context_data()
@@ -27,6 +28,7 @@ Shell_Context_Data create_shell_context_data()
   return (Shell_Context_Data) {
     .colorful = false,
     .last_typed_commands = create_list_of_strings(64, 64),
+    .next_typed_command_to_show = -1,
   };
 }
 
@@ -149,10 +151,14 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
   switch (key)
   {
     case ARROW_UP: {
-      if (context->last_typed_commands->index > 0)
+      if (context->last_typed_commands->index > 0 && context->next_typed_command_to_show + 1 <  context->last_typed_commands->index)
       {
+        context->next_typed_command_to_show++;
+        assert(context->next_typed_command_to_show > -1);
+
+        // @duplicado-copia
         buffer_clear(buffer);
-        const char *source = context->last_typed_commands->data[context->last_typed_commands->index - 1];
+        const char *source = context->last_typed_commands->data[context->last_typed_commands->index - 1 - context->next_typed_command_to_show];
         buffer_push_all(buffer, source, strlen(source));
         *cursor_position = buffer->index;
 
@@ -164,7 +170,24 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
       }
 
     }; break;
-    case ARROW_DOWN: emmit_ring_bell(); break;
+    case ARROW_DOWN: {
+      if (context->next_typed_command_to_show > 0)
+      {
+        context->next_typed_command_to_show--;
+
+        // @duplicado-copia
+        buffer_clear(buffer);
+        const char *source = context->last_typed_commands->data[context->last_typed_commands->index - 1 - context->next_typed_command_to_show];
+        buffer_push_all(buffer, source, strlen(source));
+        *cursor_position = buffer->index;
+
+        return true;
+      }
+      else
+      {
+        emmit_ring_bell();
+      }
+    }; break;
     case ARROW_RIGHT:
     {
       if (*cursor_position < buffer->index) (*cursor_position)++;
@@ -212,6 +235,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
 char *shell_wait_command_input(Shell_Context_Data *context)
 {
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
+  context->next_typed_command_to_show = -1;
   char c;
   unsigned cursor_position = 0;
 
