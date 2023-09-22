@@ -338,6 +338,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
   const char *output_filename = NULL;
+  signed token_index_start = -1;
   bool append_mode = false;
   
   for (unsigned i = 0; i < tokens->index; i++)
@@ -351,6 +352,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
       {
         redirect_expect_file_name = false;
         output_filename = token.data.string.cstring;
+        token_index_start = token.token_index_start;
       }
       else
       {
@@ -391,7 +393,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .append_mode = append_mode, };
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .token_index_start = token_index_start, .append_mode = append_mode, };
 }
 
 #endif // PARSER_H

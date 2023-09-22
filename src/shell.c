@@ -475,8 +475,8 @@ void read_eval_shell_loop(bool colorful)
       process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node, &tried_opening_file_and_failed);
       if (tried_opening_file_and_failed)
       {
-        // @todo João, usar um printf e imprimir o nome do arquivo ou anexar o token ao Execute_Command_Node para ter informação de coluna
-        context.error = "Problema ao abrir o arquivo.";
+        context.error = "O arquivo não pode ser aberto.";
+        context.error_start_index = execute_command_node.token_index_start;
         shell_report_parse_error(&context);
       }
       else
