@@ -8,6 +8,7 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * Suporte a redirect de output, com alguns bugs e limitações mas implementado
 * Expansão de asteriscos para a lista de arquivos contigos na pasta
 * Suporte a argumentos com àspas
+* Histórico de comando digitados
 * Reporte de alguns erros de sintaxe e semântica
 * Testes rudimentares para os recursos principais (feitos com asserts e sem framework algum)
 
