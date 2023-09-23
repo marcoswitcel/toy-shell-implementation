@@ -16,6 +16,8 @@
 #include "./terminal.c"
 #include "./utils.macro.h"
 
+#define HISTORY_MAX_ELEMENTS 3
+
 typedef struct Shell_Context_Data
 {
   bool colorful;
@@ -494,8 +496,15 @@ void read_eval_shell_loop(bool colorful)
     }
 
     // @todo João, por hora vou copiar a string, mas poderia muito bem pegar ela emprestada, pois esse é o ponto aonde ela não é mais necessária
-    // @todo João, indiferente de como eu implementar será necessário limpar as strings contidas nessa lista eventualmente
     list_of_strings_push(shell_context.last_typed_commands, copy(readed_line));
+
+    if (shell_context.last_typed_commands->index > HISTORY_MAX_ELEMENTS)
+    {
+      FREE_AND_NULLIFY(shell_context.last_typed_commands->data[0]);
+      // @todo João, como essa implementação não tem um método para remover um elementos específico usarei de um pequeno hack
+      memmove(&shell_context.last_typed_commands->data[0], &shell_context.last_typed_commands->data[1], HISTORY_MAX_ELEMENTS * sizeof(char *));
+      list_of_strings_pop(shell_context.last_typed_commands);
+    }
 
     FREE_AND_NULLIFY(readed_line);
     if (process_parameter.args != NULL)
