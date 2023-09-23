@@ -428,6 +428,9 @@ int shell_execute_command(const Process_Parameter process_parameter)
   // @todo João, não necessariamente aqui, mas seria importante validar se o comando será encontrado
   // antes de tentar executá-lo, seria mais rápido do que fazer o fork para falhar e seria mais fácil
   // apresentar mensagens úteis.
+  // @note Não tenho mais certeza se seria de fato melhor checar, considerando que aparentemente não há
+  // formar padrão de fazer isso. @reference https://stackoverflow.com/questions/890894/portable-way-to-find-out-if-a-command-exists-c-c
+  // Por hora seria melhor apenas melhorar a mensagem de retorno
   return launch_process(process_parameter);
 }
 
