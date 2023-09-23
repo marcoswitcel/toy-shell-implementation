@@ -16,7 +16,7 @@
 #include "./terminal.c"
 #include "./utils.macro.h"
 
-#define HISTORY_MAX_ELEMENTS 3
+#define HISTORY_MAX_ELEMENTS 20
 
 typedef struct Shell_Context_Data
 {
