@@ -152,7 +152,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
   {
     case ARROW_UP: {
       if (context->last_typed_commands->index > 0
-        && context->next_typed_command_to_show > -1
+        && context->next_typed_command_to_show > -2
         && ((unsigned) context->next_typed_command_to_show + 1) <  context->last_typed_commands->index)
       {
         context->next_typed_command_to_show++;
