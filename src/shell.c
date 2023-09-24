@@ -499,9 +499,7 @@ void read_eval_shell_loop(bool colorful)
     if (shell_context.last_typed_commands->index > HISTORY_MAX_ELEMENTS)
     {
       FREE_AND_NULLIFY(shell_context.last_typed_commands->data[0]);
-      // @todo João, como essa implementação não tem um método para remover um elementos específico usarei de um pequeno hack
-      memmove(&shell_context.last_typed_commands->data[0], &shell_context.last_typed_commands->data[1], HISTORY_MAX_ELEMENTS * sizeof(char *));
-      list_of_strings_pop(shell_context.last_typed_commands);
+      list_of_strings_pop_at(shell_context.last_typed_commands, 0);
     }
 
     FREE_AND_NULLIFY(readed_line);

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 /**
  * @brief Macro que gera a estrutura da lista e o typedef
@@ -83,6 +84,23 @@ bool STRUCT_NAME_LOWER_CASE##_pop(STRUCT_NAME *list)                            
     list->index--;                                                                                \
     return true;                                                                                  \
   }                                                                                               \
+  return false;                                                                                   \
+}                                                                                                 \
+                                                                                                  \
+bool STRUCT_NAME_LOWER_CASE##_pop_at(STRUCT_NAME *list, unsigned index)                           \
+{                                                                                                 \
+  if (list->index && index < list->index)                                                         \
+  {                                                                                               \
+    if (index < list->index - 1)                                                                  \
+    {                                                                                             \
+      unsigned number_of_bytes = (list->index - index - 1) * sizeof(TYPE);                        \
+      memmove(&list->data[index], &list->data[index + 1], number_of_bytes);                       \
+    }                                                                                             \
+                                                                                                  \
+    list->index--;                                                                                \
+    return true;                                                                                  \
+  }                                                                                               \
+                                                                                                  \
   return false;                                                                                   \
 }
 
