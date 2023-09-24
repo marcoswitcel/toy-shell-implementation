@@ -352,12 +352,10 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
     if (execute_command_node->append_mode) oflags |= O_APPEND;
     
     int fd = open(execute_command_node->output_filename, oflags, 0600);
-    // @todo João, na verdade deveria avisar o usuário e não rodar o comando nesse caso.
+    
     if (fd == -1)
     {
       *tried_opening_file_and_failed = true;
-      // @todo João, analisar se precisa reportar
-      // printf("Internal: Erro abrindo arquivo '%s'", execute_command_node->output_filename);
     }
     process.fd_stdout = fd;
   }
@@ -480,7 +478,7 @@ void read_eval_shell_loop(bool colorful)
       process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node, &tried_opening_file_and_failed);
       if (tried_opening_file_and_failed)
       {
-        context.error = "O arquivo não pode ser aberto.";
+        context.error = "O arquivo não pôde ser aberto.";
         context.error_start_index = execute_command_node.token_index_start;
         shell_report_parse_error(&context);
       }
