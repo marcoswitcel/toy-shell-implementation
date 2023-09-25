@@ -298,6 +298,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     {
       clear_terminal();
       print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
+      should_update_cursor = true;
     }
     else if (iscntrl(c))
     {
