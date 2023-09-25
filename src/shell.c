@@ -452,12 +452,10 @@ void shell_report_parse_error(Parse_Context *context)
         printf("-");
       }
     }
-    printf("\n  Descrição: %s\n", context->error);
+    printf("\n");
   }
-  else
-  {
-    printf("Erro ao executar comando:\n%s\n", context->error);
-  }
+
+  printf("  Problema: %s\n", context->error);
 }
 
 void read_eval_shell_loop(bool colorful)
