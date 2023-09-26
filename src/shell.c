@@ -464,6 +464,8 @@ void read_eval_shell_loop(bool colorful)
   Shell_Context_Data shell_context = create_shell_context_data();
   shell_context.colorful = colorful;
 
+  last_typed_commands = shell_context.last_typed_commands; // @todo João, assim não é a forma mais elegante, porém, temporariamente fica assim
+
   while (!exit_requested)
   {
     char *readed_line = shell_wait_command_input(&shell_context);

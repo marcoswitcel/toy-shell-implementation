@@ -6,10 +6,12 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./utils.macro.h"
 
 bool exit_requested = false;
+List_Of_Strings *last_typed_commands = NULL;
 
 typedef int (*Builtin_Function)(char **, Process_Handles *);
 
@@ -19,12 +21,14 @@ int builtin_cd(char **args, Process_Handles *handles);
 int builtin_help(char **args, Process_Handles *handles);
 int builtin_exit(char **args, Process_Handles *handles);
 int builtin_clear(char **args, Process_Handles *handles);
+int builtin_history(char **args, Process_Handles *handles);
 
 const char *builtin_cstring[] = {
   "cd",
   "help",
   "exit",
   "clear",
+  "history",
 };
 
 const Builtin_Function builtin_func[] = {
@@ -32,6 +36,7 @@ const Builtin_Function builtin_func[] = {
   &builtin_help,
   &builtin_exit,
   &builtin_clear,
+  &builtin_history,
 };
 
 const int number_of_builtins = sizeof(builtin_cstring) / sizeof(char *);
@@ -107,6 +112,27 @@ int builtin_clear(char **args, Process_Handles *handles)
 
   return 1;
 }
+
+int builtin_history(char **args, Process_Handles *handles)
+{
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("History:\n"));
+
+  if (last_typed_commands)
+  {
+    for (unsigned i = 0; i < last_typed_commands->index; i++)
+    {
+      const char *command = last_typed_commands->data[i];
+      write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("  "));
+      write(handles->stdout, command, strlen(command));
+      write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
+    }
+  }
+
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
+
+  return 1;
+}
+
 
 Builtin_Function has_builtin_for(const char *cstring)
 {
