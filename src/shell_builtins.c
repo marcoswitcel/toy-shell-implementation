@@ -115,6 +115,10 @@ int builtin_clear(char **args, Process_Handles *handles)
 
 int builtin_history(char **args, Process_Handles *handles)
 {
+  // Apenas para se livrar do aviso de variável não usada,
+  // ela faz parte da assinatura dessa função
+  (void) args; 
+  
   write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("History:\n"));
 
   if (last_typed_commands)
