@@ -119,9 +119,9 @@ int builtin_history(char **args, Process_Handles *handles)
   // ela faz parte da assinatura dessa função
   (void) args; 
   
-  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("History:\n"));
+  write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Resumo:\n"));
 
-  if (last_typed_commands)
+  if (last_typed_commands && last_typed_commands->index)
   {
     for (unsigned i = 0; i < last_typed_commands->index; i++)
     {
@@ -130,6 +130,10 @@ int builtin_history(char **args, Process_Handles *handles)
       write(handles->stdout, command, strlen(command));
       write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
     }
+  }
+  else 
+  {
+    write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("Nenhum comando digitado ainda.\n"));
   }
 
   write(handles->stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
