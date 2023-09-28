@@ -9,7 +9,7 @@
 /**
  * @brief Utilitário criado para facilitar a passagem de string estáticas para a função de sistema
  * `write` e outras. Basicamente essa macro expande a string para uma lista de dois itens, separados 
- * por vírgula ideias para parâmetros que esperam o ponteiro e a contagem de elementos.
+ * por vírgula ideais para parâmetros que esperam o ponteiro e a contagem de elementos.
  * Como uso a macro SIZE_OF_STATIC_STRING fica garantido que o número de bytes escritos será o correto
  * não exigindo alteração manual. E possivelmente o otimizador consiga pegar isso pois se trata de uma expressão
  * constante.
