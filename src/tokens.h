@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 typedef enum Token_Type {
-  UNINITIALIZED = 0, STRING = 1, GLOBBING = 2, REDIRECT = 3,
+  UNINITIALIZED = 0, STRING = 1, GLOBBING = 2, REDIRECT = 3, PIPE = 4,
 } Token_Type;
 
 typedef struct String_Token {
@@ -20,6 +20,10 @@ typedef struct Redirect_Token {
   bool appending;
 } Redirect_Token;
 
+typedef struct Pipe_Token {
+  const char *cstring;
+} Pipe_Token;
+
 typedef struct Token {
   Token_Type type;
   signed token_index_start;
@@ -27,6 +31,7 @@ typedef struct Token {
     String_Token string;
     Globbing_Token globbing;
     Redirect_Token redirect;
+    Pipe_Token pipe;
   } data;
 } Token;
 

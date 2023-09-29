@@ -231,6 +231,28 @@ void try_parse_string(Parse_Context *context, Token *token, bool *success)
   *success = completed_string;
 }
 
+void try_parse_pipe(Parse_Context *context, Token *token, bool *success)
+{
+  if (peek_char(context) == '|')
+  {
+    if (is_whitespace(peek_next_char(context)))
+    {
+      token->token_index_start = context->index;
+      eat_char(context);
+      *success = true;
+      token->type = PIPE;
+      token->data.pipe = (Pipe_Token) { .cstring = NULL };
+      token->data.pipe.cstring = copy("|");
+      return;
+    }
+
+    context->error = copy("Esperava espaço em branco após a pipe.");
+    context->error_start_index = context->index + 1;
+  }
+
+  *success = false;
+}
+
 void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '*')
@@ -293,6 +315,7 @@ typedef void (*Parse_Function)(Parse_Context *, Token *, bool *);
 const Parse_Function parse_functions[] = {
   &try_parse_globbing,
   &try_parse_redirect,
+  &try_parse_pipe,
   &try_parse_string,
 };
 
@@ -382,6 +405,8 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
       append_mode = token.data.redirect.appending;
       redirect_expect_file_name = true;
     }
+
+    // @todo João, implementar aqui o necessário para lidar com a PIPE
   }
 
   if (redirect_expect_file_name && context->error == NULL)
