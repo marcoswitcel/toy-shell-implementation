@@ -384,7 +384,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
 
-  Execute_Command_Node execute_command_node = parse_execute_command_node(context, tokens);
+  Execute_Command_Node execute_command_node = parse_execute_command_node(context, 0, tokens);
 
   destroy_sequence_of_tokens(tokens);
 
@@ -470,6 +470,12 @@ void read_eval_shell_loop(bool colorful)
   {
     char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
+    /**
+     * @todo João, devería chamar um método free nessa estrutura, pois ela pode conter 
+     * referências para outras estruturas alocadas no heap. Mas para isso é preciso criar esse método
+     * e talvez mudar a função shell_parse_command para retornar uma referência.
+     * @leak @fixme
+     */
     Execute_Command_Node execute_command_node = shell_parse_command(&context);
     Process_Parameter process_parameter = STATIC_PROCESS_PARAMETER(NULL);
 

@@ -11,7 +11,7 @@ typedef struct Execute_Command_Node {
   struct Execute_Command_Node *pipe;
 } Execute_Command_Node;
 
-#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .output_filename = NULL, .token_index_start = -1, .append_mode = false, }
+#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .output_filename = NULL, .token_index_start = -1, .append_mode = false, .pipe = NULL, }
 
 
 #endif // NODES_H

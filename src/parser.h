@@ -355,7 +355,8 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   return tokens;
 }
 
-Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
+// @todo João, acho que é melhor retonar uma referência alocada no heap
+Execute_Command_Node parse_execute_command_node(Parse_Context *context, const unsigned first_token_index, const Sequence_Of_Tokens *tokens)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_redirec_token = false;
@@ -364,8 +365,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   signed token_index_start = -1;
   bool append_mode = false;
   bool piped = false;
+  Execute_Command_Node *pipe = NULL;
   
-  for (unsigned i = 0; i < tokens->index; i++)
+  for (unsigned i = first_token_index; i < tokens->index; i++)
   {
     Token token = tokens->data[i];
     assert(token.token_index_start > -1);
@@ -409,6 +411,8 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
 
     if (token.type == PIPE  && token.data.pipe.cstring)
     {
+      // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
+      // mas por precaução essa lógica fica
       if (piped)
       {
         parse_context_report_error(context, "Token | encontrado mais de uma vez.", token.token_index_start);
@@ -416,10 +420,12 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
       }
       else
       {
+        Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
+        *execute_command_sub_node = parse_execute_command_node(context, i + 1, tokens);
+        pipe = execute_command_sub_node;
         piped = true;
-        parse_context_report_error(context, "Suporte à piping ainda não implementado.", token.token_index_start);
+
         break;
-        // @todo João, lidar com o comando linkado aqui
       }
     }
   }
@@ -433,7 +439,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .token_index_start = token_index_start, .append_mode = append_mode, };
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, };
 }
 
 #endif // PARSER_H
