@@ -417,6 +417,8 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
       else
       {
         piped = true;
+        parse_context_report_error(context, "Suporte à piping ainda não implementado.", token.token_index_start);
+        break;
         // @todo João, lidar com o comando linkado aqui
       }
     }
