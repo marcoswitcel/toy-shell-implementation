@@ -363,6 +363,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   const char *output_filename = NULL;
   signed token_index_start = -1;
   bool append_mode = false;
+  bool piped = false;
   
   for (unsigned i = 0; i < tokens->index; i++)
   {
@@ -406,7 +407,19 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
       redirect_expect_file_name = true;
     }
 
-    // @todo João, implementar aqui o necessário para lidar com a PIPE
+    if (token.type == PIPE  && token.data.pipe.cstring)
+    {
+      if (piped)
+      {
+        parse_context_report_error(context, "Token | encontrado mais de uma vez.", token.token_index_start);
+        break;
+      }
+      else
+      {
+        piped = true;
+        // @todo João, lidar com o comando linkado aqui
+      }
+    }
   }
 
   if (redirect_expect_file_name && context->error == NULL)
