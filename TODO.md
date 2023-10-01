@@ -1,15 +1,15 @@
 # Ideias não filtradas
 
 * ler arquivo de configuração?
-* executar comandos é um requisito, passar argumentos vai junto
-* implementar suporte para comandos com àspas ao redor
-* implementar o redirecionamento de output input
-* mais comandos builtin?
-* globing e patter matching
-* implementar limpeza de terminal com crtl + l
-* fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui
-* acessar o último comando digitado apertando pra cima
-* emitir caracteres coloridos
+* executar comandos é um requisito, passar argumentos vai junto -- ok
+* implementar suporte para comandos com àspas ao redor -- ok (embora ainda possua casos aonde pode apresentar erro, ambiguidade ou comportamento inapropriado)
+* implementar o redirecionamento de output input -- parcielmente
+* mais comandos builtin? -- em progresso
+* globing e patter matching -- em progresso
+* implementar limpeza de terminal com crtl + l -- ok
+* fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui -- não iniciado
+* acessar o último comando digitado apertando pra cima -- ok
+* emitir caracteres coloridos -- ok
 
 
 ## Anotações 15/08/2023
