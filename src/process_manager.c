@@ -14,7 +14,9 @@
 
 typedef struct Process_Parameter {
   Null_Terminated_Pointer_Array args;
+  int fd_stdin;
   int fd_stdout;
+  int fd_stderr;
   struct Process_Parameter *pipe_through;
 } Process_Parameter;
 
@@ -24,7 +26,7 @@ typedef struct Process_Handles {
   int stderr;
 } Process_Handles;
 
-#define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdout = -1, .pipe_through = NULL, }
+#define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = -1, .fd_stdout = -1, .fd_stderr = -1, .pipe_through = NULL, }
 #define STATIC_PROCESS_HANDLES() (Process_Handles) { .stdin = STDIN_FILENO, .stdout = STDOUT_FILENO, .stderr = STDERR_FILENO, }
 
 bool wait_child_process(pid_t pid)
@@ -46,9 +48,24 @@ int launch_process(const Process_Parameter process_parameter)
 
   if (pid == 0)
   {
+    // @todo João, remover asserts assim que valores começarem a ser usados
+
+    // @todo João, validar se o stdin pode ser setado da mesma forma que os file descriptors de output
+    if (process_parameter.fd_stdin > -1)
+    {
+      assert(false && "não deveria estar sendo usado ainda");
+      dup2(process_parameter.fd_stdin, STDIN_FILENO);
+    }
+
     if (process_parameter.fd_stdout > -1)
     {
       dup2(process_parameter.fd_stdout, STDOUT_FILENO);
+    }
+
+    if (process_parameter.fd_stderr > -1)
+    {
+      assert(false && "não deveria estar sendo usado ainda");
+      dup2(process_parameter.fd_stderr, STDERR_FILENO);
     }
 
     /**
