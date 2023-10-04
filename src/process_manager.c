@@ -46,7 +46,7 @@ int launch_process(const Process_Parameter process_parameter)
 
   if (pid == 0)
   {
-    if (process_parameter.fd_stdout > 0)
+    if (process_parameter.fd_stdout > -1)
     {
       dup2(process_parameter.fd_stdout, STDOUT_FILENO);
     }
