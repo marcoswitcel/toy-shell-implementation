@@ -279,6 +279,9 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
 {
   bool appending = false;
   unsigned n_char_forward = 1;
+  
+  // @todo João, checar se tem o 1 ou 2. Implementar os testes para esse novo recurso
+
   if (peek_char(context) == '>')
   {
     if (peek_next_char(context) == '>')
