@@ -451,6 +451,7 @@ int main(void)
   test_try_parse_globbing_01();
   test_try_parse_globbing_02();
   test_try_parse_globbing_03();
+  // @todo João, implementar try parse pipe
   test_list_char_prt_implementation();
   test_list_of_floats_implementation();
   test_tokenize_01();
