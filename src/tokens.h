@@ -18,6 +18,7 @@ typedef struct Globbing_Token {
 typedef struct Redirect_Token {
   const char *cstring;
   bool appending;
+  int fd;
 } Redirect_Token;
 
 typedef struct Pipe_Token {

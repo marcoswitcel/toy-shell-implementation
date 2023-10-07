@@ -358,7 +358,17 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
     {
       *tried_opening_file_and_failed = true;
     }
-    process.fd_stdout = fd;
+    else
+    {
+      if (execute_command_node->fd == 2)
+      {
+        process.fd_stderr = fd;
+      }
+      else
+      {
+        process.fd_stdout = fd;
+      }
+    }
   }
 
   return process;
@@ -417,12 +427,16 @@ int shell_execute_command(const Process_Parameter process_parameter)
   if (builtin_func)
   {
     Process_Handles handles = STATIC_PROCESS_HANDLES();
+    
     if (process_parameter.fd_stdout != -1)
     {
-      handles.stdout = process_parameter.fd_stdout;
-      int result = builtin_func(args, &handles);
-      return result;
+      handles.stdout = process_parameter.fd_stdout; 
     }
+    if (process_parameter.fd_stderr != -1)
+    {
+      handles.stderr = process_parameter.fd_stderr; 
+    }
+    
     return builtin_func(args, &handles);
   }
 

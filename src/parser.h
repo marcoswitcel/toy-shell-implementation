@@ -312,6 +312,7 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
       token->type = REDIRECT;
       token->data.redirect = (Redirect_Token) { .cstring = NULL };
       token->data.redirect.cstring = copy(">");
+      token->data.redirect.fd = fd;
       token->data.redirect.appending = appending;
       return;
     }
@@ -377,6 +378,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
   const char *output_filename = NULL;
   signed token_index_start = -1;
   bool append_mode = false;
+  int redirect_fd = -1;
   bool piped = false;
   Execute_Command_Node *pipe = NULL;
   
@@ -419,6 +421,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       }
       has_redirec_token = true;
       append_mode = token.data.redirect.appending;
+      redirect_fd = token.data.redirect.fd;
       redirect_expect_file_name = true;
     }
 
@@ -452,7 +455,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, };
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .fd = redirect_fd, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, };
 }
 
 #endif // PARSER_H
