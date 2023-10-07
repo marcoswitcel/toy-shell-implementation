@@ -222,10 +222,12 @@ void test_try_parse_redirect_01(void)
   Token token = STATIC_TOKEN(UNINITIALIZED);
   bool success = false;
 
+  assert(token.type == UNINITIALIZED);
   assert(token.token_index_start == -1);
   
   try_parse_redirect(&context, &token, &success);
   assert(success);
+  assert(token.type == REDIRECT);
   assert(token.token_index_start == 0);
   assert(context.index == 1);
   assert(context.error_start_index == -1);
@@ -306,6 +308,70 @@ void test_try_parse_redirect_06(void)
   assert(token.token_index_start == -1);
   assert(context.index == 0);
   assert(context.error_start_index == 2);
+}
+
+void test_try_parse_redirect_07(void)
+{
+  Parse_Context context = create_parse_context("1> arquivo.txt");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_parse_redirect_08(void)
+{
+  Parse_Context context = create_parse_context("2> arquivo.txt");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_parse_redirect_09(void)
+{
+  Parse_Context context = create_parse_context("1>> arquivo.txt");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 3);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_parse_redirect_10(void)
+{
+  Parse_Context context = create_parse_context("2>> arquivo.txt");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  assert(success);
+  assert(token.token_index_start == 0);
+  assert(context.index == 3);
+  assert(context.error_start_index == -1);
 }
 
 void test_try_parse_globbing_01(void)
@@ -449,6 +515,10 @@ int main(void)
   test_try_parse_redirect_04();
   test_try_parse_redirect_05();
   test_try_parse_redirect_06();
+  test_try_parse_redirect_07();
+  test_try_parse_redirect_08();
+  test_try_parse_redirect_09();
+  test_try_parse_redirect_10();
   test_try_parse_globbing_01();
   test_try_parse_globbing_02();
   test_try_parse_globbing_03();

@@ -281,8 +281,6 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
   unsigned n_char_forward = 0;
   int fd = -1;
   
-  // @todo João, checar se tem o 1 ou 2. Implementar os testes para esse novo recurso
-
   if ((peek_char(context) == '1' || peek_char(context) == '2') && peek_next_char(context) == '>')
   {
     fd = peek_char(context) - '0';
