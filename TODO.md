@@ -22,6 +22,10 @@ intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo 
 * Na rotina `shell_wait_command_input` tem bastante duplicidade e complexidade desnecessária. -- ok, parcialemente ajustado e monitorando
 * Mensurar o tempo de algumas funções [https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c](https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c) -- em progresso para fins de prática
 
+## Anotações 06/10/2023
+* Implementar e testar redirect do stdout e stderror antes de seguir com as PIPEs de stdin -- em progresso
+* Implementar redirect de stdin (PIPE)
+
 # Bugs
 
 * problema quando input e output iguais (aparentemente isso ocorre no bash também, é um alerta do próprio cat, possivelmente esse bug seja um alarme falso)

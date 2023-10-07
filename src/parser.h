@@ -278,22 +278,34 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
 {
   bool appending = false;
-  unsigned n_char_forward = 1;
+  unsigned n_char_forward = 0;
+  int fd = -1;
   
   // @todo João, checar se tem o 1 ou 2. Implementar os testes para esse novo recurso
 
-  if (peek_char(context) == '>')
+  if ((peek_char(context) == '1' || peek_char(context) == '2') && peek_next_char(context) == '>')
   {
-    if (peek_next_char(context) == '>')
+    fd = peek_char(context) - '0';
+    n_char_forward++;
+  }
+
+  if (peek_char_forward(context, n_char_forward) == '>')
+  {
+    n_char_forward ++;
+    if (peek_char_forward(context, n_char_forward) == '>')
     {
       appending = true;
-      n_char_forward = 2;
+      n_char_forward++;
     }
 
     if (is_whitespace(peek_char_forward(context, n_char_forward)) || peek_char_forward(context, n_char_forward) == '\0')
     {
       token->token_index_start = context->index;
       eat_char(context);
+      if (fd > -1)
+      {
+        eat_char(context);
+      }
       if (appending)
       {
         eat_char(context);
