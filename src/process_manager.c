@@ -64,7 +64,6 @@ int launch_process(const Process_Parameter process_parameter)
 
     if (process_parameter.fd_stderr > -1)
     {
-      assert(false && "não deveria estar sendo usado ainda");
       dup2(process_parameter.fd_stderr, STDERR_FILENO);
     }
 
