@@ -542,7 +542,6 @@ int main(void)
   test_try_parse_string_05();
   test_try_parse_string_06();
   test_try_parse_string_07();
-  // @todo João, expandir teste de redirect para considerar o prefixo numérico, recém adicionados, que indica o file descriptors
   test_try_parse_redirect_01();
   test_try_parse_redirect_02();
   test_try_parse_redirect_03();
