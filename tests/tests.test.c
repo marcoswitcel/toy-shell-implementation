@@ -408,6 +408,23 @@ void test_try_parse_redirect_12(void)
   assert(context.error_start_index == -1);
 }
 
+void test_try_parse_pipe01()
+{
+  Parse_Context context = create_parse_context("| grep");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_pipe(&context, &token, &success);
+  assert(success);
+  assert(token.data.pipe.cstring);
+  assert(token.token_index_start == 0);
+  assert(context.index == 1);
+  assert(context.error_start_index == -1);
+}
+
 void test_try_parse_globbing_01(void)
 {
   Parse_Context context = create_parse_context("*");
@@ -558,6 +575,7 @@ int main(void)
   test_try_parse_globbing_02();
   test_try_parse_globbing_03();
   // @todo João, implementar try parse pipe
+  test_try_parse_pipe01();
   test_list_char_prt_implementation();
   test_list_of_floats_implementation();
   test_tokenize_01();
