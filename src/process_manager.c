@@ -102,7 +102,11 @@ int launch_process(const Process_Parameter process_parameter)
     wait_child_process(pid);
   }
 
+  // @todo João, checar se pode chamar close com -1
+  // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
+  // @todo João, quando fecha o stdin?
   close(process_parameter.fd_stdout);
+  close(process_parameter.fd_stderr);
 
   return 1;
 }
