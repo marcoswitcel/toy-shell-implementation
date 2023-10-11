@@ -15,6 +15,7 @@
 #include "./shell_builtins.c"
 #include "./terminal.c"
 #include "./utils.macro.h"
+#include "./dev-utils.c"
 
 #define HISTORY_MAX_ELEMENTS 20
 
@@ -451,26 +452,33 @@ int shell_execute_command(const Process_Parameter process_parameter)
 
 void shell_report_parse_error(Parse_Context *context)
 {
-  // @todo joão, o ideal seria se livrar desses printf, talvez usar o write direto, porém,
-  // criando um buffer e fazendo um write apenas seria mais eficiente
+  // RECORD_TIME(report_error);
+  Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
+
   if (context->error_start_index > -1)
   {
-    printf("  ");
+    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  "));
     for (signed i = 0; i < context->error_start_index+1; i++)
     {
       if (i == context->error_start_index)
       {
-        printf("^");
+        buffer_push(buffer, '^');
       }
       else
       {
-        printf("-");
+        buffer_push(buffer, '-');
       }
     }
-    printf("\n");
+    buffer_push(buffer, '\n');
   }
 
-  printf("  Problema: %s\n", context->error);
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  Problema: "));
+  buffer_push_all(buffer, context->error, strlen(context->error));
+  buffer_push(buffer, '\n');
+
+  // @todo João, passar o contexto aqui, pra pegar o stdout configurado
+  write(1, buffer->buffer, buffer->index);
+  // MEASURE_TIME(report_error, "teste");
 }
 
 void read_eval_shell_loop(bool colorful)
