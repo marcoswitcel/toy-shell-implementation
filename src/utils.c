@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <dirent.h>
+#include <unistd.h>
 
 #include "./list.implementations.h"
 #include "./utils.macro.h"
@@ -107,15 +108,15 @@ void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_
 // @reference sugestão vinda do stackoverflow, conforme for evoluindo esse código revisar esse VT escape code
 void erase_line()
 {
-  printf("\33[2K\r");
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\33[2K\r"));
 }
 
 void clear_terminal()
 {
   // @reference http://vt100.net/docs/vt100-ug/chapter3.html#ED
-  printf("\x1b[2J");
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\x1b[2J"));
   // @reference http://vt100.net/docs/vt100-ug/chapter3.html#CUP
-  printf("\x1b[H");
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\x1b[H"));
 }
 
 void emmit_ring_bell()
