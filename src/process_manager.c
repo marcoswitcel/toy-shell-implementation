@@ -79,7 +79,7 @@ int launch_process(const Process_Parameter process_parameter)
      */
     if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {
-      printf("Internal: Processo filho não pode executar o programa alvo.\n");
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não pode executar o programa alvo.\n"));
     }
 
     /**
@@ -95,7 +95,7 @@ int launch_process(const Process_Parameter process_parameter)
   }
   else if (pid < 0)
   {
-    printf("Internal: Processo filho não iniciou.");
+    write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não iniciou."));
   }
   else
   {
@@ -124,7 +124,7 @@ pid_t fork_and_run(void (*func)(void), bool wait)
   }
   else if (pid < 0)
   {
-    printf("Thread não iniciada com sucesso.");
+    write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Thread não iniciada com sucesso."));
   }
   else if (wait)
   {
