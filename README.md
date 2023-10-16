@@ -5,7 +5,7 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 ## Alguns features
 
 * Executar comandos com argumentos
-* Suporte a redirect de output, com alguns bugs e limitações mas implementado
+* Suporte a redirect de output (stdout e stderr)
 * Expansão de asteriscos para a lista de arquivos contigos na pasta
 * Suporte a argumentos com àspas
 * Histórico de comando digitados
