@@ -20,14 +20,7 @@ typedef struct Process_Parameter {
   struct Process_Parameter *pipe_through;
 } Process_Parameter;
 
-typedef struct Process_Handles {
-  int stdin;
-  int stdout;
-  int stderr;
-} Process_Handles;
-
-#define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = -1, .fd_stdout = -1, .fd_stderr = -1, .pipe_through = NULL, }
-#define STATIC_PROCESS_HANDLES() (Process_Handles) { .stdin = STDIN_FILENO, .stdout = STDOUT_FILENO, .stderr = STDERR_FILENO, }
+#define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = STDIN_FILENO, .fd_stdout = STDOUT_FILENO, .fd_stderr = STDERR_FILENO, .pipe_through = NULL, }
 
 bool wait_child_process(pid_t pid)
 {
@@ -51,7 +44,8 @@ int launch_process(const Process_Parameter process_parameter)
     // @todo João, remover asserts assim que valores começarem a ser usados
 
     // @todo João, validar se o stdin pode ser setado da mesma forma que os file descriptors de output
-    if (process_parameter.fd_stdin > -1)
+    // @todo João, talvez incluir um cheque para não fazer o dup2, caso os atributos fd_* contiverem o valor padrão para o file descriptor 
+    if (process_parameter.fd_stdin > -1 && process_parameter.fd_stdin != STDIN_FILENO)
     {
       assert(false && "não deveria estar sendo usado ainda");
       dup2(process_parameter.fd_stdin, STDIN_FILENO);
@@ -105,8 +99,9 @@ int launch_process(const Process_Parameter process_parameter)
   // @todo João, checar se pode chamar close com -1
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
   // @todo João, quando fecha o stdin?
-  close(process_parameter.fd_stdout);
-  close(process_parameter.fd_stderr);
+  // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles
+  if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
+  if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
 
   return 1;
 }

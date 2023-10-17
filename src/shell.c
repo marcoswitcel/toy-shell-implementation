@@ -426,19 +426,8 @@ int shell_execute_command(const Process_Parameter process_parameter)
 
   Builtin_Function builtin_func = has_builtin_for(args[0]);
   if (builtin_func)
-  {
-    Process_Handles handles = STATIC_PROCESS_HANDLES();
-    
-    if (process_parameter.fd_stdout != -1)
-    {
-      handles.stdout = process_parameter.fd_stdout; 
-    }
-    if (process_parameter.fd_stderr != -1)
-    {
-      handles.stderr = process_parameter.fd_stderr; 
-    }
-    
-    return builtin_func(args, &handles);
+  {    
+    return builtin_func(&process_parameter);
   }
 
   // @todo João, não necessariamente aqui, mas seria importante validar se o comando será encontrado
