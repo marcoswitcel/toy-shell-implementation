@@ -85,6 +85,12 @@ int launch_process(const Process_Parameter process_parameter)
         write(STDOUT_FILENO, process_parameter.args[0], strlen(process_parameter.args[0]));
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
       }
+      else if (errno == ENOENT)
+      {
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Programa não encontrado: "));
+        write(STDOUT_FILENO, process_parameter.args[0], strlen(process_parameter.args[0]));
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
+      }
       else
       {
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não pode executar o programa alvo.\nMotivo: "));
