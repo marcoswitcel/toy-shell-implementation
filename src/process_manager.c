@@ -97,6 +97,7 @@ int launch_process(const Process_Parameter process_parameter)
   }
 
   // @todo João, checar se pode chamar close com -1
+  // @respota https://stackoverflow.com/questions/40915329/what-does-closing-an-invalid-file-descriptor-do
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
   // @todo João, quando fecha o stdin?
   // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles
