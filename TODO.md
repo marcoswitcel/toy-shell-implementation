@@ -12,6 +12,8 @@
 * fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui -- não iniciado
 * implementar pipe de um processo pra outro (ler https://www.rozmichelle.com/pipes-forks-dups/#pipelines) -- em progresso
 * implementar mais suporte a cores
+* suporte a crtl+arrow_left e crtl+arrow_right
+* suporte tab com autocomplete
 
 
 ## Anotações 15/08/2023
