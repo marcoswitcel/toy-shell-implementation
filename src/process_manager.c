@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "./list.implementations.h"
 #include "./utils.c"
@@ -73,7 +74,14 @@ int launch_process(const Process_Parameter process_parameter)
      */
     if (execvp(process_parameter.args[0], process_parameter.args) == -1)
     {
-      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não pode executar o programa alvo.\n"));
+      /**
+       * @note como diferenciar e printar erros
+       * @reference https://stackoverflow.com/questions/503878/how-to-know-what-the-errno-means
+       */
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não pode executar o programa alvo.\nMotivo: "));
+      const char *error_description = strerror(errno);
+      write(STDOUT_FILENO, error_description, strlen(error_description));
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
     }
 
     /**
@@ -96,8 +104,6 @@ int launch_process(const Process_Parameter process_parameter)
     wait_child_process(pid);
   }
 
-  // @todo João, checar se pode chamar close com -1
-  // @respota https://stackoverflow.com/questions/40915329/what-does-closing-an-invalid-file-descriptor-do
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
   // @todo João, quando fecha o stdin?
   // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles
