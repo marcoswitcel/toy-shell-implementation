@@ -81,19 +81,19 @@ int launch_process(const Process_Parameter process_parameter)
        */
       if (errno == EACCES)
       {
-        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Problema de permissão ao tentar executar: "));
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("  Problema de permissão ao tentar executar: "));
         write(STDOUT_FILENO, process_parameter.args[0], strlen(process_parameter.args[0]));
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
       }
       else if (errno == ENOENT)
       {
-        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Programa não encontrado: "));
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("  Programa não encontrado: "));
         write(STDOUT_FILENO, process_parameter.args[0], strlen(process_parameter.args[0]));
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
       }
       else
       {
-        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Internal: Processo filho não pode executar o programa alvo.\nMotivo: "));
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("  Internal: Processo filho não pode executar o programa alvo.\nMotivo: "));
         const char *error_description = strerror(errno);
         write(STDOUT_FILENO, error_description, strlen(error_description));
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\n"));
