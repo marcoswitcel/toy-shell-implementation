@@ -490,7 +490,6 @@ void read_eval_shell_loop(bool colorful)
      * @leak @fixme
      */
     Execute_Command_Node execute_command_node = shell_parse_command(&context);
-    Process_Parameter process_parameter = STATIC_PROCESS_PARAMETER(NULL);
 
     if (context.error == NULL)
     {
@@ -499,7 +498,7 @@ void read_eval_shell_loop(bool colorful)
       while (current_command)
       {
         bool tried_opening_file_and_failed = false;
-        process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
+        Process_Parameter process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {
           context.error = "O arquivo não pôde ser aberto.";
