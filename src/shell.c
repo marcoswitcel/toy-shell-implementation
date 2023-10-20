@@ -494,17 +494,29 @@ void read_eval_shell_loop(bool colorful)
 
     if (context.error == NULL)
     {
-      bool tried_opening_file_and_failed = false;
-      process_parameter = shell_convert_execute_command_into_process_paramater(&execute_command_node, &tried_opening_file_and_failed);
-      if (tried_opening_file_and_failed)
+      // @todo João, terminar aqui de implementar o &&
+      Execute_Command_Node *current_command = &execute_command_node;
+      while (current_command)
       {
-        context.error = "O arquivo não pôde ser aberto.";
-        context.error_start_index = execute_command_node.token_index_start;
-        shell_report_parse_error(&context);
-      }
-      else
-      {
-        shell_execute_command(process_parameter);
+        bool tried_opening_file_and_failed = false;
+        process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
+        if (tried_opening_file_and_failed)
+        {
+          context.error = "O arquivo não pôde ser aberto.";
+          context.error_start_index = current_command->token_index_start;
+          shell_report_parse_error(&context);
+        }
+        else
+        {
+          shell_execute_command(process_parameter);
+        }
+        current_command = current_command->next_command;
+
+        if (process_parameter.args != NULL)
+        {
+          release_cstring_from_null_terminated_pointer_array(process_parameter.args);
+          FREE_AND_NULLIFY(process_parameter.args);
+        }
       }
     }
     else
@@ -515,18 +527,12 @@ void read_eval_shell_loop(bool colorful)
 
     // @todo João, por hora vou copiar a string, mas poderia muito bem pegar ela emprestada, pois esse é o ponto aonde ela não é mais necessária
     list_of_strings_push(shell_context.last_typed_commands, copy(readed_line));
+    FREE_AND_NULLIFY(readed_line);
 
     if (shell_context.last_typed_commands->index > HISTORY_MAX_ELEMENTS)
     {
       FREE_AND_NULLIFY(shell_context.last_typed_commands->data[0]);
       list_of_strings_pop_at(shell_context.last_typed_commands, 0);
-    }
-
-    FREE_AND_NULLIFY(readed_line);
-    if (process_parameter.args != NULL)
-    {
-      release_cstring_from_null_terminated_pointer_array(process_parameter.args);
-      FREE_AND_NULLIFY(process_parameter.args);
     }
   }
 }
