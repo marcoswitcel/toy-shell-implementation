@@ -253,6 +253,38 @@ void try_parse_pipe(Parse_Context *context, Token *token, bool *success)
   *success = false;
 }
 
+// @todo João, falta testar esse tokenizador e suas mensagens
+void try_parse_and(Parse_Context *context, Token *token, bool *success)
+{
+  if (peek_char(context) == '&')
+  {
+    if (peek_next_char(context) == '&')
+    {
+      if (is_whitespace(peek_char_forward(context, 2)))
+      {
+        token->token_index_start = context->index;
+        eat_char(context);
+        eat_char(context);
+        *success = true;
+        token->type = AND;
+        token->data.and = (And_Token) { .cstring = NULL };
+        token->data.and.cstring = copy("&&");
+        return;
+      }
+
+      context->error = copy("Esperava espaço em branco após o &&.");
+      context->error_start_index = context->index + 2;
+    }
+    else
+    {
+      context->error = copy("Esperava encontrar mais um &.");
+      context->error_start_index = context->index + 1;
+    }
+  }
+
+  *success = false;
+}
+
 void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '*')
@@ -330,6 +362,7 @@ const Parse_Function parse_functions[] = {
   &try_parse_globbing,
   &try_parse_redirect,
   &try_parse_pipe,
+  &try_parse_and,
   &try_parse_string,
 };
 
@@ -381,6 +414,8 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
   int redirect_fd = -1;
   bool piped = false;
   Execute_Command_Node *pipe = NULL;
+  bool next_command_found = false;
+  Execute_Command_Node *next_command_node = NULL;
   
   for (unsigned i = first_token_index; i < tokens->index; i++)
   {
@@ -444,6 +479,26 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
         break;
       }
     }
+
+    if (token.type == AND && token.data.and.cstring)
+    {
+      // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
+      // mas por precaução essa lógica fica
+      if (next_command_found)
+      {
+        parse_context_report_error(context, "Token && encontrado mais de uma vez.", token.token_index_start);
+        break;
+      }
+      else
+      {
+        Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
+        *execute_command_sub_node = parse_execute_command_node(context, i + 1, tokens);
+        next_command_node = execute_command_sub_node;
+        next_command_found = true;
+
+        break;
+      }
+    }
   }
 
   if (redirect_expect_file_name && context->error == NULL)
@@ -455,7 +510,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .fd = redirect_fd, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, };
+  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .fd = redirect_fd, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, .next_command = next_command_node };
 }
 
 #endif // PARSER_H

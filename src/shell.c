@@ -494,6 +494,7 @@ void read_eval_shell_loop(bool colorful)
     if (context.error == NULL)
     {
       // @todo João, terminar aqui de implementar o &&
+      // @todo João, necessário fazer o free dos comandos executados
       Execute_Command_Node *current_command = &execute_command_node;
       while (current_command)
       {
@@ -504,6 +505,8 @@ void read_eval_shell_loop(bool colorful)
           context.error = "O arquivo não pôde ser aberto.";
           context.error_start_index = current_command->token_index_start;
           shell_report_parse_error(&context);
+          // @todo João, necessário para a execução da sequência de comandos caso dê erro
+          // e apresentar uma boa mensagem de erro
         }
         else
         {
