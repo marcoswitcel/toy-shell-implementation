@@ -56,9 +56,11 @@ int builtin_cd(const Process_Parameter *process_parameter)
     write(process_parameter->fd_stderr, EXPAND_STRING_REF_AND_COUNT("cd: não foi possível acessar o diretório \""));
     write(process_parameter->fd_stderr, target_folder, strlen(target_folder));
     write(process_parameter->fd_stderr, EXPAND_STRING_REF_AND_COUNT("\"\n"));
+
+    return 1;
   }
 
-  return 1;
+  return 0;
 }
 
 int builtin_help(const Process_Parameter *process_parameter)
@@ -72,7 +74,7 @@ int builtin_help(const Process_Parameter *process_parameter)
     write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Por hora o comando \"help\" não consegue explicar \""));
     write(process_parameter->fd_stdout, process_parameter->args[1], strlen(process_parameter->args[1]));  
     write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("\".\n"));
-    return 1;
+    return 0;
   }
 
   write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Comandos builtin básicos:\n"));
@@ -85,7 +87,7 @@ int builtin_help(const Process_Parameter *process_parameter)
 
   write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("\nDigite o nome do programa ou builtin, seguido pelos argumentos e aperte enter para executar.\n"));
   
-  return 1;
+  return 0;
 }
 
 int builtin_exit(const Process_Parameter *process_parameter)
@@ -110,7 +112,7 @@ int builtin_clear(const Process_Parameter *process_parameter)
     write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Warning: Ignorando argumentos para clear .\n"));
   }
 
-  return 1;
+  return 0;
 }
 
 int builtin_history(const Process_Parameter *process_parameter)
@@ -134,7 +136,7 @@ int builtin_history(const Process_Parameter *process_parameter)
 
   write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("\n"));
 
-  return 1;
+  return 0;
 }
 
 

@@ -526,10 +526,29 @@ void read_eval_shell_loop(bool colorful)
         }
         else
         {
-          shell_execute_command(process_parameter);
           // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
           // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
-          commando_counter++;
+          int result = shell_execute_command(process_parameter);
+
+          if (result)
+          {
+            // @todo João, me parece estranho esse código parar aqui, mas é necessário para fazer o report alinhado ao input 
+            if (commando_counter)
+            {
+              write(STDOUT_FILENO, "\n", 1);
+              print_input_mark(&shell_context, readed_line);
+              write(STDOUT_FILENO, "\n", 1);
+            }
+
+            context.error = "O comando retornou status diferente de 0.";
+
+            shell_report_parse_error(&context);
+            should_interrupt = true;
+          }
+          else
+          {
+            commando_counter++;
+          }
         }
         current_command = current_command->next_command;
 

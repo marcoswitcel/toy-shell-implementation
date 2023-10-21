@@ -126,7 +126,7 @@ int launch_process(const Process_Parameter process_parameter)
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
 
-  return 1;
+  return 0;
 }
 
 pid_t fork_and_run(void (*func)(void), bool wait)
