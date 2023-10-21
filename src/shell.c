@@ -441,17 +441,17 @@ int shell_execute_command(const Process_Parameter process_parameter)
   return launch_process(process_parameter);
 }
 
-void shell_report_parse_error(Parse_Context *context)
+void shell_report_error(const char*error, signed error_start_index)
 {
   // RECORD_TIME(report_error);
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
 
-  if (context->error_start_index > -1)
+  if (error_start_index > -1)
   {
     buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  "));
-    for (signed i = 0; i < context->error_start_index+1; i++)
+    for (signed i = 0; i < error_start_index+1; i++)
     {
-      if (i == context->error_start_index)
+      if (i == error_start_index)
       {
         buffer_push(buffer, '^');
       }
@@ -464,12 +464,17 @@ void shell_report_parse_error(Parse_Context *context)
   }
 
   buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  Problema: "));
-  buffer_push_all(buffer, context->error, strlen(context->error));
+  buffer_push_all(buffer, error, strlen(error));
   buffer_push(buffer, '\n');
 
   // @todo João, passar o contexto aqui, pra pegar o stdout configurado
   write(1, buffer->buffer, buffer->index);
   // MEASURE_TIME(report_error, "teste");
+}
+
+void shell_report_parse_error(Parse_Context *context)
+{
+  shell_report_error(context->error, context->error_start_index);
 }
 
 void read_eval_shell_loop(bool colorful)
@@ -511,6 +516,8 @@ void read_eval_shell_loop(bool colorful)
         else
         {
           shell_execute_command(process_parameter);
+          // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
+          // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
         }
         current_command = current_command->next_command;
 

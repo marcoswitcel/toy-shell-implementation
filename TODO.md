@@ -14,6 +14,7 @@
 * implementar mais suporte a cores (cores no erros?)
 * suporte a crtl+arrow_left e crtl+arrow_right
 * suporte tab com autocomplete
+* crtl + d para fechar
 
 
 ## Anotações 15/08/2023
