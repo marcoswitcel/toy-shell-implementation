@@ -501,23 +501,35 @@ void read_eval_shell_loop(bool colorful)
       // @todo João, terminar aqui de implementar o &&
       // @todo João, necessário fazer o free dos comandos executados
       Execute_Command_Node *current_command = &execute_command_node;
-      while (current_command)
+      unsigned commando_counter = 0;
+      bool should_interrupt = false;
+      while (current_command && !should_interrupt)
       {
         bool tried_opening_file_and_failed = false;
         Process_Parameter process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {
-          context.error = "O arquivo não pôde ser aberto.";
+          if (current_command->next_command) context.error = "O arquivo não pôde ser aberto. Parando execução em sequência.";
+          else                               context.error = "O arquivo não pôde ser aberto.";
+
           context.error_start_index = current_command->token_index_start;
+          
+          // @todo João, me parece estranho esse código parar aqui, mas é necessário para fazer o report alinhado ao input 
+          write(STDOUT_FILENO, "\n", 1);
+          print_input_mark(&shell_context, readed_line);
+          write(STDOUT_FILENO, "\n", 1);
+
           shell_report_parse_error(&context);
           // @todo João, necessário para a execução da sequência de comandos caso dê erro
           // e apresentar uma boa mensagem de erro
+          should_interrupt = true;
         }
         else
         {
           shell_execute_command(process_parameter);
           // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
           // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
+          commando_counter++;
         }
         current_command = current_command->next_command;
 
