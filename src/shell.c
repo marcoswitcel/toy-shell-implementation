@@ -503,7 +503,7 @@ void read_eval_shell_loop(bool colorful)
       // @todo João, terminar aqui de implementar o &&
       // @todo João, necessário fazer o free dos comandos executados
       Execute_Command_Node *current_command = &execute_command_node;
-      unsigned commando_counter = 0;
+      unsigned command_counter = 0;
       bool should_interrupt = false;
       while (current_command && !should_interrupt)
       {
@@ -534,8 +534,9 @@ void read_eval_shell_loop(bool colorful)
 
           if (result)
           {
-            // @todo João, me parece estranho esse código parar aqui, mas é necessário para fazer o report alinhado ao input 
-            if (commando_counter)
+            // @todo João, comparei com o comportamento do bash e o bash não reporta qual comando falhou, não necessariamente isso é bom
+            // mas por hora vou fazer igual
+            /* if (command_counter)
             {
               write(STDOUT_FILENO, "\n", 1);
               print_input_mark(&shell_context, readed_line);
@@ -544,12 +545,12 @@ void read_eval_shell_loop(bool colorful)
 
             context.error = "O comando retornou status diferente de 0.";
 
-            shell_report_parse_error(&context);
+            shell_report_parse_error(&context); */
             should_interrupt = true;
           }
           else
           {
-            commando_counter++;
+            command_counter++;
           }
         }
         current_command = current_command->next_command;
