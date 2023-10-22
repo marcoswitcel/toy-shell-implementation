@@ -531,18 +531,6 @@ void read_eval_shell_loop(bool colorful)
 
           if (result)
           {
-            // @todo João, comparei com o comportamento do bash e o bash não reporta qual comando falhou, não necessariamente isso é bom
-            // mas por hora vou fazer igual
-            /* if (command_counter)
-            {
-              write(STDOUT_FILENO, "\n", 1);
-              print_input_mark(&shell_context, readed_line);
-              write(STDOUT_FILENO, "\n", 1);
-            }
-
-            context.error = "O comando retornou status diferente de 0.";
-
-            shell_report_parse_error(&context); */
             should_interrupt = true;
           }
           else
@@ -550,15 +538,8 @@ void read_eval_shell_loop(bool colorful)
             command_counter++;
           }
         }
+
         current_command = current_command->next_command;
-        // @todo João, deixei a responsabilidade de fazer o release dessa memória para a função `release_execute_command_nodes`,
-        // já que a memória é emprestada do execute_command_node.
-/*         if (process_parameter.args != NULL)
-        {
-          release_cstring_from_null_terminated_pointer_array(process_parameter.args);
-          FREE_AND_NULLIFY(process_parameter.args);
-        }
-*/
       }
     }
     else
@@ -567,7 +548,9 @@ void read_eval_shell_loop(bool colorful)
       FREE_AND_NULLIFY(context.error);
     }
 
-    // Faz o release dos nós e dos args
+    // Faz o release dos nós e dos args, a estrutura `Process_Parameter` pega emprestada a referência
+    // mas a essa altura da execução ela já não está mais usando. O if e o loop acima podem ser abortados
+    // prematuramente, por isso o release fica pra depois de terminar toda execução.
     release_execute_command_nodes(&execute_command_node, false);
 
     // @todo João, por hora vou copiar a string, mas poderia muito bem pegar ela emprestada, pois esse é o ponto aonde ela não é mais necessária

@@ -623,7 +623,6 @@ int main(void)
   test_try_parse_globbing_01();
   test_try_parse_globbing_02();
   test_try_parse_globbing_03();
-  // @todo João, implementar try parse pipe
   test_try_parse_pipe01();
   test_try_parse_pipe02();
   test_try_parse_and01();
