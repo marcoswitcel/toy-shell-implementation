@@ -500,7 +500,6 @@ void read_eval_shell_loop(bool colorful)
 
     if (context.error == NULL)
     {
-      // @todo João, terminar aqui de implementar o &&
       // @todo João, necessário fazer o free dos comandos executados
       Execute_Command_Node *current_command = &execute_command_node;
       unsigned command_counter = 0;
@@ -522,8 +521,6 @@ void read_eval_shell_loop(bool colorful)
           write(STDOUT_FILENO, "\n", 1);
 
           shell_report_parse_error(&context);
-          // @todo João, necessário para a execução da sequência de comandos caso dê erro
-          // e apresentar uma boa mensagem de erro
           should_interrupt = true;
         }
         else
