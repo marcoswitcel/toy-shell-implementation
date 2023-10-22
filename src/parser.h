@@ -253,7 +253,6 @@ void try_parse_pipe(Parse_Context *context, Token *token, bool *success)
   *success = false;
 }
 
-// @todo João, falta testar esse tokenizador e suas mensagens
 void try_parse_and(Parse_Context *context, Token *token, bool *success)
 {
   if (peek_char(context) == '&')
@@ -268,7 +267,11 @@ void try_parse_and(Parse_Context *context, Token *token, bool *success)
         *success = true;
         token->type = AND;
         token->data.and = (And_Token) { .cstring = NULL };
-        token->data.and.cstring = copy("&&");
+        // @todo João, para fins de teste, vou deixar essa memória como sendo um referência para
+        // a string "&&", até aonde sei, essa string vai ganhar um endereço readonly fora da stack.
+        // Teoricamente é seguro passar adiante desde que eu não tente chamar free nessa referência.
+        // token->data.and.cstring = copy("&&");
+        token->data.and.cstring = "&&";
         return;
       }
 
