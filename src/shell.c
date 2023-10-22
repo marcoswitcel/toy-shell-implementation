@@ -551,12 +551,14 @@ void read_eval_shell_loop(bool colorful)
           }
         }
         current_command = current_command->next_command;
-
-        if (process_parameter.args != NULL)
+        // @todo João, deixei a responsabilidade de fazer o release dessa memória para a função `release_execute_command_nodes`,
+        // já que a memória é emprestada do execute_command_node.
+/*         if (process_parameter.args != NULL)
         {
           release_cstring_from_null_terminated_pointer_array(process_parameter.args);
           FREE_AND_NULLIFY(process_parameter.args);
         }
+*/
       }
     }
     else
@@ -564,6 +566,9 @@ void read_eval_shell_loop(bool colorful)
       shell_report_parse_error(&context);
       FREE_AND_NULLIFY(context.error);
     }
+
+    // Faz o release dos nós e dos args
+    release_execute_command_nodes(&execute_command_node, false);
 
     // @todo João, por hora vou copiar a string, mas poderia muito bem pegar ela emprestada, pois esse é o ponto aonde ela não é mais necessária
     list_of_strings_push(shell_context.last_typed_commands, copy(readed_line));
