@@ -15,6 +15,7 @@
 * suporte a crtl+arrow_left e crtl+arrow_right
 * suporte tab com autocomplete
 * crtl + d para fechar
+* incluir a expressão "$?" (permite consultar status do último comando)
 
 
 ## Anotações 15/08/2023
