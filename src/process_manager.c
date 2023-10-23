@@ -23,7 +23,16 @@ typedef struct Process_Parameter {
 
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = STDIN_FILENO, .fd_stdout = STDOUT_FILENO, .fd_stderr = STDERR_FILENO, .pipe_through = NULL, }
 
-bool wait_child_process(pid_t pid)
+/**
+ * @brief espera o processo terminar e retornar o stauts
+ * @todo João, ainda não testado.......
+ * 
+ * @reference https://stackoverflow.com/questions/27306764/capturing-exit-status-code-of-child-process
+ * 
+ * @param pid 
+ * @return int 
+ */
+int wait_child_process(pid_t pid)
 {
   int status;
 
@@ -32,13 +41,16 @@ bool wait_child_process(pid_t pid)
     waitpid(pid, &status, WUNTRACED);
   } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 
-  return true;
+  if (WIFEXITED(status)) return WEXITSTATUS(status);
+
+  return -1;
 }
 
 int launch_process(const Process_Parameter process_parameter)
 {
   pid_t pid;
   pid = fork();
+  int status = -1;
 
   if (pid == 0)
   {
@@ -117,7 +129,7 @@ int launch_process(const Process_Parameter process_parameter)
   }
   else
   {
-    wait_child_process(pid);
+    status = wait_child_process(pid);
   }
 
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
@@ -126,7 +138,7 @@ int launch_process(const Process_Parameter process_parameter)
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
 
-  return 0;
+  return status;
 }
 
 pid_t fork_and_run(void (*func)(void), bool wait)
