@@ -26,7 +26,7 @@ void release_execute_command_nodes(Execute_Command_Node *execute_command_node, b
 
     if (current_command->pipe) release_execute_command_nodes(current_command->pipe, true);
 
-    release_cstring_from_null_terminated_pointer_array(current_command->args);
+    if (current_command->args) release_cstring_from_null_terminated_pointer_array(current_command->args);
     free(current_command->args);
 
     if (current_command != execute_command_node || clear_root_node) free(current_command);
