@@ -49,6 +49,7 @@ int wait_child_process(pid_t pid)
 int launch_process(const Process_Parameter process_parameter)
 {
   pid_t pid;
+  // @todo João, antes de spawnar o processo filtro restaurar a flag OPOST?
   pid = fork();
   int status = -1;
 
