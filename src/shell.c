@@ -428,6 +428,9 @@ int shell_execute_command(const Process_Parameter process_parameter)
     return 1;
   }
 
+  // @todo João, investigar se não alguma forma de distorção do output nesse caso
+  // já que não estou reativando a flag opost aqui. Me parece que por emitirmos os
+  // caracteres manualmente tudo já está funcionando corretamente.
   Builtin_Function builtin_func = has_builtin_for(args[0]);
   if (builtin_func)
   {    
