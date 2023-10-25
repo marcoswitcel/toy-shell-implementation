@@ -269,7 +269,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
       should_update_cursor = true;
     }
-    else if (c == EOF || c == '\n')
+    else if (c == EOF || c == '\n' || c == '\r')
     {
       write(STDOUT_FILENO, "\n", 1);
       char *result = copy(buffer_ensure_null_terminated_view(buffer));

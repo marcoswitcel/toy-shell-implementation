@@ -63,8 +63,8 @@ void activate_raw_mode(bool set_cleanup_handler)
   if (set_cleanup_handler) atexit(deactivate_raw_mode);
 
   struct termios new_config = original_config;
-  new_config.c_lflag &= ~(IXON | ICRNL); // crtl + s / crtl + q e crtl + M
-  new_config.c_lflag &= ~(OPOST); // desabilitando processamento de output 
+  new_config.c_iflag &= ~(IXON | ICRNL); // crtl + s / crtl + q e crtl + M
+  new_config.c_oflag &= ~(OPOST); // desabilitando processamento de output 
   new_config.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN); // sem echo, buffer de saída, ctrl + c / crtl + z e crtl + v
   // @note Optei por não trazer as outras flags citadas no tutorial do editor de texto
   // @reference https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html#miscellaneous-flags
