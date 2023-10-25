@@ -269,12 +269,12 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
       should_update_cursor = true;
     }
-    else if (c == EOF || c == '\n' || c == '\r')
+    else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN)
     {
-      write(STDOUT_FILENO, "\n", 1);
+      write(STDOUT_FILENO, "\r\n", 2);
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
-      if (DEBUG_INFO) printf("linha lida: [%s]\n", result);
+      if (DEBUG_INFO) printf("linha lida: [%s]\r\n", result);
 
       destroy_buffer(buffer);
       return result;
@@ -286,12 +286,13 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       get_all_files_for_dir(".", list, true);
       if (list->index > 0)
       {
-        write(STDOUT_FILENO, "\n", 1);
+        write(STDOUT_FILENO, "\r\n", 2);
         for (unsigned i = 0; i < list->index; i++)
         {
           printf("%s ", list->data[i]);
         }
-        write(STDOUT_FILENO, "\n", 1);
+
+        write(STDOUT_FILENO, "\r\n", 2);
         print_input_mark(context, buffer_ensure_null_terminated_view(buffer));
       }
       
@@ -396,7 +397,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
     return STATIC_EXECUTE_COMMAND_NODE();
   }
 
-  if (DEBUG_INFO) printf("[[ tokens size: %d ]]\n", tokens->index);
+  if (DEBUG_INFO) printf("[[ tokens size: %d ]]\r\n", tokens->index);
 
   Execute_Command_Node execute_command_node = parse_execute_command_node(context, 0, tokens);
 
@@ -461,12 +462,12 @@ void shell_report_error(const char*error, signed error_start_index)
         buffer_push(buffer, '-');
       }
     }
-    buffer_push(buffer, '\n');
+    buffer_push_all(buffer, "\r\n", 2);
   }
 
   buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  Problema: "));
   buffer_push_all(buffer, error, strlen(error));
-  buffer_push(buffer, '\n');
+  buffer_push_all(buffer, "\r\n", 2);
 
   // @todo João, passar o contexto aqui, pra pegar o stdout configurado
   write(1, buffer->buffer, buffer->index);
@@ -517,9 +518,9 @@ void read_eval_shell_loop(bool colorful)
           context.error_start_index = current_command->token_index_start;
           
           // @todo João, me parece estranho esse código parar aqui, mas é necessário para fazer o report alinhado ao input 
-          write(STDOUT_FILENO, "\n", 1);
+          write(STDOUT_FILENO, "\r\n", 2);
           print_input_mark(&shell_context, readed_line);
-          write(STDOUT_FILENO, "\n", 1);
+          write(STDOUT_FILENO, "\r\n", 2);
 
           shell_report_parse_error(&context);
           should_interrupt = true;
@@ -529,6 +530,11 @@ void read_eval_shell_loop(bool colorful)
           // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
           // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
           int result = shell_execute_command(process_parameter);
+
+          // @todo João, agora que desativei a conversão de \n pra \r\n com o OPOST os processos filhos não estão
+          // printando corretamente. A linha abaixo corrige a falta de carriage return, mas não corrige se não houve enter,
+          // neste caso inclusive causa falhas na apresentação do output. Talvez resetar o ouput processing do processo filho
+          write(STDOUT_FILENO, "\r", 1);
 
           if (result)
           {

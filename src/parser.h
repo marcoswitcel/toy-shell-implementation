@@ -391,7 +391,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
       {
         progressed = true;
         sequence_of_tokens_push(tokens, token);
-        if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\n", token.data.string.cstring);
+        if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\r\n", token.data.string.cstring);
         break;
       }
       else if (context->error)

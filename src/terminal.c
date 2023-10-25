@@ -52,7 +52,7 @@ bool set_cursor_position(int row, int col)
 
 void deactivate_raw_mode()
 {
-  if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\n");
+  if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\r\n");
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
 }
 

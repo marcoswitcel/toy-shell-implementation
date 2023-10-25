@@ -25,7 +25,7 @@ void print_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_a
   char **token = pointer_array;
   while (*token != NULL)
   {
-    printf("%s: [%s]\n", label, *token);
+    printf("%s: [%s]\r\n", label, *token);
     token++;
   }
 }

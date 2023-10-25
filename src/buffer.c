@@ -41,7 +41,7 @@ static inline bool buffer_reallocate(Buffer *buffer)
   }
   else
   {
-    write(STDERR_FILENO, EXPAND_STRING_REF_AND_COUNT("Erro alocando memória para buffer\n"));
+    write(STDERR_FILENO, EXPAND_STRING_REF_AND_COUNT("Erro alocando memória para buffer\r\n"));
     exit(EXIT_FAILURE);
   }
 
