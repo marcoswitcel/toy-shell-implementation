@@ -12,6 +12,7 @@
 
 #include "./list.implementations.h"
 #include "./utils.c"
+#include "./terminal.h"
 
 typedef struct Process_Parameter {
   Null_Terminated_Pointer_Array args;
@@ -46,10 +47,18 @@ int wait_child_process(pid_t pid)
   return -1;
 }
 
-int launch_process(const Process_Parameter process_parameter)
+/**
+ * @brief função que faz o fork do processo pai e configura todos os "file descriptors" no processo novo.
+ * 
+ * @param process_parameter descrever os "file descriptors", pipe through e args
+ * @param activate_opost_before_fork ativa o processamento de output, especificamente a conversão de enters em carriage return seguido de enter.
+ * @return int 
+ */
+int launch_process(const Process_Parameter process_parameter, bool activate_opost_before_fork)
 {
+  if (activate_opost_before_fork) enable_oflag_opost();
+  
   pid_t pid;
-  // @todo João, antes de spawnar o processo filtro restaurar a flag OPOST?
   pid = fork();
   int status = -1;
 
@@ -138,6 +147,8 @@ int launch_process(const Process_Parameter process_parameter)
   // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
+
+  if (activate_opost_before_fork) disable_oflag_opost();
 
   return status;
 }

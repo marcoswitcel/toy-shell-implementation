@@ -71,4 +71,24 @@ void activate_raw_mode(bool set_cleanup_handler)
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &new_config);
 }
 
+void enable_oflag_opost()
+{
+  struct termios current_config;
+  tcgetattr(STDIN_FILENO, &current_config);
+
+  current_config.c_oflag |= OPOST; // habilita processamento de output 
+
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &current_config);
+}
+
+void disable_oflag_opost()
+{
+  struct termios current_config;
+  tcgetattr(STDIN_FILENO, &current_config);
+
+  current_config.c_oflag &= ~OPOST; // desabilita processamento de output 
+
+  tcsetattr(STDERR_FILENO, TCSAFLUSH, &current_config);
+}
+
 #endif // TERMINAL_C

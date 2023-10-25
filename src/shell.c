@@ -440,7 +440,7 @@ int shell_execute_command(const Process_Parameter process_parameter)
   // @note Não tenho mais certeza se seria de fato melhor checar, considerando que aparentemente não há
   // formar padrão de fazer isso. @reference https://stackoverflow.com/questions/890894/portable-way-to-find-out-if-a-command-exists-c-c
   // Por hora seria melhor apenas melhorar a mensagem de retorno (parcialmente melhorado)
-  return launch_process(process_parameter);
+  return launch_process(process_parameter, true);
 }
 
 void shell_report_error(const char*error, signed error_start_index)

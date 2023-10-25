@@ -11,4 +11,8 @@ void deactivate_raw_mode();
 
 void activate_raw_mode(bool set_cleanup_handler);
 
+void enable_oflag_opost();
+
+void disable_oflag_opost();
+
 #endif // TERMINAL_H
