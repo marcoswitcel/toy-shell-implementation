@@ -258,6 +258,16 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       c = EOF;
     }
 
+    if (c == CTRL_KEY('d') && buffer->index == 0)
+    {
+      exit_requested = true;
+      c = EOF;
+    }
+    else
+    {
+      emmit_ring_bell();
+    }
+
     if (c == ESC)
     {
       int key = try_process_escape_sequence();
@@ -269,10 +279,8 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
       should_update_cursor = true;
     }
-    else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN || c == CTRL_KEY('q'))
+    else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN)
     {
-      if (c == CTRL_KEY('q')) exit_requested = true;
-
       write(STDOUT_FILENO, "\r\n", 2);
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
