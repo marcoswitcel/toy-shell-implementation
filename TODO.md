@@ -16,6 +16,7 @@
 * suporte tab com autocomplete
 * crtl + d para fechar
 * incluir a expressão "$?" (permite consultar status do último comando)
+* implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input, ctrl+c para interromper digitação?
 
 
 ## Anotações 15/08/2023
