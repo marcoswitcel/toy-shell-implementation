@@ -258,14 +258,17 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       c = EOF;
     }
 
-    if (c == CTRL_KEY('d') && buffer->index == 0)
+    if (c == CTRL_KEY('d'))
     {
-      exit_requested = true;
-      c = EOF;
-    }
-    else
-    {
-      emmit_ring_bell();
+      if (buffer->index == 0)
+      {
+        exit_requested = true;
+        c = EOF;
+      }
+      else
+      {
+        emmit_ring_bell();
+      }
     }
 
     if (c == ESC)
