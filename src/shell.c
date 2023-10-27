@@ -269,8 +269,10 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
       should_update_cursor = true;
     }
-    else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN)
+    else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN || c == CTRL_KEY('q'))
     {
+      if (c == CTRL_KEY('q')) exit_requested = true;
+
       write(STDOUT_FILENO, "\r\n", 2);
       char *result = copy(buffer_ensure_null_terminated_view(buffer));
 
@@ -552,9 +554,12 @@ void read_eval_shell_loop(bool colorful)
         current_command = current_command->next_command;
       }
     }
-    else
+    else if (!exit_requested) // @note se exit_requested for true, no momento ele reporta o erro pro tentar parsear input vazio
     {
       shell_report_parse_error(&context);
+      FREE_AND_NULLIFY(context.error);
+    } else {
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!"));
       FREE_AND_NULLIFY(context.error);
     }
 

@@ -10,6 +10,17 @@
 #include "./types.h"
 #include "./terminal.h"
 
+/**
+ * @brief mascara a letra com o padrão binário 00011111 (decimal 31 e hexadecimal 0x1f)
+ * esse é o padrão que o terminal aplica a combinação ctrl + key, poderia ser por exemplo:
+ * ctrl+q ficaria 17, 'q' mascarado por 0x1f é igual à 17.
+ * 
+ * @reference https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#press-ctrl-q-to-quit
+ * @reference https://stackoverflow.com/questions/76901856/getting-the-status-of-the-ctrl-key-when-reading-console-input-in-java-on-unix
+ */
+#define CTRL_KEY(LETTER) ((LETTER) & 0x1f)
+
+
 static struct termios original_config;
 
 int get_cursor_position(int *row, int *column)
