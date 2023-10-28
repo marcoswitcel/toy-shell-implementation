@@ -258,19 +258,6 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       c = EOF;
     }
 
-    if (c == CTRL_KEY('d'))
-    {
-      if (buffer->index == 0)
-      {
-        exit_requested = true;
-        c = EOF;
-      }
-      else
-      {
-        emmit_ring_bell();
-      }
-    }
-
     if (c == ESC)
     {
       int key = try_process_escape_sequence();
@@ -325,18 +312,29 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
           should_update_cursor = true;
         }
-      };
-
-      if (c == CTRL_KEY('a'))
+      }
+      else if (c == CTRL_KEY('a'))
       {
         cursor_position = 0;
         should_update_cursor = true;
       }
-
-      if (c == CTRL_KEY('e'))
+      else if (c == CTRL_KEY('e'))
       {
         cursor_position = buffer->index;
         should_update_cursor = true;
+      }
+      else if (c == CTRL_KEY('d'))
+      {
+        if (buffer->index == 0)
+        {
+          exit_requested = true;
+          write(STDOUT_FILENO, "\r\n", 2);
+          break;
+        }
+        else
+        {
+          emmit_ring_bell();
+        }
       }
     }
     else
