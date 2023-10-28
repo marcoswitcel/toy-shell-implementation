@@ -12,7 +12,7 @@
 
 #include "./list.implementations.h"
 #include "./utils.c"
-#include "./terminal.h"
+#include "./terminal.c"
 
 typedef struct Process_Parameter {
   Null_Terminated_Pointer_Array args;
