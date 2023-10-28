@@ -285,12 +285,8 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN)
     {
       write(STDOUT_FILENO, "\r\n", 2);
-      char *result = copy(buffer_ensure_null_terminated_view(buffer));
-
-      if (DEBUG_INFO) printf("linha lida: [%s]\r\n", result);
-
-      destroy_buffer(buffer);
-      return result;
+      // @note decidi mover a lógica de cópia, release de memória e retorno pra fora do loop, parece mais legível
+      break;
     }
     else if (c == '\t')
     {
@@ -369,6 +365,13 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       }
     }
   }
+
+  char *result = copy(buffer_ensure_null_terminated_view(buffer));
+  destroy_buffer(buffer);
+
+  if (DEBUG_INFO) printf("linha lida: [%s]\r\n", result);
+
+  return result;
 }
 
 Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
