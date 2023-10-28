@@ -330,6 +330,18 @@ char *shell_wait_command_input(Shell_Context_Data *context)
           should_update_cursor = true;
         }
       };
+
+      if (c == CTRL_KEY('a'))
+      {
+        cursor_position = 0;
+        should_update_cursor = true;
+      }
+
+      if (c == CTRL_KEY('e'))
+      {
+        cursor_position = buffer->index;
+        should_update_cursor = true;
+      }
     }
     else
     {
