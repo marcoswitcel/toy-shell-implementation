@@ -14,9 +14,11 @@
 * implementar mais suporte a cores (cores no erros?)
 * suporte a crtl+arrow_left e crtl+arrow_right
 * suporte tab com autocomplete
-* crtl + d para fechar
+* crtl + d para fechar -- ok
 * incluir a expressão "$?" (permite consultar status do último comando)
-* implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input, ctrl+c para interromper digitação?
+* implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
+* ctrl+c para interromper digitação?
+* não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo.
 
 
 ## Anotações 15/08/2023
