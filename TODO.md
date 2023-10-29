@@ -17,7 +17,7 @@
 * crtl + d para fechar -- ok
 * incluir a expressão "$?" (permite consultar status do último comando)
 * implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
-* ctrl+c para interromper digitação?
+* ctrl+c para interromper digitação? -- ok
 * não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo.
 
 

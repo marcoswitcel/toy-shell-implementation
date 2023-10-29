@@ -336,6 +336,18 @@ char *shell_wait_command_input(Shell_Context_Data *context)
           emmit_ring_bell();
         }
       }
+      else if (c == CTRL_KEY('c'))
+      {
+        // @todo João, isso acaba sobreescrevendo alguns caracteres quando é dado ctrl-c no meio do texto,
+        // mas não causa nenhum bug, é só visual, por hora fica assim.
+        write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("^C\r\n"));
+
+        buffer_clear(buffer);
+        print_input_mark(context, NULL);
+
+        cursor_position = 0;
+        should_update_cursor = true;
+      }
     }
     else
     {
