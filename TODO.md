@@ -19,6 +19,7 @@
 * implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
 * ctrl+c para interromper digitação? -- ok
 * não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo.
+* implementar uma função de ordenação e aplicar na lista de diretórios retornada pela expansão do asterísco
 
 
 ## Anotações 15/08/2023
