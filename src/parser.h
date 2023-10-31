@@ -405,7 +405,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   return tokens;
 }
 
-// @todo João, acho que é melhor retonar uma referência alocada no heap
+// @todo João, acho que é melhor retornar uma referência alocada no heap
 Execute_Command_Node parse_execute_command_node(Parse_Context *context, const unsigned first_token_index, const Sequence_Of_Tokens *tokens)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);

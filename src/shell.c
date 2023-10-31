@@ -423,7 +423,6 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
   Sequence_Of_Tokens *tokens = tokenize(context);
 
-  // @todo João, talvez mover esse if pra dentro da função `tokenize`
   if (tokens->index == 0)
   {
     context->error = copy("Nenhum comando encontrado, possivelmente por se tratar de uma linha apenas com espaços.");
@@ -534,7 +533,7 @@ void read_eval_shell_loop(bool colorful)
     char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
     /**
-     * @todo João, devería chamar um método free nessa estrutura, pois ela pode conter 
+     * @todo João, deveria chamar um método free nessa estrutura, pois ela pode conter 
      * referências para outras estruturas alocadas no heap. Mas para isso é preciso criar esse método
      * e talvez mudar a função shell_parse_command para retornar uma referência.
      * @leak @fixme

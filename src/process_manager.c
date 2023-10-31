@@ -25,8 +25,7 @@ typedef struct Process_Parameter {
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = STDIN_FILENO, .fd_stdout = STDOUT_FILENO, .fd_stderr = STDERR_FILENO, .pipe_through = NULL, }
 
 /**
- * @brief espera o processo terminar e retornar o stauts
- * @todo João, ainda não testado.......
+ * @brief espera o processo terminar e retornar o status
  * 
  * @reference https://stackoverflow.com/questions/27306764/capturing-exit-status-code-of-child-process
  * 
