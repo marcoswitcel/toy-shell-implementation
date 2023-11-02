@@ -31,6 +31,9 @@ static unsigned partition(const char **list, unsigned begin, unsigned end)
  * @brief Função que faz a ordenação de listas de strings de forma lexicográfica
  * 
  * @todo João, desenvolver testes para essa função, corrigir possíveis bugs
+ * @todo João, bug aonde chamando a função de quick_sort duas vezes seguida causa leitura de endereço inválido
+ * 
+ * @note ordem dos arquivos: a.txt aa.txt buffer.o help.txt help1.txt jaininha.txt main temp.txt aja.txt teste testeteeeee.txt tests teste.txt
  * 
  * @link https://en.wikipedia.org/wiki/Quicksort
  * @link https://www.baeldung.com/java-quicksort
