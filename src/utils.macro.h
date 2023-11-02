@@ -26,4 +26,32 @@
 
 #define NO_UNDERFLOW_SUBTRACTING(NUMBER, VALUE) (NUMBER >= VALUE)
 
+#define CONCAT_EXPANSION(A, B) A ## B 
+#define CONCAT(A, B) CONCAT_EXPANSION(A, B)
+/**
+ * @brief concatena o símbolo ao número da linha para ter nomes de variáveis com menos
+ * chance de colisão.
+ * 
+ * @link https://stackoverflow.com/questions/1082192/how-to-generate-random-variable-names-in-c-using-macros
+ */
+#define SUFFIXED_NAME(NAME) CONCAT(NAME, __LINE__)
+
+/**
+ * @brief Macro para fazer swap de valores em dois endereços de memória
+ * Depende da função memcpy e da macro assert, não faço o import aqui. Deixo a critério de quem usar a macro
+ * 
+ * Apenas para referência:
+ * @link https://stackoverflow.com/questions/3982348/implement-generic-swap-macro-in-c/3982430#3982430
+ * @link https://stackoverflow.com/questions/8862136/is-there-a-built-in-swap-function-in-c
+ * @link https://cplusplus.com/reference/algorithm/swap/
+ */
+#define SWAP(A, B) \
+{\
+  assert(sizeof(A) == sizeof(B) && "Os tamanho deveriam ser idênticos para o swap funcionar corretamente"); \
+  unsigned char SUFFIXED_NAME(__temp__)[sizeof(A)]; \
+  memcpy(SUFFIXED_NAME(__temp__), &A, sizeof(A));\
+  memcpy(&A, &B, sizeof(A));\
+  memcpy(&B, SUFFIXED_NAME(__temp__), sizeof(A));\
+}
+
 #endif // UTILS_MACRO_H
