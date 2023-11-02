@@ -1,29 +1,28 @@
 #ifndef __SORTING__
 #define __SORTING__
 
-#include "./list.implementations.h"
 #include "./utils.macro.h"
 #include "string.h"
 
-static unsigned partition(List_Of_Strings *list, unsigned begin, unsigned end)
+static unsigned partition(const char **list, unsigned begin, unsigned end)
 {
-  const char* pivot = list->data[end];
+  const char* pivot = list[end];
   unsigned i = begin - 1;
 
   for (unsigned j = begin; j < end - 1; j++)
   {
-    int diff = strcmp(list->data[j], pivot);
-    // printf("[%s] [%s] r: %d\r\n", list->data[j], pivot, diff );
+    int diff = strcmp(list[j], pivot);
+    // printf("[%s] [%s] r: %d\r\n", list[j], pivot, diff );
 
     if (diff <= 0)
     {
       i++;
-      SWAP(list->data[i], list->data[j]);
+      SWAP(list[i], list[j]);
     }
   }
 
   i++;
-  SWAP(list->data[i], list->data[end]);
+  SWAP(list[i], list[end]);
 
   return i;
 }
@@ -41,7 +40,7 @@ static unsigned partition(List_Of_Strings *list, unsigned begin, unsigned end)
  * @param begin 
  * @param end 
  */
-void quick_sort_list(List_Of_Strings *list, unsigned begin, unsigned end)
+void quick_sort_list(const char **list, unsigned begin, unsigned end)
 {
   if (begin < end)
   {
