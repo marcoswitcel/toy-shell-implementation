@@ -10,6 +10,7 @@ TESTS_SOURCE_FOLDER=tests
 run-debug: CFLAGS += -fsanitize=address -g
 run-gdb: CFLAGS += -fsanitize=address -g
 build-obj: CFLAGS += -c
+# run-tests: CFLAGS += -fsanitize=address -g
 
 # Pasta aonde o artefacto fica após o build
 BUILD_FOLDER_NAME=bin
