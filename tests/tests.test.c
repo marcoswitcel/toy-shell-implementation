@@ -18,6 +18,7 @@
 #include "../src/list.implementations.h"
 #include "../src/utils.macro.h"
 #include "./buffer.test.c"
+#include "./sorting.test.c"
 
 void test_list_char_prt_implementation(void)
 {
@@ -666,6 +667,7 @@ int main(void)
   test_tokenize_01();
   test_tokenize_02();
   test_suit_buffer();
+  test_suit_sorting();
   
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
