@@ -4,12 +4,12 @@
 #include "./utils.macro.h"
 #include "string.h"
 
-static unsigned partition(const char **list, unsigned begin, unsigned end)
+static signed partition(const char **list, signed begin, signed end)
 {
   const char* pivot = list[end];
-  unsigned i = begin - 1;
+  signed i = begin - 1;
 
-  for (unsigned j = begin; j < end - 1; j++)
+  for (signed j = begin; j < end - 1; j++)
   {
     int diff = strcmp(list[j], pivot);
     // printf("[%s] [%s] r: %d\r\n", list[j], pivot, diff );
@@ -43,11 +43,31 @@ static unsigned partition(const char **list, unsigned begin, unsigned end)
  * @param begin 
  * @param end 
  */
-void quick_sort_list(const char **list, unsigned begin, unsigned end)
+void quick_sort_list(const char **list, signed begin, signed end)
 {
-  if (begin < end)
+  if (begin < end && begin >= 0)
   {
-    unsigned partitionIndex = partition(list, begin, end);
+    signed diff = (end - begin) + 1;
+
+    if (diff == 1)
+    {
+      return;
+    }
+    else if (diff == 2)
+    {
+      if (strcmp(list[begin], list[end]) > 0) SWAP(list[begin], list[end]);
+      
+      return;
+    }
+    else if (diff == 3)
+    {
+      if (strcmp(list[begin], list[begin + 1]) > 0) SWAP(list[begin], list[begin + 1]);
+      if (strcmp(list[begin + 1], list[end]) > 0) SWAP(list[begin + 1], list[end]);
+      if (strcmp(list[begin], list[begin + 1]) > 0) SWAP(list[begin], list[begin + 1]);
+      return;
+    }
+
+    signed partitionIndex = partition(list, begin, end);
 
     quick_sort_list(list, begin, partitionIndex - 1);
     quick_sort_list(list, partitionIndex + 1, end);
