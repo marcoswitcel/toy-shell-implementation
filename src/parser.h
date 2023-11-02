@@ -7,6 +7,7 @@
 #include <ctype.h>
 
 #include "./list.implementations.h"
+#include "./sorting.c"
 #include "./process_manager.c"
 #include "./utils.c"
 #include "./utils.macro.h"
@@ -447,7 +448,18 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       }
       else
       {
-        get_all_files_for_dir(".", list_of_args, false);
+        List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
+
+        // @todo João, parece ter algum problema de ordenação no resultado final
+        quick_sort_list(file_names, 0, file_names->index - 1);
+
+        // @todo João, adicionar um método push_all pra fazer o push de uma lista na macro de lista
+        for (unsigned i = 0; i < file_names->index; i++)
+        {
+          list_of_strings_push(list_of_args, file_names->data[i]);
+        }
+
+        destroy_list_of_strings(file_names);
       }
     }
     if (token.type == REDIRECT && token.data.redirect.cstring)
