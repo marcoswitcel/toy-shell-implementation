@@ -450,7 +450,6 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       {
         List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
 
-        // @todo João, parece ter algum problema de ordenação no resultado final
         quick_sort_list(file_names->data, 0, file_names->index - 1);
 
         // @todo João, adicionar um método push_all pra fazer o push de uma lista na macro de lista
