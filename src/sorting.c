@@ -6,6 +6,10 @@
 
 static signed partition(const char **list, signed begin, signed end)
 {
+  // Pra garatir que os cálculos sempre resultam em índices válidos
+  assert(begin > -1);
+  assert(end > -1);
+
   const char* pivot = list[end];
   signed i = begin - 1;
 
@@ -39,17 +43,17 @@ static signed partition(const char **list, signed begin, signed end)
  * @link https://www.programiz.com/c-programming/library-function/string.h/strcmp
  * 
  * @param list 
- * @param begin 
- * @param end 
+ * @param beginIndex 
+ * @param endIndex 
  */
-void quick_sort_list(const char **list, signed begin, signed end)
+void quick_sort_list(const char **list, signed beginIndex, signed endIndex)
 {
-  if (begin < end && begin >= 0)
+  if (beginIndex < endIndex && beginIndex >= 0)
   {
-    signed partitionIndex = partition(list, begin, end);
+    signed partitionIndex = partition(list, beginIndex, endIndex);
 
-    quick_sort_list(list, begin, partitionIndex - 1);
-    quick_sort_list(list, partitionIndex + 1, end);
+    quick_sort_list(list, beginIndex, partitionIndex - 1);
+    quick_sort_list(list, partitionIndex + 1, endIndex);
   }
 }
 
