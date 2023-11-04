@@ -46,7 +46,7 @@ void test_ordena_lista_duas_vezes_em_sequencia()
 
 void test_list_alfabeto()
 {
-   const char *arquivos[] = {
+  const char *arquivos[] = {
     "z",
     "w",
     "d",

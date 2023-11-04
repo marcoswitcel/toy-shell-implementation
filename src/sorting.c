@@ -40,6 +40,8 @@ static signed partition(const char **list, signed begin, signed end)
  * 
  * @link https://en.wikipedia.org/wiki/Quicksort
  * @link https://www.baeldung.com/java-quicksort
+ * Esse link abaixo me ajudou a identificar um erro de interpretação feito em relação ao pseudo código apresentado na wiki
+ * @link https://www.javatpoint.com/quick-sort-in-c
  * @link https://www.programiz.com/c-programming/library-function/string.h/strcmp
  * 
  * @param list 
