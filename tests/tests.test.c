@@ -54,7 +54,60 @@ void test_list_char_prt_implementation(void)
   list_of_strings_pop_at(list, 0);
   assert(list->index == 0);
 
-  // @todo João, falta testar push_all
+  const char *other_list[] = {
+    "banana",
+    "maçã",
+    "abacaxi",
+    "abacate",
+  };
+
+  list_of_strings_push_all(list, other_list, SIZE_OF_ARRAY(other_list));
+  assert(list->index == SIZE_OF_ARRAY(other_list));
+}
+
+void test_list_char_prt_allocation_implementation(void)
+{
+  List_Of_Strings *list = create_list_of_strings(1, 1);
+  char test_name[] = "Tux";
+
+  assert(list->index == 0);
+  list_of_strings_pop(list);
+  assert(list->index == 0);
+
+  list_of_strings_push(list, test_name);
+  assert(list->index == 1);
+  list_of_strings_push(list, test_name);
+  assert(list->index == 2);
+
+  list_of_strings_push(list, test_name);
+  list_of_strings_pop(list);
+
+  assert(list->index == 2);
+
+  assert(list->data[0] && list->data[1]);
+
+  assert(list->data[0] == list->data[1]);
+
+  assert(list->data[0] == test_name);
+
+  list_of_strings_pop_at(list, 0);
+  assert(list->index == 1);
+
+  list_of_strings_pop_at(list, 0);
+  assert(list->index == 0);
+
+  list_of_strings_pop_at(list, 0);
+  assert(list->index == 0);
+
+  const char *other_list[] = {
+    "banana",
+    "maçã",
+    "abacaxi",
+    "abacate",
+  };
+
+  list_of_strings_push_all(list, other_list, SIZE_OF_ARRAY(other_list));
+  assert(list->index == SIZE_OF_ARRAY(other_list));
 }
 
 void test_list_of_floats_implementation(void)
@@ -665,6 +718,7 @@ int main(void)
   test_try_parse_and03();
   test_try_parse_and04();
   test_list_char_prt_implementation();
+  test_list_char_prt_allocation_implementation();
   test_list_of_floats_implementation();
   test_tokenize_01();
   test_tokenize_02();
