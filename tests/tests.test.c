@@ -53,6 +53,8 @@ void test_list_char_prt_implementation(void)
 
   list_of_strings_pop_at(list, 0);
   assert(list->index == 0);
+
+  // @todo João, falta testar push_all
 }
 
 void test_list_of_floats_implementation(void)
