@@ -452,11 +452,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
         quick_sort_list(file_names->data, 0, file_names->index - 1);
 
-        // @todo João, adicionar um método push_all pra fazer o push de uma lista na macro de lista
-        for (unsigned i = 0; i < file_names->index; i++)
-        {
-          list_of_strings_push(list_of_args, file_names->data[i]);
-        }
+        list_of_strings_push_all(list_of_args, file_names->data, file_names->index);
 
         destroy_list_of_strings(file_names);
       }

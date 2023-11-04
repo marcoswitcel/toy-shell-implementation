@@ -47,6 +47,40 @@ void destroy_##STRUCT_NAME_LOWER_CASE(STRUCT_NAME *list)                        
   free(list);                                                                                     \
 }                                                                                                 \
                                                                                                   \
+static inline bool STRUCT_NAME_LOWER_CASE##_reallocate(STRUCT_NAME *list)                         \
+{                                                                                                 \
+  TYPE *data = (TYPE *) realloc(list->data, sizeof(TYPE) * list->internal_memory_size);           \
+  if (data)                                                                                       \
+  {                                                                                               \
+    list->data = data;                                                                            \
+    return true;                                                                                  \
+  }                                                                                               \
+  else                                                                                            \
+  {                                                                                               \
+    printf("Erro alocando memória para buffer\r\n");                                              \
+    exit(EXIT_FAILURE);                                                                           \
+  }                                                                                               \
+  return false;                                                                                   \
+}                                                                                                 \
+                                                                                                  \
+static inline bool STRUCT_NAME_LOWER_CASE##_ensure_enough_space_for_next_n_writes(                \
+  STRUCT_NAME *list, unsigned n_writes)                                                           \
+{                                                                                                 \
+  unsigned index_after_writes = list->index + n_writes;                                           \
+                                                                                                  \
+  if (index_after_writes > list->internal_memory_size)                                            \
+  {                                                                                               \
+    while (list->internal_memory_size < index_after_writes)                                       \
+    {                                                                                             \
+      list->internal_memory_size += list->grouth_by;                                              \
+    }                                                                                             \
+                                                                                                  \
+    return STRUCT_NAME_LOWER_CASE##_reallocate(list);                                             \
+  }                                                                                               \
+                                                                                                  \
+  return false;                                                                                   \
+}                                                                                                 \
+                                                                                                  \
 static inline bool STRUCT_NAME_LOWER_CASE##_ensure_enough_space(STRUCT_NAME *list)                \
 {                                                                                                 \
   if (list->index >= list->internal_memory_size)                                                  \
@@ -75,6 +109,17 @@ bool STRUCT_NAME_LOWER_CASE##_push(STRUCT_NAME *list, TYPE value)               
   list->index++;                                                                                  \
                                                                                                   \
   return true;                                                                                    \
+}                                                                                                 \
+                                                                                                  \
+void STRUCT_NAME_LOWER_CASE##_push_all(STRUCT_NAME *list, const TYPE *source, unsigned length)    \
+{                                                                                                 \
+  STRUCT_NAME_LOWER_CASE##_ensure_enough_space_for_next_n_writes(list, length);                   \
+                                                                                                  \
+  for (unsigned i = 0; i < length; i++)                                                           \
+  {                                                                                               \
+    list->data[list->index] = source[i];                                                          \
+    list->index++;                                                                                \
+  }                                                                                               \
 }                                                                                                 \
                                                                                                   \
 bool STRUCT_NAME_LOWER_CASE##_pop(STRUCT_NAME *list)                                              \
