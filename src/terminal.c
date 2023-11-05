@@ -79,6 +79,9 @@ void activate_raw_mode(bool set_cleanup_handler)
   new_config.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN); // sem echo, buffer de saída, ctrl + c / crtl + z e crtl + v
   // @note Optei por não trazer as outras flags citadas no tutorial do editor de texto
   // @reference https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html#miscellaneous-flags
+  new_config.c_cc[VMIN] = 0;
+  new_config.c_cc[VTIME] = 1;
+
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &new_config);
 }
 
