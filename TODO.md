@@ -19,6 +19,12 @@
 * implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
 * ctrl+c para interromper digitação? -- ok
 * não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo.
+* * Elaborando o ponto acima: Apenas habilitar a duplicação do STDIN não resolve, preciso desabilitar as flags pra não emitir os sinais senão o processo filho também não recebe, no caso preciso restaurar o terminal ao estado "normal" e depois voltar ao modo canônico no final. Desta forma o ctrl-c consegue chegar ao processo filho, porém o processo pai também encerra, o que posso fazer é cadastrar um handler vazio pro ctrl-c e pedir pra não encerrar. O problema é que não gostei dessa solução, tem muitas partes que precisam funcionar em conjunto, pelo menos é o que parece. Preciso tentar simplificar essa solução.
+Posso criar um stdin separado para o processo filho e duplicar meu input pra lá? posso mandar apenas ctrl-c incialmente? ou posso continuar usando o mesmo para os dois só acertar as flags e os handlers
+    https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c
+    https://stackoverflow.com/questions/34036642/reading-from-stdin-by-multiple-processes
+
+
 * implementar uma função de ordenação e aplicar na lista de diretórios retornada pela expansão do asterísco -- ok
 
 
