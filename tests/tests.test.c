@@ -608,6 +608,8 @@ void test_try_parse_globbing_03(void)
   assert(context.error_start_index == 1);
 }
 
+// @todo João, implementar testes para query_last_status/$? 
+
 void test_tokenize_01(void)
 {
   const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
