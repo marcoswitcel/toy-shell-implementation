@@ -596,12 +596,14 @@ void read_eval_shell_loop(bool colorful)
         current_command = current_command->next_command;
       }
     }
-    else if (!exit_requested) // @note se exit_requested for true, no momento ele reporta o erro pro tentar parsear input vazio
+    else if (exit_requested)
+    {
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!"));
+      FREE_AND_NULLIFY(context.error);
+    }
+    else // @note se exit_requested for false, no momento ele reporta o erro pro tentar parsear input vazio
     {
       shell_report_parse_error(&context);
-      FREE_AND_NULLIFY(context.error);
-    } else {
-      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!"));
       FREE_AND_NULLIFY(context.error);
     }
 
