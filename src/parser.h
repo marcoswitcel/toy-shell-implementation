@@ -276,12 +276,49 @@ void try_parse_and(Parse_Context *context, Token *token, bool *success)
         return;
       }
 
+      // @todo João, se o input terminou não terá espaço em branco, porém, seria mais instrutivo poder
+      // explicar para o usuário que após o && deveria vir algum comando, acredito que isso possa ser feito
+      // na função `parse_execute_command_node`
       context->error = copy("Esperava espaço em branco após o &&.");
       context->error_start_index = context->index + 2;
     }
     else
     {
       context->error = copy("Esperava encontrar mais um &.");
+      context->error_start_index = context->index + 1;
+    }
+  }
+
+  *success = false;
+}
+
+void try_parse_query_last_status(Parse_Context *context, Token *token, bool *success)
+{
+  if (peek_char(context) == '$')
+  {
+    if (peek_next_char(context) == '?')
+    {
+      if (is_whitespace(peek_char_forward(context, 2)))
+      {
+        token->token_index_start = context->index;
+        eat_char(context);
+        eat_char(context);
+        *success = true;
+        token->type = QUERY_LAST_STATUS;
+        token->data.query_last_status = (Query_Last_Status_Token) { .cstring = NULL };
+        // @todo João, avaliar se vai voltar pro copy aqui
+        token->data.and.cstring = "$?";
+        return;
+      }
+
+      // @todo João, nesse caso é válido semanticamente não haver nada em sequência, então seria ok checar pelo fim
+      // do source.
+      context->error = copy("Esperava espaço em branco após o $?.");
+      context->error_start_index = context->index + 2;
+    }
+    else
+    {
+      context->error = copy("Esperava encontrar mais um ?.");
       context->error_start_index = context->index + 1;
     }
   }
@@ -367,6 +404,7 @@ const Parse_Function parse_functions[] = {
   &try_parse_redirect,
   &try_parse_pipe,
   &try_parse_and,
+  &try_parse_query_last_status,
   &try_parse_string,
 };
 
@@ -407,6 +445,9 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
 }
 
 // @todo João, acho que é melhor retornar uma referência alocada no heap
+// @todo João, coloquei uma anotação na função `try_parse_and` sobre reportar de forma mais clara que após o && deve haver algum
+// input (checar em outros dos métodos de parse). Hoje o sistema apenas avisa sobre falta de espaço, mas se realizar essa correção ainda estará errado. Cai no assert da função
+// `shell_execute_command`.
 Execute_Command_Node parse_execute_command_node(Parse_Context *context, const unsigned first_token_index, const Sequence_Of_Tokens *tokens)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -507,6 +548,20 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
         next_command_found = true;
 
         break;
+      }
+    }
+
+    if (token.type == QUERY_LAST_STATUS && token.data.query_last_status.cstring)
+    {
+      if (redirect_expect_file_name)
+      {
+        parse_context_report_error(context, "Token $? não é um argumento válido para o redirect.", token.token_index_start);
+        break;
+      }
+      else
+      {
+        // @todo João, implementar o campo para armazenar o status code e a função para criar a string que representa o número
+        list_of_strings_push(list_of_args, copy("STATUS_CODE_HERE"));
       }
     }
   }
