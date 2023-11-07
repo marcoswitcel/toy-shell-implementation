@@ -298,7 +298,7 @@ void try_parse_query_last_status(Parse_Context *context, Token *token, bool *suc
   {
     if (peek_next_char(context) == '?')
     {
-      if (is_whitespace(peek_char_forward(context, 2)))
+      if (is_whitespace(peek_char_forward(context, 2)) || peek_char_forward(context, 2) == '\0')
       {
         token->token_index_start = context->index;
         eat_char(context);
