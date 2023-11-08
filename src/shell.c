@@ -24,6 +24,7 @@ typedef struct Shell_Context_Data
   bool colorful;
   List_Of_Strings *last_typed_commands;
   int next_typed_command_to_show;
+  int last_status_code;
 } Shell_Context_Data;
 
 Shell_Context_Data create_shell_context_data()
@@ -32,6 +33,7 @@ Shell_Context_Data create_shell_context_data()
     .colorful = false,
     .last_typed_commands = create_list_of_strings(64, 64),
     .next_typed_command_to_show = -1,
+    .last_status_code = 0,
   };
 }
 
@@ -577,6 +579,7 @@ void read_eval_shell_loop(bool colorful)
           // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
           // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
           int result = shell_execute_command(process_parameter);
+          shell_context.last_status_code = result;
 
           // @todo João, agora que desativei a conversão de \n pra \r\n com o OPOST os processos filhos não estão
           // printando corretamente. A linha abaixo corrige a falta de carriage return, mas não corrige se não houve enter,
