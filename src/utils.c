@@ -126,9 +126,25 @@ void emmit_ring_bell()
 }
 
 // @todo João, implementar o algoritmo para criar a string
-const char * int_to_cstring(int i)
+// @todo João, testar e validar contra implementações de outras pessoas
+const char * int_to_cstring(int number)
 {
-  return copy("0");
+  int n_chars = 1;
+  int copy = number;
+
+  while ((copy /= 10) > 0) n_chars++;
+
+  char *number_cstring = (char *) malloc(n_chars + 1);
+
+  for (int i = 0; i < n_chars; i++)
+  {
+    // @todo João, implementar o cálculo aqui
+    number_cstring[i] = '-';
+  }  
+
+  number_cstring[n_chars] = '\n';
+
+  return number_cstring;
 }
 
 #endif // UTILS_C

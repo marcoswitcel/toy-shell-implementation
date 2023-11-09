@@ -562,7 +562,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       {
         // @todo João, implementar a função para criar a string que representa o número
         // @todo João, implementar o campo para armazenar o status code e usar o campo aqui
-        list_of_strings_push(list_of_args, int_to_cstring(0));
+        list_of_strings_push(list_of_args, int_to_cstring(1024));
       }
     }
   }
