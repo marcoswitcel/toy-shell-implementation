@@ -7,6 +7,7 @@
 
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
 
@@ -136,13 +137,10 @@ const char * int_to_cstring(int number)
 
   char *number_cstring = (char *) malloc(n_chars + 1);
 
-  for (int i = 0; i < n_chars; i++)
-  {
-    // @todo João, implementar o cálculo aqui
-    number_cstring[i] = '-';
-  }  
+  // @todo João, estudar e trocar a implementação por um algoritmo customizado
+  sprintf(number_cstring, "%d", number);
 
-  number_cstring[n_chars] = '\n';
+  number_cstring[n_chars] = '\0';
 
   return number_cstring;
 }
