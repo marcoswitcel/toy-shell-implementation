@@ -95,6 +95,14 @@ Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
   return args;
 }
 
+/**
+ * @brief Função que libera a memória da cstrings individuais referenciadas pelo pointer_array
+ * @note João, essa função deveria ser genérica, portanto não deveria conter referência a lógica de substituição
+ * dos símbolos. Acredito que o ideal seria interessante copiar essa função para dentro do arquivo com o código dos Nodes 
+ * e simplificar essa função aqui para o estado original.
+ * 
+ * @param pointer_array 
+ */
 void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_array)
 {
   assert(pointer_array);
