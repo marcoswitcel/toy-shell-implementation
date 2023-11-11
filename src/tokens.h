@@ -46,6 +46,14 @@ typedef struct Token {
   } data;
 } Token;
 
+/**
+ * @brief representa um símbolo identificado pelo parser
+ * @note Hoje essa string e adicionada ao array de argumentos e uma etapa anterior a identifica e substitui pelo valor.
+ * A etapa que faz a substituição tira proveito do fato que o endereço é fixo e conhecido para identificar símbolos que
+ * precisam ser substituídos, não sei se é uma solução duradoura, mas temporariamente serve.
+ */
+static const char static_query_last_status_code_symbol[] = "$?";
+
 #define  STATIC_TOKEN(ENUM_TYPE) (Token) { .type = ENUM_TYPE, .token_index_start = -1, }
 
 #endif // TOKENS_H

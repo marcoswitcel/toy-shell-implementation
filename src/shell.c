@@ -16,6 +16,7 @@
 #include "./terminal.c"
 #include "./utils.macro.h"
 #include "./dev-utils.c"
+#include "./utils.c"
 
 #define HISTORY_MAX_ELEMENTS 20
 
@@ -393,6 +394,32 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   return result;
 }
 
+/**
+ * @brief Função que percorre os argumentos e verifica se os argumentos contém algum dos símbolos de query e realiza
+ * a substituição com a informação provida.
+ * 
+ * Símbolo de query atualmente suportados: $?
+ * 
+ * @param execute_command_node 
+ * @param last_status_code 
+ */
+void replace_static_symbols_with_query_info(Execute_Command_Node *execute_command_node, int last_status_code)
+{
+  assert(execute_command_node->args != NULL);
+
+  char **pointer_array = execute_command_node->args;
+
+  while (*pointer_array != NULL)
+  {
+    if (*pointer_array == static_query_last_status_code_symbol) 
+    {
+      *pointer_array = int_to_cstring(last_status_code);
+    }
+
+    pointer_array++;
+  }
+}
+
 Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
 {
   assert(execute_command_node->args != NULL);
@@ -558,6 +585,10 @@ void read_eval_shell_loop(bool colorful)
       while (current_command && !should_interrupt)
       {
         bool tried_opening_file_and_failed = false;
+
+        // @Note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
+        // do resultado da execução do comando anterior
+        replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
         Process_Parameter process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {

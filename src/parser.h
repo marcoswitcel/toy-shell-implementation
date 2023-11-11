@@ -12,6 +12,7 @@
 #include "./utils.c"
 #include "./utils.macro.h"
 #include "./nodes.h"
+#include "./tokens.h"
 #include "./buffer.h"
 
 typedef struct Parse_Context {
@@ -560,9 +561,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       }
       else
       {
-        // @todo João, implementar a função para criar a string que representa o número
-        // @todo João, implementar o campo para armazenar o status code e usar o campo aqui
-        list_of_strings_push(list_of_args, int_to_cstring(1024));
+        list_of_strings_push(list_of_args, static_query_last_status_code_symbol);
       }
     }
   }

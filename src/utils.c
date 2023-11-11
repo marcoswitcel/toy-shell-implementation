@@ -13,7 +13,7 @@
 
 #include "./list.implementations.h"
 #include "./utils.macro.h"
-
+#include "./tokens.h"
 
 /**
  * @brief o argv da família de comandos `exec` recebe um array de ponteiros para char terminado com null
@@ -101,6 +101,23 @@ void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_
 
   while (*pointer_array != NULL)
   {
+    /**
+     * @note Em teoria eu troco todos os símbolos de query antes de chamar essa função, então ela nunca deveria 
+     * tentar fazer o release da memória de um símbolo, porém, por precaução eu deixarei o 'if' de guarda abaixo 
+     * para proteger as versões de release. Em dev observarei atentamente se cometo muitos erros e esse assert
+     * costuma disparar conforme faço refatorações.
+     */
+    assert(*pointer_array != static_query_last_status_code_symbol);
+
+    // @note Idealmente esse 'if' não precisaria existir aqui, poderia tratar os símbolos fixos de outra forma,
+    // mas por hora o conceito de argumentos que precisam ser substituídos antes da execução existe e os símbolos
+    // são strings constantes que preciso considerar antes de fazer o release.
+    if (*pointer_array == static_query_last_status_code_symbol) 
+    {
+      pointer_array++;
+      continue;
+    }
+
     FREE_AND_NULLIFY(*pointer_array);
     pointer_array++;
   }
@@ -128,7 +145,7 @@ void emmit_ring_bell()
 
 // @todo João, implementar o algoritmo para criar a string
 // @todo João, testar e validar contra implementações de outras pessoas
-const char * int_to_cstring(int number)
+char * int_to_cstring(int number)
 {
   int n_chars = 1;
   int copy = number;
