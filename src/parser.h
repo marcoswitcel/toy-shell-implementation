@@ -312,8 +312,6 @@ void try_parse_query_last_status(Parse_Context *context, Token *token, bool *suc
         return;
       }
 
-      // @todo João, nesse caso é válido semanticamente não haver nada em sequência, então seria ok checar pelo fim
-      // do source.
       context->error = copy("Esperava espaço em branco após o $?.");
       context->error_start_index = context->index + 2;
     }

@@ -11,7 +11,6 @@
 #include <termios.h>
 #include <ctype.h>
 
-// @todo João, deselegante incluir assim? porém por hora fica...
 #include "../src/types.h"
 #include "../src/tokens.h"
 #include "../src/parser.h"

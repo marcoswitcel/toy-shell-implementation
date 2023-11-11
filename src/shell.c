@@ -254,8 +254,6 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     
     // @todo João, essa não é a versão final, mas precisava dar um passo
     // para deixar esse código mais explícito e possível de alterar o stdin
-    // @todo João, eventualmente vou precisar deixar a chamada da função `read` configurada para não
-    // ficar esperando indeterminadamente. Segue o link do exemplo: https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html#a-timeout-for-read
     // @note Fiz a configuração acima para setar um timeout na função de leitura, coloquei um monte de asserts para garantir
     // que minha compreensão do fluxo estava correta, não entendia bem como essa função deveria se comportar
     int readed = 0;

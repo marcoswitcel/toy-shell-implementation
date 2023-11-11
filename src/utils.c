@@ -136,7 +136,6 @@ void emmit_ring_bell()
   write(STDOUT_FILENO, "\x7", 1);
 }
 
-// @todo João, implementar o algoritmo para criar a string
 // @todo João, testar e validar contra implementações de outras pessoas
 char * int_to_cstring(int number)
 {
