@@ -476,6 +476,7 @@ void test_try_parse_pipe01()
   
   try_parse_pipe(&context, &token, &success);
   assert(success);
+  assert(token.type == PIPE);
   assert(token.data.pipe.cstring);
   assert(token.token_index_start == 0);
   assert(context.index == 1);
@@ -509,6 +510,7 @@ void test_try_parse_and01()
   
   try_parse_and(&context, &token, &success);
   assert(success);
+  assert(token.type == AND);
   assert(token.data.and.cstring);
   assert(token.token_index_start == 0);
   assert(context.index == 2);
@@ -573,6 +575,7 @@ void test_try_parse_globbing_01(void)
   
   try_parse_globbing(&context, &token, &success);
   assert(success);
+  assert(token.type == GLOBBING);
   assert(token.token_index_start == 0);
   assert(context.index == 1);
   assert(context.error_start_index == -1);
@@ -588,6 +591,7 @@ void test_try_parse_globbing_02(void)
   
   try_parse_globbing(&context, &token, &success);
   assert(success);
+  assert(token.type == GLOBBING);
   assert(token.token_index_start == 0);
   assert(context.index == 1);
   assert(context.error_start_index == -1);
@@ -762,7 +766,6 @@ int main(void)
 {
   printf("Executando testes\n");
 
-  // @todo João, revisar testes dos métodos "try_parse*", pois acredito que esqueci de validar o token type em alguns
   test_try_parse_string_01();
   test_try_parse_string_02();
   test_try_parse_string_03();
