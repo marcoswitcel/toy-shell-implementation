@@ -97,9 +97,6 @@ Null_Terminated_Pointer_Array convert_list_to_argv(const List_Of_Strings *list)
 
 /**
  * @brief Função que libera a memória da cstrings individuais referenciadas pelo pointer_array
- * @note João, essa função deveria ser genérica, portanto não deveria conter referência a lógica de substituição
- * dos símbolos. Acredito que o ideal seria interessante copiar essa função para dentro do arquivo com o código dos Nodes 
- * e simplificar essa função aqui para o estado original.
  * 
  * @param pointer_array 
  */
@@ -110,21 +107,9 @@ void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_
   while (*pointer_array != NULL)
   {
     /**
-     * @note Em teoria eu troco todos os símbolos de query antes de chamar essa função, então ela nunca deveria 
-     * tentar fazer o release da memória de um símbolo, porém, por precaução eu deixarei o 'if' de guarda abaixo 
-     * para proteger as versões de release. Em dev observarei atentamente se cometo muitos erros e esse assert
-     * costuma disparar conforme faço refatorações.
+     * @note Essa função não deveria mais receber símbolos, porém fica o assert para eventuais erros de uso
      */
     assert(*pointer_array != static_query_last_status_code_symbol);
-
-    // @note Idealmente esse 'if' não precisaria existir aqui, poderia tratar os símbolos fixos de outra forma,
-    // mas por hora o conceito de argumentos que precisam ser substituídos antes da execução existe e os símbolos
-    // são strings constantes que preciso considerar antes de fazer o release.
-    if (*pointer_array == static_query_last_status_code_symbol) 
-    {
-      pointer_array++;
-      continue;
-    }
 
     FREE_AND_NULLIFY(*pointer_array);
     pointer_array++;
