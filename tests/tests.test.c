@@ -609,7 +609,77 @@ void test_try_parse_globbing_03(void)
   assert(context.error_start_index == 1);
 }
 
-// @todo João, implementar testes para query_last_status/$? 
+void test_try_query_status_01()
+{
+  Parse_Context context = create_parse_context("$?");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_query_last_status(&context, &token, &success);
+  assert(success);
+  assert(token.type == QUERY_LAST_STATUS);
+  assert(token.data.and.cstring);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_query_status_02()
+{
+  Parse_Context context = create_parse_context("$? ");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_query_last_status(&context, &token, &success);
+  assert(success);
+  assert(token.type == QUERY_LAST_STATUS);
+  assert(token.data.and.cstring);
+  assert(token.token_index_start == 0);
+  assert(context.index == 2);
+  assert(context.error_start_index == -1);
+}
+
+void test_try_query_status_03()
+{
+  Parse_Context context = create_parse_context("$?a");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_query_last_status(&context, &token, &success);
+  assert(!success);
+  assert(token.type == UNINITIALIZED);
+  assert(token.token_index_start == -1);
+  assert(context.error);
+  assert(context.index == 0);
+  assert(context.error_start_index == 2);
+}
+
+void test_try_query_status_04()
+{
+  Parse_Context context = create_parse_context("$");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_query_last_status(&context, &token, &success);
+  assert(!success);
+  assert(token.type == UNINITIALIZED);
+  assert(token.token_index_start == -1);
+  assert(context.error);
+  assert(context.index == 0);
+  assert(context.error_start_index == 1);
+}
 
 void test_tokenize_01(void)
 {
@@ -692,6 +762,7 @@ int main(void)
 {
   printf("Executando testes\n");
 
+  // @todo João, revisar testes dos métodos "try_parse*", pois acredito que esqueci de validar o token type em alguns
   test_try_parse_string_01();
   test_try_parse_string_02();
   test_try_parse_string_03();
@@ -720,6 +791,10 @@ int main(void)
   test_try_parse_and02();
   test_try_parse_and03();
   test_try_parse_and04();
+  test_try_query_status_01();
+  test_try_query_status_02();
+  test_try_query_status_03();
+  test_try_query_status_04();
   test_list_char_prt_implementation();
   test_list_char_prt_allocation_implementation();
   test_list_of_floats_implementation();
