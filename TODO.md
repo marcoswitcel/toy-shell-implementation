@@ -43,7 +43,7 @@ intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo 
 
 # Bugs
 
-* problema quando input e output iguais (aparentemente isso ocorre no bash também, é um alerta do próprio cat, possivelmente esse bug seja um alarme falso)
+* problema quando input e output iguais (aparentemente isso ocorre no bash também, é um alerta do próprio cat, possivelmente esse bug seja um alarme falso. Interessante é que no bash o comando cat com um redirect simples geralmente funciona, esse só falha quando é um redirect de append, e só se o arquivo já existir e não estiver vazio, aparentemente)
 ```bash
 |>cat a.txt > a.txt
 cat: a.txt: input file is output file
