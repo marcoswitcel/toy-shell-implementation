@@ -136,9 +136,23 @@ void emmit_ring_bell()
   write(STDOUT_FILENO, "\x7", 1);
 }
 
-// @todo João, testar e validar contra implementações de outras pessoas
+/**
+ * @brief Gera um string com a representação textual do inteiro
+ * 
+ * @todo João, adicionar suporte a números negativos e ou criar um outra função mais genérica
+ * @todo João, adicionar uma versão que suporta bases alternativas como base: 2, 16 e etc...
+ * 
+ * Referências
+ * @link https://daveparillo.github.io/cisc187-reader/recursion/to_string.html
+ * @link https://panda.ime.usp.br/panda/static/pythonds_pt/04-Recursao/04-int2str.html
+ * 
+ * @param number 
+ * @return char* 
+ */
 char * int_to_cstring(int number)
 {
+  assert(number > -1); // @note sem suporte a número negativos ainda, não emite o sinal
+  const int base = 10;
   int n_chars = 1;
   int copy = number;
 
@@ -146,9 +160,20 @@ char * int_to_cstring(int number)
 
   char *number_cstring = (char *) malloc(n_chars + 1);
 
-  // @todo João, estudar e trocar a implementação por um algoritmo customizado
-  sprintf(number_cstring, "%d", number);
+  int currentNumber = number;
+  for (int i = n_chars; i--;)
+  {
+    if (currentNumber < base)
+    {
+      number_cstring[i] = '0' + currentNumber;
+      break;
+    }
 
+    int remainder = currentNumber % base;
+    number_cstring[i] = '0' + remainder;
+    currentNumber /= base;
+  }
+  
   number_cstring[n_chars] = '\0';
 
   return number_cstring;

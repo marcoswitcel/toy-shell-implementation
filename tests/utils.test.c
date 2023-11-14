@@ -27,6 +27,8 @@ void test_int_to_cstring(void)
 
   representation = int_to_cstring(20056);
   assert(strcmp(representation, "20056") == 0);
+
+  // @todo João, quando houver uma função com suporte a numeros negativos e bases alternativas, adicionar os casos de teste nesse arquivo 
 }
 
 void test_suit_utils(void)
