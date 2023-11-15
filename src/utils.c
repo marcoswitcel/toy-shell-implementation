@@ -139,7 +139,6 @@ void emmit_ring_bell()
 /**
  * @brief Gera um string com a representação textual do inteiro
  * 
- * @todo João, adicionar suporte a números negativos e ou criar um outra função mais genérica
  * @todo João, adicionar uma versão que suporta bases alternativas como base: 2, 16 e etc...
  * 
  * Referências
