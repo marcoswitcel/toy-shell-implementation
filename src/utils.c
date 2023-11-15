@@ -154,6 +154,7 @@ char * int_to_cstring(int number)
   bool is_negative_number = number < 0;
   int n_chars = 1 + is_negative_number;
   int copy = number;
+  // @note a inversão do sinal poderia ser feita com uma negação e uma adição "copy = ~copy + 1;"
   if (is_negative_number) copy *= -1;
   
   while ((copy /= 10) > 0) n_chars++;
