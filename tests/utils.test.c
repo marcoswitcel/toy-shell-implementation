@@ -52,9 +52,10 @@ void test_int_to_cstring(void)
   representation = int_to_cstring(20056);
   assert(strcmp(representation, "20056") == 0);
 
-  // @todo João, quando houver uma função com suporte a numeros negativos e bases alternativas, adicionar os casos de teste nesse arquivo  
-  representation = int_to_cstring(-0);
-  assert(strcmp(representation, "0") == 0); // @todo João, validar, mas acho que em integers do C não tem como diferenciar -0 e 0
+  // @note Em C não existe um zero negativo inteiro, porém o operador '-' pode ser especificado a frente de um zero
+  // e não produzira efeito nenhum. Esse teste abaixo fica mais como uma curiosidade do que como um teste prático.
+  representation = int_to_cstring(-0); 
+  assert(strcmp(representation, "0") == 0);
 
   representation = int_to_cstring(-1);
   assert(strcmp(representation, "-1") == 0);
