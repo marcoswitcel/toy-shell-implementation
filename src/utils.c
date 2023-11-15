@@ -151,16 +151,19 @@ void emmit_ring_bell()
  */
 char * int_to_cstring(int number)
 {
-  assert(number > -1); // @note sem suporte a número negativos ainda, não emite o sinal
   const int base = 10;
-  int n_chars = 1;
+  bool is_negative_number = number < 0;
+  int n_chars = 1 + is_negative_number;
   int copy = number;
-
+  if (is_negative_number) copy *= -1;
+  
   while ((copy /= 10) > 0) n_chars++;
 
   char *number_cstring = (char *) malloc(n_chars + 1);
 
   int currentNumber = number;
+  if (is_negative_number) currentNumber *= -1;
+  
   for (int i = n_chars; i--;)
   {
     if (currentNumber < base)
@@ -174,6 +177,10 @@ char * int_to_cstring(int number)
     currentNumber /= base;
   }
   
+  if (is_negative_number)
+  {
+    number_cstring[0] = '-';
+  }
   number_cstring[n_chars] = '\0';
 
   return number_cstring;
