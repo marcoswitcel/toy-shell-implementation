@@ -17,6 +17,7 @@
 #include "./utils.macro.h"
 #include "./dev-utils.c"
 #include "./utils.c"
+#include "./sorting.c"
 
 #define HISTORY_MAX_ELEMENTS 20
 
@@ -288,6 +289,9 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       List_Of_Strings *list = create_list_of_strings(64, 64);
       
       get_all_files_for_dir(".", list, true);
+      
+      quick_sort_list(list->data, 0, list->index - 1);
+
       if (list->index > 0)
       {
         write(STDOUT_FILENO, "\r\n", 2);
