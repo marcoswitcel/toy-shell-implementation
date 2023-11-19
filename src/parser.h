@@ -488,6 +488,11 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       }
       else
       {
+        // @todo João, mover esse codigo para dentro da função `replace_static_symbols_with_query_info`,
+        // isso porque a expansão do '*' para lista de diretórios e arquivos deve acontecer antes de executar o comando
+        // e hoje da forma que está se o usuário digitar uma lista de comando com '&&' conectando todos
+        // todos os comandos vão ver uma lista bem similar, embora algum comando possa estar tentando criar um arquivo
+        // e o usuário espere que o arquivo apareça no próximocomando
         List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
 
         quick_sort_list(file_names->data, 0, file_names->index - 1);
