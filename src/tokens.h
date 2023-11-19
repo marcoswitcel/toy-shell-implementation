@@ -53,6 +53,7 @@ typedef struct Token {
  * precisam ser substituídos, não sei se é uma solução duradoura, mas temporariamente serve.
  */
 static const char static_query_last_status_code_symbol[] = "$?";
+static const char static_globbing_symbol[] = "*";
 
 #define  STATIC_TOKEN(ENUM_TYPE) (Token) { .type = ENUM_TYPE, .token_index_start = -1, }
 

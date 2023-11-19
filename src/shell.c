@@ -413,12 +413,17 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
 
   while (*pointer_array != NULL)
   {
-    // @todo João, preciso criar um símbolo para o globbing e adicionar aqui a lógica apropriada
-    // comparei com alguns shells e decidi que o meu comportamento atual quebra a expectativa do usuário
-
     if (*pointer_array == static_query_last_status_code_symbol) 
     {
       *pointer_array = int_to_cstring(last_status_code);
+    }
+
+    // @todo João, preciso mover a lógica apropriada para cá. Comparei com alguns shells e decidi que o
+    // meu comportamento atual quebra a expectativa do usuário.
+    // Acredito que será necessário reallocar o args e adicionar argumentos necessários.
+    if (*pointer_array == static_globbing_symbol) 
+    {
+      assert(false && "Ainda não implementado");
     }
 
     pointer_array++;

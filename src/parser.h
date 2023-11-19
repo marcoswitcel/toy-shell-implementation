@@ -492,7 +492,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
         // isso porque a expansão do '*' para lista de diretórios e arquivos deve acontecer antes de executar o comando
         // e hoje da forma que está se o usuário digitar uma lista de comando com '&&' conectando todos
         // todos os comandos vão ver uma lista bem similar, embora algum comando possa estar tentando criar um arquivo
-        // e o usuário espere que o arquivo apareça no próximocomando
+        // e o usuário espere que o arquivo apareça no próximo comando
+        
+        // @note Toda essa lógica vai parar em uma função específica ou dentro de um 'if'.
         List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
 
         quick_sort_list(file_names->data, 0, file_names->index - 1);
@@ -500,6 +502,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
         list_of_strings_push_all(list_of_args, file_names->data, file_names->index);
 
         destroy_list_of_strings(file_names);
+
+        // @todo João, quando a alteração estiver concluída será necessário apenas trocar a string pelo símbolo
+        // list_of_strings_push(list_of_args, static_globbing_symbol);
       }
     }
     if (token.type == REDIRECT && token.data.redirect.cstring)
@@ -574,6 +579,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
     parse_context_report_error(context, "Nome do arquivo que deve receber o output não foi especificado.", context->length);
   }
 
+  // @todo João, analisar se considerando a necessidade de expandir a lista de argumentos na função `replace_static_symbols_with_query_info`
+  // não seria interessante que o atributo `args` fosse na verdade uma lista de strings ao invés de um char ** terminado com null.
+  // Por hora decidi montar uma lista nova na função e reconstruir o array
   Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
 
   destroy_list_of_strings(list_of_args);

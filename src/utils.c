@@ -110,6 +110,7 @@ void release_cstring_from_null_terminated_pointer_array(Null_Terminated_Pointer_
      * @note Essa função não deveria mais receber símbolos, porém fica o assert para eventuais erros de uso
      */
     assert(*pointer_array != static_query_last_status_code_symbol);
+    assert(*pointer_array != static_globbing_symbol);
 
     FREE_AND_NULLIFY(*pointer_array);
     pointer_array++;
