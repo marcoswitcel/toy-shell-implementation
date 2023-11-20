@@ -493,18 +493,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
         // e hoje da forma que está se o usuário digitar uma lista de comando com '&&' conectando todos
         // todos os comandos vão ver uma lista bem similar, embora algum comando possa estar tentando criar um arquivo
         // e o usuário espere que o arquivo apareça no próximo comando
-        
-        // @note Toda essa lógica vai parar em uma função específica ou dentro de um 'if'.
-        List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
-
-        quick_sort_list(file_names->data, 0, file_names->index - 1);
-
-        list_of_strings_push_all(list_of_args, file_names->data, file_names->index);
-
-        destroy_list_of_strings(file_names);
-
-        // @todo João, quando a alteração estiver concluída será necessário apenas trocar a string pelo símbolo
-        // list_of_strings_push(list_of_args, static_globbing_symbol);
+        list_of_strings_push(list_of_args, static_globbing_symbol);
       }
     }
     if (token.type == REDIRECT && token.data.redirect.cstring)

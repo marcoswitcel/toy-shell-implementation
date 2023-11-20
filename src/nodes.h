@@ -29,7 +29,7 @@ void release_cstring_from_null_terminated_pointer_array_skipping_symbols(Null_Te
     // @note Idealmente esse 'if' não precisaria existir aqui, poderia tratar os símbolos fixos de outra forma,
     // mas por hora o conceito de argumentos que precisam ser substituídos antes da execução existe e os símbolos
     // são strings constantes que preciso considerar antes de fazer o release.
-    if (*pointer_array == static_query_last_status_code_symbol) 
+    if (*pointer_array == static_query_last_status_code_symbol || *pointer_array == static_globbing_symbol) 
     {
       pointer_array++;
       continue;

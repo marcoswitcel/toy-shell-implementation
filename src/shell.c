@@ -409,13 +409,18 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
 {
   assert(execute_command_node->args != NULL);
 
+  // @todo João, poderia skippar todo código abaixo se não houvesse símbolos pra processar
+
   char **pointer_array = execute_command_node->args;
+  List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
 
   while (*pointer_array != NULL)
   {
     if (*pointer_array == static_query_last_status_code_symbol) 
     {
-      *pointer_array = int_to_cstring(last_status_code);
+      list_of_strings_push(list_of_args, int_to_cstring(last_status_code));
+      pointer_array++;
+      continue;
     }
 
     // @todo João, preciso mover a lógica apropriada para cá. Comparei com alguns shells e decidi que o
@@ -423,11 +428,28 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
     // Acredito que será necessário reallocar o args e adicionar argumentos necessários.
     if (*pointer_array == static_globbing_symbol) 
     {
-      assert(false && "Ainda não implementado");
+      List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
+
+      quick_sort_list(file_names->data, 0, file_names->index - 1);
+
+      list_of_strings_push_all(list_of_args, file_names->data, file_names->index);
+
+      destroy_list_of_strings(file_names);
+
+      pointer_array++;
+      continue;  
     }
 
+
+    list_of_strings_push(list_of_args, *pointer_array);
     pointer_array++;
   }
+
+  FREE_AND_NULLIFY(execute_command_node->args);
+  Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
+  destroy_list_of_strings(list_of_args);
+
+  execute_command_node->args = args;
 }
 
 Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
