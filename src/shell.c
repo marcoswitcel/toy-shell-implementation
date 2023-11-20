@@ -409,7 +409,8 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
 {
   assert(execute_command_node->args != NULL);
 
-  // @todo João, poderia skippar todo código abaixo se não houvesse símbolos pra processar
+  // @todo João, poderia skippar todo código abaixo se não houvesse símbolos pra processar,
+  // não teenho certeza se a economia de tempo e processamente compensam a lógica extra.
 
   char **pointer_array = execute_command_node->args;
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -423,9 +424,8 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
       continue;
     }
 
-    // @todo João, preciso mover a lógica apropriada para cá. Comparei com alguns shells e decidi que o
-    // meu comportamento atual quebra a expectativa do usuário.
-    // Acredito que será necessário reallocar o args e adicionar argumentos necessários.
+    // @note João, me parece que no que toca ao processamento de símbolos, seria interessante que o atributo
+    // `args` fosse uma lista de strings ao invés de array estático.
     if (*pointer_array == static_globbing_symbol) 
     {
       List_Of_Strings *file_names = get_all_files_for_dir(".", NULL, false);
