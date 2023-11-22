@@ -27,6 +27,7 @@ Posso criar um stdin separado para o processo filho e duplicar meu input pra lá
 
 
 * implementar uma função de ordenação e aplicar na lista de diretórios retornada pela expansão do asterísco -- ok
+* implementar suporte a inputs de multiplas linhas, permitindo navegar e reportando erros de forma clara
 
 
 ## Anotações 15/08/2023
