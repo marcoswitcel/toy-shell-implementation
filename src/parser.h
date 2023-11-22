@@ -277,10 +277,17 @@ void try_parse_and(Parse_Context *context, Token *token, bool *success)
         return;
       }
 
-      // @todo João, se o input terminou não terá espaço em branco, porém, seria mais instrutivo poder
-      // explicar para o usuário que após o && deveria vir algum comando, acredito que isso possa ser feito
+      // @note João, se o input terminou não terá espaço em branco, é mais instrutivo
+      // explicar para o usuário que após o && deveria vir algum comando, isso também pode ser feito
       // na função `parse_execute_command_node`
-      context->error = copy("Esperava espaço em branco após o &&.");
+      if (peek_char_forward(context, 2) == '\0')
+      {
+        context->error = copy("Comando incompleto, esperava uma continuação.");
+      }
+      else {
+        context->error = copy("Esperava espaço em branco após o &&.");
+      }
+
       context->error_start_index = context->index + 2;
     }
     else
