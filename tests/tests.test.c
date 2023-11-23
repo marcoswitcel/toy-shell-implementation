@@ -581,6 +581,8 @@ void test_try_parse_and05()
 }
 
 // @todo João, replicar esse teste para os outros 'parsers'
+// a ideia por trás desse teste é que o parser tem o conceito de 
+// fracasso que não gera aviso e fracaso de parsing que gera aviso.
 void test_try_parse_and06()
 {
   Parse_Context context = create_parse_context("asd &&");
