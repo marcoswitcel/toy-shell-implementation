@@ -580,6 +580,23 @@ void test_try_parse_and05()
   assert(context.error_start_index == 2);
 }
 
+// @todo João, replicar esse teste para os outros 'parsers'
+void test_try_parse_and06()
+{
+  Parse_Context context = create_parse_context("asd &&");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  assert(token.token_index_start == -1);
+  assert(context.error_start_index == -1);
+  
+  try_parse_and(&context, &token, &success);
+  assert(!success);
+  assert(context.error == NULL);
+  assert(context.index == 0);
+  assert(context.error_start_index == -1);
+}
+
 void test_try_parse_globbing_01(void)
 {
   Parse_Context context = create_parse_context("*");
@@ -810,6 +827,7 @@ int main(void)
   test_try_parse_and03();
   test_try_parse_and04();
   test_try_parse_and05();
+  test_try_parse_and06();
   test_try_query_status_01();
   test_try_query_status_02();
   test_try_query_status_03();
