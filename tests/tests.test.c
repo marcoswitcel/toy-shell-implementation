@@ -16,6 +16,7 @@
 #include "../src/parser.h"
 #include "../src/list.implementations.h"
 #include "../src/utils.macro.h"
+#include "../src/shell.c"
 #include "./buffer.test.c"
 #include "./sorting.test.c"
 #include "./utils.test.c"
@@ -796,6 +797,90 @@ void test_tokenize_02(void)
   assert(tokens->data[4].data.string.cstring && strcmp(tokens->data[4].data.string.cstring, "arquivo.txt") == 0);
 }
 
+void test_shell_parse_command01(void)
+{
+  const char parse_input_sample[] = "echo teste > arquivo.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == 0);
+  assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == strlen(parse_input_sample));
+
+  assert(execute_command_node.fd  == -1);
+  assert(execute_command_node.args != NULL);
+
+  assert(execute_command_node.args[0] != NULL);
+  assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  assert(execute_command_node.args[1] != NULL);
+  assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  assert(execute_command_node.args[2] == NULL);
+
+  assert(execute_command_node.append_mode == false);
+  assert(execute_command_node.next_command == NULL);
+  assert(strcmp(execute_command_node.output_filename, "arquivo.txt") == 0);
+  assert(execute_command_node.pipe == NULL);
+  // @todo João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
+  // do último token parseado, nesse caso a string "arquivo.txt"
+  assert(execute_command_node.token_index_start == 13);
+}
+
+void test_shell_parse_command02(void)
+{
+  const char parse_input_sample[] = "echo teste && echo teste2";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == 0);
+  assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == strlen(parse_input_sample));
+
+  assert(execute_command_node.fd  == -1);
+  assert(execute_command_node.args != NULL);
+
+  assert(execute_command_node.args[0] != NULL);
+  assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  assert(execute_command_node.args[1] != NULL);
+  assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  assert(execute_command_node.args[2] == NULL);
+
+  assert(execute_command_node.append_mode == false);
+  assert(execute_command_node.next_command != NULL);
+  assert(execute_command_node.output_filename == NULL);
+  assert(execute_command_node.pipe == NULL);
+  assert(execute_command_node.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+
+  // o comando AND a seguir
+  assert(execute_command_node.next_command->fd  == -1);
+  assert(execute_command_node.next_command->args != NULL);
+
+  assert(execute_command_node.next_command->args[0] != NULL);
+  assert(strcmp(execute_command_node.next_command->args[0], "echo") == 0);
+  assert(execute_command_node.next_command->args[1] != NULL);
+  assert(strcmp(execute_command_node.next_command->args[1], "teste2") == 0);
+  assert(execute_command_node.next_command->args[2] == NULL);
+
+  assert(execute_command_node.next_command->append_mode == false);
+  assert(execute_command_node.next_command->next_command == NULL);
+  assert(execute_command_node.next_command->output_filename == NULL);
+  assert(execute_command_node.next_command->pipe == NULL);
+  assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+}
+
+// @todo João, testar PIPE (aguardar até ele estar funcional)
+
+// @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
+
 int main(void)
 {
   printf("Executando testes\n");
@@ -839,6 +924,8 @@ int main(void)
   test_list_of_floats_implementation();
   test_tokenize_01();
   test_tokenize_02();
+  test_shell_parse_command01();
+  test_shell_parse_command02();
   test_suit_buffer();
   test_suit_sorting();
   test_suit_utils();
