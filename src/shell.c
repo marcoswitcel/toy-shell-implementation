@@ -470,6 +470,8 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
     }
     else
     {
+      // @todo João, atualmente eu não suporto mandar o stderr para um arquivo e o stdout para outro
+      // seria um recurso interessante.
       if (execute_command_node->fd == 2)
       {
         process.fd_stderr = fd;
