@@ -459,10 +459,10 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_redirec_token = false;
   bool redirect_expect_file_name = false;
-  const char *output_filename = NULL;
+  const char *stdout_redirect_filename = NULL;
+  const char *stderr_redirect_filename = NULL;
   signed token_index_start = -1;
   bool append_mode = false;
-  int redirect_fd = -1;
   bool piped = false;
   Execute_Command_Node *pipe = NULL;
   bool next_command_found = false;
@@ -475,10 +475,11 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
     if (token.type == STRING && token.data.string.cstring)
     {
+      // @todo João adicionar toda lógica aqui stderr_redirect_filename
       if (redirect_expect_file_name)
       {
         redirect_expect_file_name = false;
-        output_filename = token.data.string.cstring;
+        stdout_redirect_filename = token.data.string.cstring;
         token_index_start = token.token_index_start;
       }
       else
@@ -507,7 +508,6 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       }
       has_redirec_token = true;
       append_mode = token.data.redirect.appending;
-      redirect_fd = token.data.redirect.fd;
       redirect_expect_file_name = true;
     }
 
@@ -577,7 +577,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .output_filename = output_filename, .fd = redirect_fd, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, .next_command = next_command_node };
+  return (Execute_Command_Node) { .args = args, .stdout_redirect_filename = stdout_redirect_filename, .stderr_redirect_filename = stderr_redirect_filename, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, .next_command = next_command_node };
 }
 
 #endif // PARSER_H

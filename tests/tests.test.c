@@ -812,7 +812,7 @@ void test_shell_parse_command01(void)
   assert(context.error_start_index == -1);
   assert(context.index == strlen(parse_input_sample));
 
-  assert(execute_command_node.fd  == -1);
+  assert(execute_command_node.stderr_redirect_filename == NULL);
   assert(execute_command_node.args != NULL);
 
   assert(execute_command_node.args[0] != NULL);
@@ -823,7 +823,7 @@ void test_shell_parse_command01(void)
 
   assert(execute_command_node.append_mode == false);
   assert(execute_command_node.next_command == NULL);
-  assert(strcmp(execute_command_node.output_filename, "arquivo.txt") == 0);
+  assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
   assert(execute_command_node.pipe == NULL);
   // @todo João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
   // do último token parseado, nesse caso a string "arquivo.txt"
@@ -845,7 +845,6 @@ void test_shell_parse_command02(void)
   assert(context.error_start_index == -1);
   assert(context.index == strlen(parse_input_sample));
 
-  assert(execute_command_node.fd  == -1);
   assert(execute_command_node.args != NULL);
 
   assert(execute_command_node.args[0] != NULL);
@@ -856,12 +855,12 @@ void test_shell_parse_command02(void)
 
   assert(execute_command_node.append_mode == false);
   assert(execute_command_node.next_command != NULL);
-  assert(execute_command_node.output_filename == NULL);
+  assert(execute_command_node.stderr_redirect_filename == NULL);
+  assert(execute_command_node.stdout_redirect_filename == NULL);
   assert(execute_command_node.pipe == NULL);
   assert(execute_command_node.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 
   // o comando AND a seguir
-  assert(execute_command_node.next_command->fd  == -1);
   assert(execute_command_node.next_command->args != NULL);
 
   assert(execute_command_node.next_command->args[0] != NULL);
@@ -872,7 +871,8 @@ void test_shell_parse_command02(void)
 
   assert(execute_command_node.next_command->append_mode == false);
   assert(execute_command_node.next_command->next_command == NULL);
-  assert(execute_command_node.next_command->output_filename == NULL);
+  assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
+  assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
   assert(execute_command_node.next_command->pipe == NULL);
   assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 }

@@ -7,16 +7,16 @@ typedef struct Execute_Command_Node {
   char **args;
   // @todo João, como foi levantado a necessidade de implementar o suporte a múltiplos (2) redirects para arquivos,
   // seria interessante já aproveitar para reformular a estrutura de responsabilidade atual sobre
-  // a criação e liberação dos file descriptors. Talvez empacotar o output_filename e o fd em uma struct e aí criar dois campos?
-  const char *output_filename;
-  int fd; // @todo João, refatorar isso para um lugar mais apropriado
+  // a criação e liberação dos file descriptors. Talvez empacotar o stdout_redirect_filename e o fd em uma struct e aí criar dois campos?
+  const char *stdout_redirect_filename;
+  const char *stderr_redirect_filename;
   signed token_index_start;
   bool append_mode;
   struct Execute_Command_Node *pipe;
   struct Execute_Command_Node *next_command;
 } Execute_Command_Node;
 
-#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .output_filename = NULL, .fd = -1, .token_index_start = -1, .append_mode = false, .pipe = NULL, .next_command = NULL, }
+#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .stdout_redirect_filename = NULL, .stderr_redirect_filename = NULL, .token_index_start = -1, .append_mode = false, .pipe = NULL, .next_command = NULL, }
 
 /**
  * @brief Função que libera a memória da cstrings individuais referenciadas pelo pointer_array

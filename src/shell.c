@@ -457,12 +457,12 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
   assert(execute_command_node->args != NULL);
 
   Process_Parameter process = STATIC_PROCESS_PARAMETER(execute_command_node->args);
-  if (execute_command_node->output_filename)
+  if (execute_command_node->stdout_redirect_filename)
   {
     int oflags = O_RDWR|O_CREAT;
     if (execute_command_node->append_mode) oflags |= O_APPEND;
     
-    int fd = open(execute_command_node->output_filename, oflags, 0600);
+    int fd = open(execute_command_node->stdout_redirect_filename, oflags, 0600);
     
     if (fd == -1)
     {
@@ -472,7 +472,7 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
     {
       // @todo João, atualmente eu não suporto mandar o stderr para um arquivo e o stdout para outro
       // seria um recurso interessante.
-      if (execute_command_node->fd == 2)
+      if (execute_command_node->stderr_redirect_filename)
       {
         process.fd_stderr = fd;
       }
