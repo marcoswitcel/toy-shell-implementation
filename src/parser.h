@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include "./list.implementations.h"
 #include "./sorting.c"
@@ -457,8 +458,10 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
 Execute_Command_Node parse_execute_command_node(Parse_Context *context, const unsigned first_token_index, const Sequence_Of_Tokens *tokens)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
-  bool has_redirec_token = false;
-  bool redirect_expect_file_name = false;
+  bool has_stdout_redirect_token = false;
+  bool has_stderr_redirect_token = false;
+  bool stdout_redirect_expect_file_name = false;
+  bool stderr_redirect_expect_file_name = false;
   const char *stdout_redirect_filename = NULL;
   const char *stderr_redirect_filename = NULL;
   signed token_index_start = -1;
@@ -475,12 +478,21 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
     if (token.type == STRING && token.data.string.cstring)
     {
-      // @todo João adicionar toda lógica aqui stderr_redirect_filename
-      if (redirect_expect_file_name)
+      if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
-        redirect_expect_file_name = false;
-        stdout_redirect_filename = token.data.string.cstring;
-        token_index_start = token.token_index_start;
+        if (stdout_redirect_expect_file_name)
+        {
+          stdout_redirect_expect_file_name = false;
+          stdout_redirect_filename = token.data.string.cstring;
+          token_index_start = token.token_index_start; // @todo João, resetando em casos de setar separado
+        }
+
+        if (stderr_redirect_expect_file_name)
+        {
+          stderr_redirect_expect_file_name = false;
+          stderr_redirect_filename = token.data.string.cstring;
+          token_index_start = token.token_index_start; // @todo João, resetando em casos de setar separado
+        }
       }
       else
       {
@@ -489,7 +501,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
     }
     if (token.type == GLOBBING && token.data.globbing.cstring)
     {
-      if (redirect_expect_file_name)
+      if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
         parse_context_report_error(context, "Token * não é um argumento válido para o redirect.", token.token_index_start);
         break;
@@ -501,14 +513,35 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
     }
     if (token.type == REDIRECT && token.data.redirect.cstring)
     {
-      if (has_redirec_token)
+      int fd = token.data.redirect.fd;
+
+      if ((fd == STDOUT_FILENO && has_stdout_redirect_token) ||
+          (fd == STDERR_FILENO && has_stderr_redirect_token) ||
+          (fd != STDOUT_FILENO && fd != STDERR_FILENO && (has_stdout_redirect_token  || has_stderr_redirect_token)))
       {
         parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
         break;
       }
-      has_redirec_token = true;
-      append_mode = token.data.redirect.appending;
-      redirect_expect_file_name = true;
+
+      append_mode = token.data.redirect.appending; // @todo João, compiando o último modo para ambos os redirects por hora
+
+      if (fd == STDOUT_FILENO)
+      {
+        has_stdout_redirect_token = true;
+        stdout_redirect_expect_file_name = true;
+      }
+      else if (fd == STDERR_FILENO)
+      {
+        has_stderr_redirect_token = true;
+        stderr_redirect_expect_file_name = true;
+      }
+      else
+      {
+        has_stdout_redirect_token = true;
+        stdout_redirect_expect_file_name = true;
+        has_stderr_redirect_token = true;
+        stderr_redirect_expect_file_name = true;
+      } 
     }
 
     if (token.type == PIPE  && token.data.pipe.cstring)
@@ -553,7 +586,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
 
     if (token.type == QUERY_LAST_STATUS && token.data.query_last_status.cstring)
     {
-      if (redirect_expect_file_name)
+      if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
         parse_context_report_error(context, "Token $? não é um argumento válido para o redirect.", token.token_index_start);
         break;
@@ -565,9 +598,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
     }
   }
 
-  if (redirect_expect_file_name && context->error == NULL)
+  if ((stdout_redirect_expect_file_name || stderr_redirect_expect_file_name) && context->error == NULL)
   {
-    parse_context_report_error(context, "Nome do arquivo que deve receber o output não foi especificado.", context->length);
+    parse_context_report_error(context, "Nome do arquivo que deve receber o redirecionamento não foi especificado.", context->length);
   }
 
   // @todo João, analisar se considerando a necessidade de expandir a lista de argumentos na função `replace_static_symbols_with_query_info`

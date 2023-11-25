@@ -812,7 +812,7 @@ void test_shell_parse_command01(void)
   assert(context.error_start_index == -1);
   assert(context.index == strlen(parse_input_sample));
 
-  assert(execute_command_node.stderr_redirect_filename == NULL);
+  
   assert(execute_command_node.args != NULL);
 
   assert(execute_command_node.args[0] != NULL);
@@ -824,6 +824,7 @@ void test_shell_parse_command01(void)
   assert(execute_command_node.append_mode == false);
   assert(execute_command_node.next_command == NULL);
   assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
+  assert(strcmp(execute_command_node.stderr_redirect_filename, "arquivo.txt") == 0);
   assert(execute_command_node.pipe == NULL);
   // @todo João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
   // do último token parseado, nesse caso a string "arquivo.txt"
