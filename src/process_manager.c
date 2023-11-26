@@ -50,12 +50,12 @@ int wait_child_process(pid_t pid)
  * @brief função que faz o fork do processo pai e configura todos os "file descriptors" no processo novo.
  * 
  * @param process_parameter descrever os "file descriptors", pipe through e args
- * @param activate_opost_before_fork ativa o processamento de output, especificamente a conversão de enters em carriage return seguido de enter.
+ * @param revert_raw_mode ativa o processamento de output, especificamente a conversão de enters em carriage return seguido de enter.
  * @return int 
  */
-int launch_process(const Process_Parameter process_parameter, bool activate_opost_before_fork)
+int launch_process(const Process_Parameter process_parameter, bool revert_raw_mode)
 {
-  if (activate_opost_before_fork) enable_oflag_opost();
+  if (revert_raw_mode) deactivate_raw_mode();
   
   pid_t pid;
   pid = fork();
@@ -67,9 +67,8 @@ int launch_process(const Process_Parameter process_parameter, bool activate_opos
 
     // @todo João, validar se o stdin pode ser setado da mesma forma que os file descriptors de output
     // @todo João, talvez incluir um cheque para não fazer o dup2, caso os atributos fd_* contiverem o valor padrão para o file descriptor 
-    if (process_parameter.fd_stdin > -1 && process_parameter.fd_stdin != STDIN_FILENO)
+    if (process_parameter.fd_stdin > -1)
     {
-      assert(false && "não deveria estar sendo usado ainda");
       dup2(process_parameter.fd_stdin, STDIN_FILENO);
     }
 
@@ -147,7 +146,7 @@ int launch_process(const Process_Parameter process_parameter, bool activate_opos
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
 
-  if (activate_opost_before_fork) disable_oflag_opost();
+  if (revert_raw_mode) activate_raw_mode(false);
 
   return status;
 }
