@@ -623,7 +623,11 @@ void read_eval_shell_loop(bool colorful)
   Shell_Context_Data shell_context = create_shell_context_data();
   shell_context.colorful = colorful;
 
-  last_typed_commands = shell_context.last_typed_commands; // @todo João, assim não é a forma mais elegante, porém, temporariamente fica assim
+  // @todo João, acho que a ideia mais interessante seria mover a variável `exit_requested` para dentro
+  // da estrutura `Shell_Context_Data` e começar a passar ela para os builtins. Parece razoável
+  // e deixaria claro o acesso dos builtins a esses dados, também poderia ser criado algum tipo de `getter`,
+  // mas, não está clara a estrutura ainda então prefiro só passar a estrutura toda.
+  last_typed_commands = shell_context.last_typed_commands;
 
   while (!exit_requested)
   {
