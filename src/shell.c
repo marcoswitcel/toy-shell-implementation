@@ -502,6 +502,17 @@ Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_C
   return process;
 }
 
+/**
+ * @brief Parseaia o comando e se não houver erros retorna o nós que representa ordem de execução.
+ * 
+ * @note No passado cogitei retornar um ponteiro alocado o heap, para facilitar a função
+ * `release_execute_command_nodes`, mas considerando que pode ser interessante fazer um solução ainda
+ * mais robusta para o gerenciamento de memória (um alocador em arena que possa ser "liberado" no final do ciclo do REPL),
+ * vou documentar essa ideia com essa nota, mas deixar por isso até a solução nova chegar, ou decidir mudar.
+ * 
+ * @param context 
+ * @return Execute_Command_Node 
+ */
 Execute_Command_Node shell_parse_command(Parse_Context *context)
 {
   // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
@@ -618,17 +629,10 @@ void read_eval_shell_loop(bool colorful)
   {
     char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
-    /**
-     * @todo João, deveria chamar um método free nessa estrutura, pois ela pode conter 
-     * referências para outras estruturas alocadas no heap. Mas para isso é preciso criar esse método
-     * e talvez mudar a função shell_parse_command para retornar uma referência.
-     * @leak @fixme
-     */
     Execute_Command_Node execute_command_node = shell_parse_command(&context);
 
     if (context.error == NULL)
     {
-      // @todo João, necessário fazer o free dos comandos executados
       Execute_Command_Node *current_command = &execute_command_node;
       unsigned command_counter = 0;
       bool should_interrupt = false;
@@ -639,6 +643,7 @@ void read_eval_shell_loop(bool colorful)
         // @Note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
         // do resultado da execução do comando anterior
         replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
+        // @todo João, quando o 'pipe_through' estiver implementado vou precisar fazer o release dessa estrutura
         Process_Parameter process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {
