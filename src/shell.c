@@ -21,6 +21,19 @@
 
 #define HISTORY_MAX_ELEMENTS 20
 
+/**
+ * @brief usada como controle para o loop de interpretação do shell, quando setada para falso
+ * o loop irá terminar
+ * 
+ */
+bool exit_requested = false;
+
+/**
+ * @brief Usada como variável global para compartilhar a lista de histórico com os builtins
+ * 
+ */
+List_Of_Strings *last_typed_commands = NULL;
+
 typedef struct Shell_Context_Data
 {
   bool colorful;

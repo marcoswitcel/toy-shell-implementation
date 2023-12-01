@@ -10,8 +10,9 @@
 #include "./process_manager.c"
 #include "./utils.macro.h"
 
-bool exit_requested = false;
-List_Of_Strings *last_typed_commands = NULL;
+// @note globais compartilhadas com o shell
+extern bool exit_requested;
+extern List_Of_Strings *last_typed_commands;
 
 typedef int (*Builtin_Function)(const Process_Parameter *);
 
