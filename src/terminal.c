@@ -85,7 +85,7 @@ void activate_raw_mode(bool set_cleanup_handler)
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &new_config);
 }
 
-// @todo João, considerei usar a configuração orignal para evitar o "tcget" mas seria menos flexível a função
+// @note João, considerei usar a configuração orignal para evitar o "tcget" mas seria menos flexível a função
 // então como não tenho certeza vou deixar assim por hora
 void enable_oflag_opost()
 {
@@ -97,7 +97,7 @@ void enable_oflag_opost()
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &current_config);
 }
 
-// @todo João, considerei usar a configuração orignal para evitar o "tcget" mas seria menos flexível a função
+// @note João, considerei usar a configuração orignal para evitar o "tcget" mas seria menos flexível a função
 // então como não tenho certeza vou deixar assim por hora
 void disable_oflag_opost()
 {
