@@ -293,8 +293,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     }
     else if (c == EOF || c == NEW_LINE || c == CARRIAGE_RETURN)
     {
-      write(STDOUT_FILENO, "\r\n", 2);
-      // @note decidi mover a lógica de cópia, release de memória e retorno pra fora do loop, parece mais legível
+      write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("\r\n"));
       break;
     }
     else if (c == '\t')

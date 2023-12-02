@@ -5,9 +5,6 @@
 
 typedef struct Execute_Command_Node {
   char **args;
-  // @todo João, como foi levantado a necessidade de implementar o suporte a múltiplos (2) redirects para arquivos,
-  // seria interessante já aproveitar para reformular a estrutura de responsabilidade atual sobre
-  // a criação e liberação dos file descriptors. Talvez empacotar o stdout_redirect_filename e o fd em uma struct e aí criar dois campos?
   const char *stdout_redirect_filename;
   const char *stderr_redirect_filename;
   signed token_index_start;

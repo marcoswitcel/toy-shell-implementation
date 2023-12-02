@@ -140,7 +140,7 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
 
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
   // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles (parece que sim, mas checar mais)
-
+  // @note considerar fazer o `close` fora do método deste método
   if (process_parameter.fd_stdin != STDIN_FILENO) close(process_parameter.fd_stdin);
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
