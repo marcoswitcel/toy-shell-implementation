@@ -63,21 +63,19 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
 
   if (pid == 0)
   {
-    // @todo João, remover asserts assim que valores começarem a ser usados
-
     // @todo João, validar se o stdin pode ser setado da mesma forma que os file descriptors de output
     // @todo João, talvez incluir um cheque para não fazer o dup2, caso os atributos fd_* contiverem o valor padrão para o file descriptor 
-    if (process_parameter.fd_stdin > -1)
+    if (process_parameter.fd_stdin > -1 && process_parameter.fd_stdin != STDIN_FILENO)
     {
       dup2(process_parameter.fd_stdin, STDIN_FILENO);
     }
 
-    if (process_parameter.fd_stdout > -1)
+    if (process_parameter.fd_stdout > -1 && process_parameter.fd_stdout != STDOUT_FILENO)
     {
       dup2(process_parameter.fd_stdout, STDOUT_FILENO);
     }
 
-    if (process_parameter.fd_stderr > -1)
+    if (process_parameter.fd_stderr > -1 && process_parameter.fd_stderr != STDERR_FILENO)
     {
       dup2(process_parameter.fd_stderr, STDERR_FILENO);
     }
@@ -141,8 +139,9 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
   }
 
   // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
-  // @todo João, quando fecha o stdin?
-  // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles
+  // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles (parece que sim, mas checar mais)
+
+  if (process_parameter.fd_stdin != STDIN_FILENO) close(process_parameter.fd_stdin);
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
   if (process_parameter.fd_stderr != STDERR_FILENO) close(process_parameter.fd_stderr);
 
