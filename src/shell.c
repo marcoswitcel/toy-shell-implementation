@@ -464,7 +464,16 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
   execute_command_node->args = args;
 }
 
-Process_Parameter shell_convert_execute_command_into_process_paramater(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
+/**
+ * @brief converte o `Execute_Command_Node` em um `Process_Parameter`
+ * @note João, vou precisar analisar como lidar com o atributo `pipe`, desda ordem de precendência de parse
+ * até, a forma como vou executar e alocar recurso, abrir arquivos de redirect, etc...
+ * 
+ * @param execute_command_node 
+ * @param tried_opening_file_and_failed 
+ * @return Process_Parameter 
+ */
+Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_Command_Node *execute_command_node, bool *tried_opening_file_and_failed)
 {
   assert(execute_command_node->args != NULL);
 
@@ -660,7 +669,7 @@ void read_eval_shell_loop(bool colorful)
         // do resultado da execução do comando anterior
         replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
         // @todo João, quando o 'pipe_through' estiver implementado vou precisar fazer o release dessa estrutura
-        Process_Parameter process_parameter = shell_convert_execute_command_into_process_paramater(current_command, &tried_opening_file_and_failed);
+        Process_Parameter process_parameter = shell_convert_execute_command_into_process_parameter(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {
           if (current_command->next_command) context.error = "O arquivo não pôde ser aberto. Parando execução em sequência.";

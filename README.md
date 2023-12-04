@@ -35,3 +35,5 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://stackoverflow.com/questions/12633039/shift-elements-in-array](https://stackoverflow.com/questions/12633039/shift-elements-in-array)
 * [https://vt100.net/docs/vt100-ug/chapter3.html#DSR](https://vt100.net/docs/vt100-ug/chapter3.html#DSR)
 * [https://vt100.net/docs/vt100-ug/chapter3.html#CPR](https://vt100.net/docs/vt100-ug/chapter3.html#CPR)
+* [https://www.geeksforgeeks.org/pipe-system-call/](https://www.geeksforgeeks.org/pipe-system-call/)
+* [https://www.rozmichelle.com/pipes-forks-dups/](https://www.rozmichelle.com/pipes-forks-dups/)
