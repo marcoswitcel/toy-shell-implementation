@@ -520,6 +520,17 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
     }
   }
 
+  if (execute_command_node->pipe)
+  {
+    assert(false && "Trabalho em progresso");
+    
+    // @todo João, terminar de implementar tratativa de erros, como por exemplo, "não pode abrir o arquivo"
+    bool failed = false;
+    // @todo João, leak fixme
+    Process_Parameter *process_pipe = ALLOC(Process_Parameter, 1);
+    *process_pipe = shell_convert_execute_command_into_process_parameter(execute_command_node->pipe, &failed);
+  }
+
   return process;
 }
 
