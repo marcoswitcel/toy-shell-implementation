@@ -57,6 +57,12 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
 {
   if (revert_raw_mode) deactivate_raw_mode();
   
+  if (process_parameter.pipe_through) {
+    assert(false);
+    // @todo João, continuar implementando
+    // https://www.geeksforgeeks.org/pipe-system-call/
+  }
+  
   pid_t pid;
   pid = fork();
   int status = -1;
