@@ -528,6 +528,12 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
     process.pipe_through = ALLOC(Process_Parameter, 1);
     *process.pipe_through = shell_convert_execute_command_into_process_parameter(execute_command_node->pipe, &failed);
 
+    int fd[2];
+    pipe(fd);
+
+    process.fd_stdout = fd[1];
+    process.pipe_through->fd_stdin = fd[0];
+
     if (failed) *tried_opening_file_and_failed = true;
   }
 

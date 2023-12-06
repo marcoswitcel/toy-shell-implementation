@@ -57,12 +57,6 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
 {
   if (revert_raw_mode) deactivate_raw_mode();
   
-  if (process_parameter.pipe_through) {
-    assert(false);
-    // @todo João, continuar implementando
-    // https://www.geeksforgeeks.org/pipe-system-call/
-  }
-  
   pid_t pid;
   pid = fork();
   int status = -1;
@@ -141,6 +135,17 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
   }
   else
   {
+    if (process_parameter.pipe_through) {
+      // @note João, por hora só de fechar esse file descriptor o processo na pipe consegue terminar
+      close(process_parameter.fd_stdout);
+
+      // @todo João, continuar implementando e testar
+      // https://www.geeksforgeeks.org/pipe-system-call/
+      // @todo João, o problema é que launch_process espera o processo terminar e nesse caso, acho que seria interessante
+      // fechar os fd para terminar o processo.
+      launch_process(*process_parameter.pipe_through, false);
+    }
+
     status = wait_child_process(pid);
   }
 

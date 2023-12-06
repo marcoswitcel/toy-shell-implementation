@@ -37,3 +37,6 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://vt100.net/docs/vt100-ug/chapter3.html#CPR](https://vt100.net/docs/vt100-ug/chapter3.html#CPR)
 * [https://www.geeksforgeeks.org/pipe-system-call/](https://www.geeksforgeeks.org/pipe-system-call/)
 * [https://www.rozmichelle.com/pipes-forks-dups/](https://www.rozmichelle.com/pipes-forks-dups/)
+* [https://www.geeksforgeeks.org/pipe-system-call/](https://www.geeksforgeeks.org/pipe-system-call/)
+* [https://stackoverflow.com/questions/61114748/using-a-pipe-to-execute-cat-and-grep](https://stackoverflow.com/questions/61114748/using-a-pipe-to-execute-cat-and-grep)
+* [https://www.geeksforgeeks.org/dup-dup2-linux-system-call/](https://www.geeksforgeeks.org/dup-dup2-linux-system-call/)
