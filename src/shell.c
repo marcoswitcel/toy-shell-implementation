@@ -192,6 +192,18 @@ static Key_Pressed try_process_escape_sequence()
   }
 }
 
+unsigned skip_word_to_the_left(Buffer *buffer, unsigned start_position)
+{
+  unsigned cursor_position = start_position;
+
+  while (!is_whitespace(buffer->buffer[cursor_position]) && cursor_position > 0)
+  {
+    cursor_position += -1; 
+  }
+
+  return cursor_position;
+}
+
 /**
  * @brief lida com teclas de controle de edição e outras sequencias de escape
  * @todo João, falta lidar com sequências inválidas e keys desconhecidas
@@ -285,7 +297,14 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
     } break;
     case ALT_ARROW_LEFT:
     {
-      // @todo João, implementar skipp left
+      // @todo João, terminar aqui, semifuncional
+      unsigned new_cursor_position = skip_word_to_the_left(buffer, *cursor_position);
+
+      if (new_cursor_position != *cursor_position)
+      {
+        *cursor_position = new_cursor_position;
+        return true;
+      }
     } break;
     case ALT_ARROW_RIGHT:
     {
