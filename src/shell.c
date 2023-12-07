@@ -82,6 +82,10 @@ typedef enum Key_Pressed {
   ARROW_DOWN,
   ARROW_LEFT,
   ARROW_RIGHT,
+  ALT_ARROW_UP,
+  ALT_ARROW_DOWN,
+  ALT_ARROW_LEFT,
+  ALT_ARROW_RIGHT,
   DELETE,
   HOME,
   END,
@@ -112,6 +116,38 @@ static Key_Pressed try_process_escape_sequence()
       {
         c = getchar();
         if (c == '~') return HOME;
+        if (c == ';')
+        {
+          c = getchar();
+          /**
+           * @note Pelo que li tem mais sequências que poderia ser enviadas para representar
+           * um alt + arrow_up/arrow_down/arrow_left/arrow_right. Por hora estou tratando só essa.
+           * <ESC>[1;3A  <ESC>[1;3B  <ESC>[1;3C  <ESC>[1;3D
+           */
+          if (c == '3')
+          {
+            c = getchar();
+            switch (c)
+            {
+              case 'A':
+              {
+                return ALT_ARROW_UP;
+              }
+              case 'B':
+              {
+                return ALT_ARROW_DOWN;
+              }
+              case 'C':
+              {
+                return ALT_ARROW_RIGHT;
+              }
+              case 'D':
+              {
+                return ALT_ARROW_LEFT;
+              }
+            }  
+          }
+        }
       } break;
       case '3':
       {
@@ -239,6 +275,22 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
       *cursor_position = buffer->index;
     }
     break;
+    case ALT_ARROW_UP:
+    {
+      // @note Não faz nada por hora
+    } break;
+    case ALT_ARROW_DOWN:
+    {
+      // @note Não faz nada por hora
+    } break;
+    case ALT_ARROW_LEFT:
+    {
+      // @todo João, implementar skipp left
+    } break;
+    case ALT_ARROW_RIGHT:
+    {
+      // @todo João, implementar skipp right
+    } break;
     case UNKNOWN:
     {
       assert(false && "Escape sequence desconhecida não tratada.");

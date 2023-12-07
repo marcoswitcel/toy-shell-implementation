@@ -40,3 +40,4 @@ O código contigo nesse repositório não está completo e serve apenas como esp
 * [https://www.geeksforgeeks.org/pipe-system-call/](https://www.geeksforgeeks.org/pipe-system-call/)
 * [https://stackoverflow.com/questions/61114748/using-a-pipe-to-execute-cat-and-grep](https://stackoverflow.com/questions/61114748/using-a-pipe-to-execute-cat-and-grep)
 * [https://www.geeksforgeeks.org/dup-dup2-linux-system-call/](https://www.geeksforgeeks.org/dup-dup2-linux-system-call/)
+* [https://unix.stackexchange.com/questions/73669/what-are-the-characters-printed-when-altarrow-keys-are-pressed](https://unix.stackexchange.com/questions/73669/what-are-the-characters-printed-when-altarrow-keys-are-pressed)
