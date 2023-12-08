@@ -225,6 +225,39 @@ unsigned skip_word_to_the_left(const char *buffer, const unsigned size, unsigned
   return cursor_position;
 }
 
+// @todo João, falta adicionar os testes
+unsigned skip_word_to_the_right(const char *buffer, const unsigned size, unsigned start_position)
+{
+  unsigned cursor_position = start_position;
+
+  // caso esteja no último caractere antes de espaços pula para os espaços
+  if (!is_whitespace(buffer[cursor_position]) && cursor_position < size && is_whitespace(buffer[cursor_position + 1]))
+  {
+    cursor_position += 1;
+  }
+
+  // se estiver lidando com espaços, pula todos
+  while (is_whitespace(buffer[cursor_position]) && cursor_position < size)
+  {
+    cursor_position += 1;
+  }
+
+  // se tiver parado em um caractere que não seja "white space", pula até o primeiro "white space" ou o final
+  bool skipped = !is_whitespace(buffer[cursor_position]) && cursor_position < size;
+  while (!is_whitespace(buffer[cursor_position]) && cursor_position < size)
+  {
+    cursor_position += 1; 
+  }
+
+  // se tiver pulado, pode estar no primeiro caracteter "white space" antes do texto, avança se for o caso
+  if (skipped && is_whitespace(buffer[cursor_position]) && cursor_position > 0)
+  {
+    cursor_position -= 1;
+  }
+
+  return cursor_position;
+}
+
 /**
  * @brief lida com teclas de controle de edição e outras sequencias de escape
  * @todo João, falta lidar com sequências inválidas e keys desconhecidas
@@ -328,7 +361,13 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
     } break;
     case ALT_ARROW_RIGHT:
     {
-      // @todo João, implementar skipp right
+      unsigned new_cursor_position = skip_word_to_the_right(buffer->buffer, buffer->index, *cursor_position);
+
+      if (new_cursor_position != *cursor_position)
+      {
+        *cursor_position = new_cursor_position;
+        return true;
+      }
     } break;
     case UNKNOWN:
     {
