@@ -192,13 +192,34 @@ static Key_Pressed try_process_escape_sequence()
   }
 }
 
-unsigned skip_word_to_the_left(Buffer *buffer, unsigned start_position)
+// @todo João, falta adicionar os testes
+unsigned skip_word_to_the_left(const char *buffer, const unsigned size, unsigned start_position)
 {
   unsigned cursor_position = start_position;
 
-  while (!is_whitespace(buffer->buffer[cursor_position]) && cursor_position > 0)
+  // caso esteja no último caractere antes de espaços pula para os espaços
+  if (!is_whitespace(buffer[cursor_position]) && cursor_position > 0 && is_whitespace(buffer[cursor_position - 1]))
   {
-    cursor_position += -1; 
+    cursor_position -= 1;
+  }
+
+  // se estiver lidando com espaços, pula todos
+  while (is_whitespace(buffer[cursor_position]) && cursor_position > 0)
+  {
+    cursor_position -= 1;
+  }
+
+  // se tiver parado em um caractere que não seja "white space", pula até o primeiro "white space" ou o final
+  bool skipped = !is_whitespace(buffer[cursor_position]) && cursor_position > 0;
+  while (!is_whitespace(buffer[cursor_position]) && cursor_position > 0)
+  {
+    cursor_position -= 1; 
+  }
+
+  // se tiver pulado, pode estar no primeiro caracteter "white space" antes do texto, avança se for o caso
+  if (skipped && is_whitespace(buffer[cursor_position]) && cursor_position < size - 1)
+  {
+    cursor_position += 1;
   }
 
   return cursor_position;
@@ -297,8 +318,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
     } break;
     case ALT_ARROW_LEFT:
     {
-      // @todo João, terminar aqui, semifuncional
-      unsigned new_cursor_position = skip_word_to_the_left(buffer, *cursor_position);
+      unsigned new_cursor_position = skip_word_to_the_left(buffer->buffer, buffer->index, *cursor_position);
 
       if (new_cursor_position != *cursor_position)
       {
