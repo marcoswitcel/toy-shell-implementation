@@ -878,6 +878,60 @@ void test_shell_parse_command02(void)
   assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 }
 
+void test_skip_word_to_the_left_01(void)
+{
+  const char command[] = "echo teste";
+  const unsigned size = SIZE_OF_STATIC_STRING(command);
+  unsigned cursor = size;
+  unsigned new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 5);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 0);
+}
+
+void test_skip_word_to_the_left_02(void)
+{
+  const char command[] = "echo teste | grep       te  ";
+  const unsigned size = SIZE_OF_STATIC_STRING(command);
+  unsigned cursor = size;
+  unsigned new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 24);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 13);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 11);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 5);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 0);
+}
+
 // @todo João, testar PIPE (aguardar até ele estar funcional)
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
@@ -927,6 +981,8 @@ int main(void)
   test_tokenize_02();
   test_shell_parse_command01();
   test_shell_parse_command02();
+  test_skip_word_to_the_left_01();
+  test_skip_word_to_the_left_02();
   test_suit_buffer();
   test_suit_sorting();
   test_suit_utils();

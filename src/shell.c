@@ -192,7 +192,14 @@ static Key_Pressed try_process_escape_sequence()
   }
 }
 
-// @todo João, falta adicionar os testes
+/**
+ * @brief Função que avança uma "palavra" para a esquerda
+ * 
+ * @param buffer 
+ * @param size 
+ * @param start_position 
+ * @return unsigned 
+ */
 unsigned skip_word_to_the_left(const char *buffer, const unsigned size, unsigned start_position)
 {
   unsigned cursor_position = start_position;
