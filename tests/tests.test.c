@@ -930,6 +930,11 @@ void test_skip_word_to_the_left_02(void)
   new_cursor_position = skip_word_to_the_left(command, size, cursor);
   assert(new_cursor_position != cursor);
   assert(new_cursor_position == 0);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_left(command, size, cursor);
+  assert(new_cursor_position == 0);
 }
 
 // @todo João, testar PIPE (aguardar até ele estar funcional)
