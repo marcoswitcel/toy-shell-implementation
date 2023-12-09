@@ -232,7 +232,14 @@ unsigned skip_word_to_the_left(const char *buffer, const unsigned size, unsigned
   return cursor_position;
 }
 
-// @todo João, falta adicionar os testes
+/**
+ * @brief Função que avança uma palavra para direita 
+ * 
+ * @param buffer 
+ * @param size 
+ * @param start_position 
+ * @return unsigned 
+ */
 unsigned skip_word_to_the_right(const char *buffer, const unsigned size, unsigned start_position)
 {
   unsigned cursor_position = start_position;
@@ -250,16 +257,9 @@ unsigned skip_word_to_the_right(const char *buffer, const unsigned size, unsigne
   }
 
   // se tiver parado em um caractere que não seja "white space", pula até o primeiro "white space" ou o final
-  bool skipped = !is_whitespace(buffer[cursor_position]) && cursor_position < size;
   while (!is_whitespace(buffer[cursor_position]) && cursor_position < size)
   {
     cursor_position += 1; 
-  }
-
-  // se tiver pulado, pode estar no primeiro caracteter "white space" antes do texto, avança se for o caso
-  if (skipped && is_whitespace(buffer[cursor_position]) && cursor_position > 0)
-  {
-    cursor_position -= 1;
   }
 
   return cursor_position;

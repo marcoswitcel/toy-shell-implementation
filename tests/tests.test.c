@@ -937,6 +937,52 @@ void test_skip_word_to_the_left_02(void)
   assert(new_cursor_position == 0);
 }
 
+void test_skip_word_to_the_right_01(void)
+{
+  const char command[] = "echo teste | grep       te  ";
+  const unsigned size = SIZE_OF_STATIC_STRING(command);
+  unsigned cursor = 0;
+  unsigned new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 4);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 10);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 12);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 17);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position != cursor);
+  assert(new_cursor_position == 26);
+
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position == 28);
+  
+  cursor = new_cursor_position;
+
+  new_cursor_position = skip_word_to_the_right(command, size, cursor);
+  assert(new_cursor_position == 28);  
+}
+
 // @todo João, testar PIPE (aguardar até ele estar funcional)
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
@@ -988,6 +1034,7 @@ int main(void)
   test_shell_parse_command02();
   test_skip_word_to_the_left_01();
   test_skip_word_to_the_left_02();
+  test_skip_word_to_the_right_01();
   test_suit_buffer();
   test_suit_sorting();
   test_suit_utils();
