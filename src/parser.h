@@ -453,11 +453,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   return tokens;
 }
 
-// @todo João, acho que é melhor retornar uma referência alocada no heap
-// @todo João, coloquei uma anotação na função `try_parse_and` sobre reportar de forma mais clara que após o && deve haver algum
-// input (checar em outros dos métodos de parse). Hoje o sistema apenas avisa sobre falta de espaço, mas se realizar essa correção ainda estará errado. Cai no assert da função
-// `shell_execute_command`.
-Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
+Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, const Sequence_Of_Tokens *tokens, bool piping)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_stdout_redirect_token = false;
@@ -562,16 +558,31 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
         context->token_index += 1;
         assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
-        *execute_command_sub_node = parse_execute_command_node(context, tokens);
+        *execute_command_sub_node = parse_execute_command_node_interal(context, tokens, true);
         pipe = execute_command_sub_node;
         piped = true;
 
-        break;
+        // @todo João, testar se não dá pra dar apenas um continue e deixar o loop principal encerrar, ficaria menos código aqui
+        // @todo João, testar muito a questão da PIPE
+        if (context->token_index < tokens->index)
+        {
+          continue;
+        }
+        else
+        {
+          break;
+        }
       }
     }
 
     if (token.type == AND && token.data.and.cstring)
     {
+      if (piping)
+      {
+        context->token_index -= 1;
+        break;
+      }
+
       // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
       // mas por precaução essa lógica fica
       if (next_command_found)
@@ -584,7 +595,7 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
         context->token_index += 1;
         assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
-        *execute_command_sub_node = parse_execute_command_node(context, tokens);
+        *execute_command_sub_node = parse_execute_command_node_interal(context, tokens, false);
         next_command_node = execute_command_sub_node;
         next_command_found = true;
 
@@ -619,6 +630,15 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   destroy_list_of_strings(list_of_args);
 
   return (Execute_Command_Node) { .args = args, .stdout_redirect_filename = stdout_redirect_filename, .stderr_redirect_filename = stderr_redirect_filename, .token_index_start = token_index_start, .append_mode = append_mode, .pipe = pipe, .next_command = next_command_node };
+}
+
+// @todo João, acho que é melhor retornar uma referência alocada no heap
+// @todo João, coloquei uma anotação na função `try_parse_and` sobre reportar de forma mais clara que após o && deve haver algum
+// input (checar em outros dos métodos de parse). Hoje o sistema apenas avisa sobre falta de espaço, mas se realizar essa correção ainda estará errado. Cai no assert da função
+// `shell_execute_command`.
+Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
+{
+  return parse_execute_command_node_interal(context, tokens, false);
 }
 
 #endif // PARSER_H
