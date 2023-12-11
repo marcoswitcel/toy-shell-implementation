@@ -22,6 +22,7 @@ typedef struct Parse_Context {
   unsigned index;
   const char *error;
   signed error_start_index;
+  unsigned token_index;
 } Parse_Context;
 
 
@@ -33,6 +34,7 @@ Parse_Context create_parse_context(const char *source)
     .index = 0,
     .error = NULL,
     .error_start_index = -1,
+    .token_index = 0,
   };
 }
 
@@ -455,7 +457,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
 // @todo João, coloquei uma anotação na função `try_parse_and` sobre reportar de forma mais clara que após o && deve haver algum
 // input (checar em outros dos métodos de parse). Hoje o sistema apenas avisa sobre falta de espaço, mas se realizar essa correção ainda estará errado. Cai no assert da função
 // `shell_execute_command`.
-Execute_Command_Node parse_execute_command_node(Parse_Context *context, const unsigned first_token_index, const Sequence_Of_Tokens *tokens)
+Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_stdout_redirect_token = false;
@@ -471,8 +473,10 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
   bool next_command_found = false;
   Execute_Command_Node *next_command_node = NULL;
   
-  for (unsigned i = first_token_index; i < tokens->index; i++)
+  for (unsigned i = context->token_index; i < tokens->index; i++)
   {
+    context->token_index = i;
+    
     Token token = tokens->data[i];
     assert(token.token_index_start > -1);
 
@@ -556,7 +560,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       else
       {
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
-        *execute_command_sub_node = parse_execute_command_node(context, i + 1, tokens);
+        context->token_index += 1;
+        assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
+        *execute_command_sub_node = parse_execute_command_node(context, tokens);
         pipe = execute_command_sub_node;
         piped = true;
 
@@ -576,7 +582,9 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const un
       else
       {
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
-        *execute_command_sub_node = parse_execute_command_node(context, i + 1, tokens);
+        context->token_index += 1;
+        assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
+        *execute_command_sub_node = parse_execute_command_node(context, tokens);
         next_command_node = execute_command_sub_node;
         next_command_found = true;
 

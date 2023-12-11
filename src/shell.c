@@ -708,7 +708,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
 
   if (DEBUG_INFO) printf("[[ tokens size: %d ]]\r\n", tokens->index);
 
-  Execute_Command_Node execute_command_node = parse_execute_command_node(context, 0, tokens);
+  Execute_Command_Node execute_command_node = parse_execute_command_node(context, tokens);
 
   destroy_sequence_of_tokens(tokens);
 
