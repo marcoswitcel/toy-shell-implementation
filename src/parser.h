@@ -566,6 +566,7 @@ Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, 
         // @todo João, testar muito a questão da PIPE
         if (context->token_index < tokens->index)
         {
+          i = context->token_index;
           continue;
         }
         else

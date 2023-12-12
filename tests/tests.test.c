@@ -878,6 +878,71 @@ void test_shell_parse_command02(void)
   assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 }
 
+void test_shell_parse_command03(void)
+{
+  const char parse_input_sample[] = "echo primeiro && echo segundo | grep segundo && echo terceiro";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == 0);
+  assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  assert(context.error == NULL);
+  assert(context.error_start_index == -1);
+  assert(context.index == strlen(parse_input_sample));
+
+  assert(execute_command_node.args != NULL);
+
+  assert(execute_command_node.args[0] != NULL);
+  assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  assert(execute_command_node.args[1] != NULL);
+  assert(strcmp(execute_command_node.args[1], "primeiro") == 0);
+  assert(execute_command_node.args[2] == NULL);
+
+  assert(execute_command_node.append_mode == false);
+  assert(execute_command_node.next_command != NULL);
+  assert(execute_command_node.stderr_redirect_filename == NULL);
+  assert(execute_command_node.stdout_redirect_filename == NULL);
+  assert(execute_command_node.pipe == NULL);
+  assert(execute_command_node.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+
+  // o comando AND a seguir
+  assert(execute_command_node.next_command->args != NULL);
+
+  assert(execute_command_node.next_command->args[0] != NULL);
+  assert(strcmp(execute_command_node.next_command->args[0], "echo") == 0);
+  assert(execute_command_node.next_command->args[1] != NULL);
+  assert(strcmp(execute_command_node.next_command->args[1], "segundo") == 0);
+  assert(execute_command_node.next_command->args[2] == NULL);
+
+  assert(execute_command_node.next_command->append_mode == false);
+  assert(execute_command_node.next_command->next_command);
+  assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
+  assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
+  assert(execute_command_node.next_command->pipe);
+  assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  
+  // pipe
+  assert(execute_command_node.next_command->pipe->args != NULL);
+
+  assert(execute_command_node.next_command->pipe->args[0] != NULL);
+  assert(strcmp(execute_command_node.next_command->pipe->args[0], "grep") == 0);
+  assert(execute_command_node.next_command->pipe->args[1] != NULL);
+  assert(strcmp(execute_command_node.next_command->pipe->args[1], "segundo") == 0);
+  assert(execute_command_node.next_command->pipe->args[2] == NULL);
+
+  // o comando AND a seguir
+  assert(execute_command_node.next_command->next_command->args != NULL);
+
+  assert(execute_command_node.next_command->next_command->args[0] != NULL);
+  assert(strcmp(execute_command_node.next_command->next_command->args[0], "echo") == 0);
+  assert(execute_command_node.next_command->next_command->args[1] != NULL);
+  assert(strcmp(execute_command_node.next_command->next_command->args[1], "terceiro") == 0);
+  assert(execute_command_node.next_command->next_command->args[2] == NULL);
+}
+
 void test_skip_word_to_the_left_01(void)
 {
   const char command[] = "echo teste";
@@ -1032,6 +1097,7 @@ int main(void)
   test_tokenize_02();
   test_shell_parse_command01();
   test_shell_parse_command02();
+  test_shell_parse_command03();
   test_skip_word_to_the_left_01();
   test_skip_word_to_the_left_02();
   test_skip_word_to_the_right_01();
