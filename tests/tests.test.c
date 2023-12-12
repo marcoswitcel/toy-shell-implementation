@@ -888,59 +888,76 @@ void test_shell_parse_command03(void)
   assert(context.index == 0);
   assert(context.length == strlen(parse_input_sample));
 
-  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  Execute_Command_Node first_command = shell_parse_command(&context);
   assert(context.error == NULL);
   assert(context.error_start_index == -1);
   assert(context.index == strlen(parse_input_sample));
 
-  assert(execute_command_node.args != NULL);
+  assert(first_command.args != NULL);
 
-  assert(execute_command_node.args[0] != NULL);
-  assert(strcmp(execute_command_node.args[0], "echo") == 0);
-  assert(execute_command_node.args[1] != NULL);
-  assert(strcmp(execute_command_node.args[1], "primeiro") == 0);
-  assert(execute_command_node.args[2] == NULL);
+  assert(first_command.args[0] != NULL);
+  assert(strcmp(first_command.args[0], "echo") == 0);
+  assert(first_command.args[1] != NULL);
+  assert(strcmp(first_command.args[1], "primeiro") == 0);
+  assert(first_command.args[2] == NULL);
 
-  assert(execute_command_node.append_mode == false);
-  assert(execute_command_node.next_command != NULL);
-  assert(execute_command_node.stderr_redirect_filename == NULL);
-  assert(execute_command_node.stdout_redirect_filename == NULL);
-  assert(execute_command_node.pipe == NULL);
-  assert(execute_command_node.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  assert(first_command.append_mode == false);
+  assert(first_command.next_command != NULL);
+  assert(first_command.stderr_redirect_filename == NULL);
+  assert(first_command.stdout_redirect_filename == NULL);
+  assert(first_command.pipe == NULL);
+  assert(first_command.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 
   // o comando AND a seguir
-  assert(execute_command_node.next_command->args != NULL);
+  Execute_Command_Node *second_command = first_command.next_command;
+  assert(second_command->args != NULL);
 
-  assert(execute_command_node.next_command->args[0] != NULL);
-  assert(strcmp(execute_command_node.next_command->args[0], "echo") == 0);
-  assert(execute_command_node.next_command->args[1] != NULL);
-  assert(strcmp(execute_command_node.next_command->args[1], "segundo") == 0);
-  assert(execute_command_node.next_command->args[2] == NULL);
+  assert(second_command->args[0] != NULL);
+  assert(strcmp(second_command->args[0], "echo") == 0);
+  assert(second_command->args[1] != NULL);
+  assert(strcmp(second_command->args[1], "segundo") == 0);
+  assert(second_command->args[2] == NULL);
 
-  assert(execute_command_node.next_command->append_mode == false);
-  assert(execute_command_node.next_command->next_command);
-  assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
-  assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
-  assert(execute_command_node.next_command->pipe);
-  assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  assert(second_command->append_mode == false);
+  assert(second_command->next_command);
+  assert(second_command->stderr_redirect_filename == NULL);
+  assert(second_command->stdout_redirect_filename == NULL);
+  assert(second_command->pipe);
+  assert(second_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
   
   // pipe
-  assert(execute_command_node.next_command->pipe->args != NULL);
+  Execute_Command_Node *second_command_pipe = second_command->pipe;
+  assert(second_command_pipe->args != NULL);
 
-  assert(execute_command_node.next_command->pipe->args[0] != NULL);
-  assert(strcmp(execute_command_node.next_command->pipe->args[0], "grep") == 0);
-  assert(execute_command_node.next_command->pipe->args[1] != NULL);
-  assert(strcmp(execute_command_node.next_command->pipe->args[1], "segundo") == 0);
-  assert(execute_command_node.next_command->pipe->args[2] == NULL);
+  assert(second_command_pipe->args[0] != NULL);
+  assert(strcmp(second_command_pipe->args[0], "grep") == 0);
+  assert(second_command_pipe->args[1] != NULL);
+  assert(strcmp(second_command_pipe->args[1], "segundo") == 0);
+  assert(second_command_pipe->args[2] == NULL);
+
+  assert(second_command_pipe->append_mode == false);
+  assert(second_command_pipe->next_command == NULL);
+  assert(second_command_pipe->stderr_redirect_filename == NULL);
+  assert(second_command_pipe->stdout_redirect_filename == NULL);
+  assert(second_command_pipe->pipe == NULL);
+  assert(second_command_pipe->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 
   // o comando AND a seguir
-  assert(execute_command_node.next_command->next_command->args != NULL);
+  Execute_Command_Node *third_command = first_command.next_command->next_command;
+  assert(third_command->args != NULL);
 
-  assert(execute_command_node.next_command->next_command->args[0] != NULL);
-  assert(strcmp(execute_command_node.next_command->next_command->args[0], "echo") == 0);
-  assert(execute_command_node.next_command->next_command->args[1] != NULL);
-  assert(strcmp(execute_command_node.next_command->next_command->args[1], "terceiro") == 0);
-  assert(execute_command_node.next_command->next_command->args[2] == NULL);
+  assert(third_command->args[0] != NULL);
+  assert(strcmp(third_command->args[0], "echo") == 0);
+  assert(third_command->args[1] != NULL);
+  assert(strcmp(third_command->args[1], "terceiro") == 0);
+  assert(third_command->args[2] == NULL);
+
+  assert(third_command->append_mode == false);
+  assert(third_command->next_command == NULL);
+  assert(third_command->stderr_redirect_filename == NULL);
+  assert(third_command->stdout_redirect_filename == NULL);
+  assert(third_command->pipe == NULL);
+  assert(third_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
 }
 
 void test_skip_word_to_the_left_01(void)
