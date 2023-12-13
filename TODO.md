@@ -4,28 +4,28 @@
 * implementar limpeza de terminal com crtl + l -- ok
 * acessar o último comando digitado apertando pra cima -- ok
 * emitir caracteres coloridos -- ok
-* ler arquivo de configuração?
+* implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
+* crtl + d para fechar -- ok
+* ctrl+c para interromper digitação? -- ok
+* Implementar redirect de stdin (PIPE) -- ok
+* Implementar e testar redirect do stdout e stderror antes de seguir com as PIPEs de stdin -- ok
+* implementar uma função de ordenação e aplicar na lista de diretórios retornada pela expansão do asterísco -- ok
+* implementar o redirecionamento de output input -- ok
+* implementar pipe de um processo pra outro -- ok
+* suporte a crtl+arrow_left e crtl+arrow_right -- ok
+* incluir a expressão "$?" (permite consultar status do último comando) -- ok
+* não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo. -- ok
 * implementar suporte para comandos com àspas ao redor -- ok (embora ainda possua casos aonde pode apresentar erro, ambiguidade ou comportamento inapropriado)
-* implementar o redirecionamento de output input -- parcialmente
+* ler arquivo de configuração?
 * mais comandos builtin? -- em progresso
 * globing e patter matching -- em progresso
 * fazer algum tutorial sobre interpretadores de AST para ter alguma base para implementar um interpretador aqui -- não iniciado
-* implementar pipe de um processo pra outro 
 * implementar mais suporte a cores (cores no erros?)
-* suporte a crtl+arrow_left e crtl+arrow_right
 * suporte tab com autocomplete
-* crtl + d para fechar -- ok
-* incluir a expressão "$?" (permite consultar status do último comando)
-* implementar atalhos como ctrl-a e ctrl-e pra navegar do início ao final do input -- ok
-* ctrl+c para interromper digitação? -- ok
-* não permito enviar ctrl-c do terminal para um programa rodando, por exemplo: depois de iniciar o comando "tail -f a.txt" no terminal, não consigo mais interrompê-lo.
 * * Elaborando o ponto acima: Apenas habilitar a duplicação do STDIN não resolve, preciso desabilitar as flags pra não emitir os sinais senão o processo filho também não recebe, no caso preciso restaurar o terminal ao estado "normal" e depois voltar ao modo canônico no final. Desta forma o ctrl-c consegue chegar ao processo filho, porém o processo pai também encerra, o que posso fazer é cadastrar um handler vazio pro ctrl-c e pedir pra não encerrar. O problema é que não gostei dessa solução, tem muitas partes que precisam funcionar em conjunto, pelo menos é o que parece. Preciso tentar simplificar essa solução.
 Posso criar um stdin separado para o processo filho e duplicar meu input pra lá? posso mandar apenas ctrl-c incialmente? ou posso continuar usando o mesmo para os dois só acertar as flags e os handlers
     https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c
     https://stackoverflow.com/questions/34036642/reading-from-stdin-by-multiple-processes
-
-
-* implementar uma função de ordenação e aplicar na lista de diretórios retornada pela expansão do asterísco -- ok
 * implementar suporte a inputs de multiplas linhas, permitindo navegar e reportando erros de forma clara
 
 
@@ -39,8 +39,6 @@ intuitiva, por exemplo, aceitar uma mensagem que descreve qual é o teste sendo 
 * Mensurar o tempo de algumas funções [https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c](https://www.tutorialspoint.com/how-to-measure-time-taken-by-a-function-in-c) -- em progresso para fins de prática
 
 ## Anotações 06/10/2023
-* Implementar e testar redirect do stdout e stderror antes de seguir com as PIPEs de stdin -- em progresso
-* Implementar redirect de stdin (PIPE)
 
 # Bugs
 
