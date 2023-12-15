@@ -11,7 +11,7 @@
 #include <termios.h>
 #include <ctype.h>
 
-// #include "./test-runner.c"
+#include "./test-runner.c"
 #include "../src/types.h"
 #include "../src/tokens.h"
 #include "../src/parser.h"
@@ -412,9 +412,14 @@ void test_skip_word_to_the_right_01(void)
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
 
-void test_testing_runner(void)
+void test_testing_runner_pass(void)
 {
-  printf("\n[test_testing_runner] output da função\n");
+  Assert(2 > 1);
+}
+
+void test_testing_runner_fails(void)
+{
+  Assert(2 < 1);
 }
 
 int main(void)
@@ -444,8 +449,9 @@ int main(void)
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
   // @todo João, trabalho em progresso
-  // register_test(&test_testing_runner, "test_testing_runner");  
-  // test_runner();
+  register_test(&test_testing_runner_pass, "test_testing_runner_pass");
+  register_test(&test_testing_runner_fails, "test_testing_runner_fails");  
+  test_runner();
 
   return EXIT_SUCCESS;
 }
