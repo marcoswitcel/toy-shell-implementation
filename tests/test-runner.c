@@ -46,18 +46,28 @@ typedef struct Test_State {
   // @todo João, adicionar o tempo por teste
 } Test_State;
 
-static Test_State *current_state = NULL;
+static Test_State current_state = { 0 };
 
+/**
+ * @brief Mecanismo que faz a asserção no framework de teste
+ * 
+ */
 #define Assert(EXPR) {                        \
   if (EXPR) {                                 \
-    current_state->passed += 1;               \
+    current_state.passed += 1;               \
   }                                           \
   else                                        \
   {                                           \
-   current_state->at_least_one_failed = true; \
+   current_state.at_least_one_failed = true; \
    return;                                    \
   }                                           \
 }
+
+/**
+ * @brief Facilita o registro de uma função usando seu nome como nome do teste
+ * 
+ */
+#define Register_Test(FUNCTION_SYMBOL_NAME) register_test(FUNCTION_SYMBOL_NAME, # FUNCTION_SYMBOL_NAME); 
 
 void test_runner(void)
 {
@@ -71,14 +81,19 @@ void test_runner(void)
 
   for (unsigned i = 0; i < tests->index; i++)
   {
-    Test_State state = { .at_least_one_failed = false, .passed = 0 };
-    current_state = &state;
-    const char *name = proc_names->data[i];
-    Test_Proc test = tests->data[i];
     // @todo João, resetar estrutura com contador de asserts e erros 
+    current_state.at_least_one_failed = false;
+    current_state.passed = 0;
+    
+    Test_Proc test = tests->data[i];
     test();
 
-    if (current_state->at_least_one_failed) printf("%d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
-    else printf("%d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
+    // @todo João, pendências
+    // - número de testes com zero a esquerda (fazer o max dos testes registrados para saber quantos zeros)
+    // - limitar o número de caracteres por linha
+    // - em caso de erro reportar dados úteis (line number, filename, etc...)
+    const char *name = proc_names->data[i];
+    if (current_state.at_least_one_failed) printf("%03d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
+    else                                    printf("%03d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
   }
 }
