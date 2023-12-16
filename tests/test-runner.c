@@ -12,6 +12,8 @@ typedef void (*Test_Proc)(void);
 
 
 static int number_of_tests = 0;
+static int number_of_success_tests = 0;
+static int number_of_failed_tests = 0;
 
 
 MAKE_LIST_IMPLEMENTATION(List_Of_Tests, list_of_tests, Test_Proc)
@@ -113,11 +115,25 @@ void test_runner(void)
     {
       printf("%04d %-69s %sFAILED%s\n", i + 1, name, red, reset);
       printf("     %s:%d Assertion: '%s'\n", current_state.filename, current_state.line_number, current_state.expr);
+      number_of_failed_tests += 1;
     }
     else
     {
+      number_of_success_tests += 1;
       printf("%04d %-69s %sOK%s\n", i + 1, name, green, reset);
     } 
+  }
+
+  // resumo
+  printf("\n");
+  printf("Total de testes: %d", number_of_tests);
+  if (number_of_tests == number_of_success_tests)
+  {
+    printf(" - 100%% sucesso\n");
+  }
+  else
+  {
+    printf(" - %0.2f%% sucesso", number_of_success_tests / (float) number_of_tests * 100.00);
   }
 }
 
