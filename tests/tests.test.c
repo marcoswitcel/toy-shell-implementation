@@ -412,16 +412,6 @@ void test_skip_word_to_the_right_01(void)
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
 
-void test_testing_runner_pass(void)
-{
-  Assert(2 > 1);
-}
-
-void test_testing_runner_fails(void)
-{
-  Assert(2 < 1);
-}
-
 int main(void)
 {
   /**
@@ -433,10 +423,6 @@ int main(void)
   printf("-------------------------------------------------------------------------\n");
   printf("|                           Executando Testes                           |\n");
   printf("-------------------------------------------------------------------------\n");
-
-  // @note testes padrão por hora para poder ter uma referência rápida de erro e sucesso
-  Register_Test(test_testing_runner_pass);
-  Register_Test(test_testing_runner_fails);
 
   Register_Test(test_list_char_prt_implementation);
   Register_Test(test_list_char_prt_allocation_implementation);
