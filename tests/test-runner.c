@@ -104,12 +104,18 @@ void test_runner(void)
     // - número de testes com zero a esquerda (fazer o max dos testes registrados para saber quantos zeros)
     // - limitar o número de caracteres por linha
     // - em caso de erro reportar dados úteis (line number, filename, etc...)
+    // - usar um print apenas e um buffer para montar a linha
     const char *name = proc_names->data[i];
+    // @note por hora estou usando padding do C 
+    // @reference https://stackoverflow.com/questions/276827/string-padding-in-c
     if (current_state.at_least_one_failed)
     {
-      printf("%03d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
-      printf("    %s:%d Assertion: '%s'\n", current_state.filename, current_state.line_number, current_state.expr);
+      printf("%04d %-69s %sFAILED%s\n", i + 1, name, red, reset);
+      printf("     %s:%d Assertion: '%s'\n", current_state.filename, current_state.line_number, current_state.expr);
     }
-    else                                   printf("%03d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
+    else
+    {
+      printf("%04d %-69s %sOK%s\n", i + 1, name, green, reset);
+    } 
   }
 }
