@@ -108,7 +108,7 @@ void test_runner(void)
     if (current_state.at_least_one_failed)
     {
       printf("%03d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
-      printf("    %s:%d Assertion: '%s'", current_state.filename, current_state.line_number, current_state.expr);
+      printf("    %s:%d Assertion: '%s'\n", current_state.filename, current_state.line_number, current_state.expr);
     }
     else                                   printf("%03d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
   }
