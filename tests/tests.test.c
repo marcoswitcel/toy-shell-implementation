@@ -449,9 +449,9 @@ int main(void)
   printf("Testes executados com sucesso! Nenhum erro detectado.");
 
   // @todo João, trabalho em progresso
-  // Register_Test(test_testing_runner_pass);
-  // Register_Test(test_testing_runner_fails);  
-  // test_runner();
+  Register_Test(test_testing_runner_pass);
+  Register_Test(test_testing_runner_fails);  
+  test_runner();
 
   return EXIT_SUCCESS;
 }

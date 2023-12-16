@@ -43,6 +43,10 @@ void register_test(Test_Proc test, const char *name)
 typedef struct Test_State {
   bool at_least_one_failed;
   unsigned passed;
+  unsigned failed;
+  const char *filename;
+  const char *expr;
+  unsigned line_number;
   // @todo João, adicionar o tempo por teste
 } Test_State;
 
@@ -54,12 +58,16 @@ static Test_State current_state = { 0 };
  */
 #define Assert(EXPR) {                        \
   if (EXPR) {                                 \
-    current_state.passed += 1;               \
+    current_state.passed += 1;                \
   }                                           \
   else                                        \
   {                                           \
-   current_state.at_least_one_failed = true; \
-   return;                                    \
+    current_state.failed += 1;                \
+    current_state.at_least_one_failed = true; \
+    current_state.filename = __FILE__;        \
+    current_state.expr = # EXPR;              \
+    current_state.line_number = __LINE__;     \
+    return;                                   \
   }                                           \
 }
 
@@ -84,6 +92,10 @@ void test_runner(void)
     // @todo João, resetar estrutura com contador de asserts e erros 
     current_state.at_least_one_failed = false;
     current_state.passed = 0;
+    current_state.failed = 0;
+    current_state.filename = NULL;
+    current_state.line_number = 0;
+    current_state.expr = NULL;
     
     Test_Proc test = tests->data[i];
     test();
@@ -93,7 +105,11 @@ void test_runner(void)
     // - limitar o número de caracteres por linha
     // - em caso de erro reportar dados úteis (line number, filename, etc...)
     const char *name = proc_names->data[i];
-    if (current_state.at_least_one_failed) printf("%03d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
-    else                                    printf("%03d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
+    if (current_state.at_least_one_failed)
+    {
+      printf("%03d %s ......................................... %sFAILED%s\n", i + 1, name, red, reset);
+      printf("    %s:%d Assertion: '%s'", current_state.filename, current_state.line_number, current_state.expr);
+    }
+    else                                   printf("%03d %s ......................................... %sOK%s\n", i + 1, name, green, reset);
   }
 }
