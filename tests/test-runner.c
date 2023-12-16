@@ -1,3 +1,6 @@
+#ifndef _TEST_RUNNER_C_
+#define _TEST_RUNNER_C_
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -85,8 +88,6 @@ void test_runner(void)
   static const char red[] =  "\x1B[31m";
   static const char reset[] = "\x1B[0m";
   
-  printf("\n");
-
   for (unsigned i = 0; i < tests->index; i++)
   {
     // @todo João, resetar estrutura com contador de asserts e erros 
@@ -119,3 +120,5 @@ void test_runner(void)
     } 
   }
 }
+
+#endif // _TEST_RUNNER_C_

@@ -430,7 +430,9 @@ int main(void)
    * uns dos outros, apresentar ao final quantidade de sucessos e falhas, junto ao tempo decorrido.
    * Printar uma linha para cada teste, talvez colorido? formatação bonita.
    */
-  printf("Executando testes\n");
+  printf("-------------------------------------------------------------------------\n");
+  printf("|                           Executando Testes                           |\n");
+  printf("-------------------------------------------------------------------------\n");
 
   // @note testes padrão por hora para poder ter uma referência rápida de erro e sucesso
   Register_Test(test_testing_runner_pass);
@@ -445,10 +447,11 @@ int main(void)
   Register_Test(test_skip_word_to_the_left_01);
   Register_Test(test_skip_word_to_the_left_02);
   Register_Test(test_skip_word_to_the_right_01);
-  Register_Test(test_suit_buffer);
-  Register_Test(test_suit_sorting);
-  Register_Test(test_suit_utils);
-  Register_Test(test_suit_parser);
+  
+  test_suit_buffer();
+  test_suit_sorting();
+  test_suit_utils();
+  test_suit_parser();
 
   test_runner();
 

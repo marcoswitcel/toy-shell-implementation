@@ -1,7 +1,7 @@
-#include <assert.h>
 #include <string.h>
 
 #include "../src/types.h"
+#include "./test-runner.c"
 
 #define LINE_BUFFER_SIZE 1024
 
@@ -19,33 +19,33 @@ static void test_buffer_implementation(void)
   put_garbage_on_buffer(buffer);
   char test_name[] = "Tux";
 
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
   buffer_pop(buffer);
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
   buffer_push(buffer, test_name[0]);
-  assert(buffer->index == 1);
+  Assert(buffer->index == 1);
   buffer_push(buffer, test_name[1]);
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
 
   buffer_push(buffer, test_name[2]);
   buffer_pop(buffer);
 
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
 
   buffer_push(buffer, test_name[2]);
 
-  assert(buffer->buffer[0] && buffer->buffer[1]);
+  Assert(buffer->buffer[0] && buffer->buffer[1]);
 
-  assert(buffer->buffer[0] == test_name[0]);
-  assert(buffer->buffer[1] == test_name[1]);
-  assert(buffer->buffer[2] == test_name[2]);
+  Assert(buffer->buffer[0] == test_name[0]);
+  Assert(buffer->buffer[1] == test_name[1]);
+  Assert(buffer->buffer[2] == test_name[2]);
 
-  assert(buffer->buffer[3] != '\0');
+  Assert(buffer->buffer[3] != '\0');
 
-  assert(strcmp(test_name, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp(test_name, buffer_ensure_null_terminated_view(buffer)) == 0);
 
-  assert(buffer->buffer[3] == '\0');
+  Assert(buffer->buffer[3] == '\0');
 }
 
 static void test_buffer_push_at(void)
@@ -54,47 +54,47 @@ static void test_buffer_push_at(void)
   put_garbage_on_buffer(buffer);
   char test_name[] = "Tux";
 
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
   buffer_pop(buffer);
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
 
   buffer_push_at(buffer, test_name[0], 0);
-  assert(buffer->index == 1);
+  Assert(buffer->index == 1);
   buffer_push_at(buffer, test_name[1], 0);
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
 
   buffer_push_at(buffer, test_name[2], 0);
   buffer_pop(buffer);
 
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
 
   buffer_push_at(buffer, test_name[2], 0);
 
-  assert(buffer->buffer[0] && buffer->buffer[1]);
+  Assert(buffer->buffer[0] && buffer->buffer[1]);
 
-  assert(buffer->buffer[0] == test_name[2]); // x
-  assert(buffer->buffer[1] == test_name[2]); // x
-  assert(buffer->buffer[2] == test_name[1]); // u
+  Assert(buffer->buffer[0] == test_name[2]); // x
+  Assert(buffer->buffer[1] == test_name[2]); // x
+  Assert(buffer->buffer[2] == test_name[1]); // u
 
-  assert(buffer->buffer[3] != '\0');
-  assert(buffer->index == 3);
+  Assert(buffer->buffer[3] != '\0');
+  Assert(buffer->index == 3);
 
-  assert(strcmp("xxu", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp("xxu", buffer_ensure_null_terminated_view(buffer)) == 0);
 
-  assert(buffer->index == 3);
-  assert(buffer->buffer[3] == '\0');
+  Assert(buffer->index == 3);
+  Assert(buffer->buffer[3] == '\0');
 
   buffer_pop(buffer);
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
 
   buffer_push_at(buffer, test_name[2], 0);
-  assert(buffer->index == 3);
+  Assert(buffer->index == 3);
 
   buffer_push_at(buffer, 'T', 1);
-  assert(buffer->index == 4);
-  assert(strcmp("xTxx", buffer_ensure_null_terminated_view(buffer)) == 0);
-  assert(buffer->index == 4);
+  Assert(buffer->index == 4);
+  Assert(strcmp("xTxx", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(buffer->index == 4);
 }
 
 static void test_buffer_remove_at(void)
@@ -106,28 +106,28 @@ static void test_buffer_remove_at(void)
   char x = 'x';
   char texto[] = { t, u, x, '\0' };
 
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
   buffer_push(buffer, t);
-  assert(buffer->buffer[0] == t);
-  assert(buffer->index == 1);
+  Assert(buffer->buffer[0] == t);
+  Assert(buffer->index == 1);
   buffer_push(buffer, u);
-  assert(buffer->index == 2);
-  assert(buffer->buffer[1] == u);
+  Assert(buffer->index == 2);
+  Assert(buffer->buffer[1] == u);
   buffer_push(buffer, x);
-  assert(buffer->index == 3);
-  assert(buffer->buffer[2] == x);
+  Assert(buffer->index == 3);
+  Assert(buffer->buffer[2] == x);
 
-  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
   buffer_pop_at(buffer, 1);
-  assert(buffer->index == 2);
-  assert(buffer->buffer[1] == x);
-  assert(strcmp("tx", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(buffer->index == 2);
+  Assert(buffer->buffer[1] == x);
+  Assert(strcmp("tx", buffer_ensure_null_terminated_view(buffer)) == 0);
 
 
   buffer_push_at(buffer, u, 1);
-  assert(buffer->index == 3);
-  assert(buffer->buffer[1] == u);
-  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(buffer->index == 3);
+  Assert(buffer->buffer[1] == u);
+  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
 }
 
 static void test_buffer_clear(void)
@@ -139,24 +139,24 @@ static void test_buffer_clear(void)
   char x = 'x';
   char texto[] = { t, u, x, '\0' };
 
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
   buffer_clear(buffer);
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
   buffer_push(buffer, t);
-  assert(buffer->index == 1);
+  Assert(buffer->index == 1);
   buffer_push(buffer, u);
-  assert(buffer->index == 2);
+  Assert(buffer->index == 2);
   buffer_push(buffer, x);
-  assert(buffer->index == 3);
+  Assert(buffer->index == 3);
 
-  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
 
   buffer_clear(buffer);
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
-  assert(strcmp("", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp("", buffer_ensure_null_terminated_view(buffer)) == 0);
 }
 
 static void test_buffer_push_all(void)
@@ -166,30 +166,30 @@ static void test_buffer_push_all(void)
   char texto[] = "texto para adicionar";
   unsigned length = strlen(texto);
 
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
   buffer_push_all(buffer, (const char *) &texto, length);
-  assert(buffer->index == length);
+  Assert(buffer->index == length);
 
-  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
 
   buffer_push_all(buffer, (const char *) &texto, length);
-  assert(buffer->index == length * 2);
+  Assert(buffer->index == length * 2);
 
   buffer_clear(buffer);
-  assert(buffer->index == 0);
+  Assert(buffer->index == 0);
 
   buffer_push_all(buffer, (const char *) &texto, length);
-  assert(buffer->index == length);
+  Assert(buffer->index == length);
   
-  assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
 }
 
 extern void test_suit_buffer()
 {
-  test_buffer_implementation();
-  test_buffer_push_at();
-  test_buffer_remove_at();
-  test_buffer_clear();
-  test_buffer_push_all();
+  Register_Test(test_buffer_implementation);
+  Register_Test(test_buffer_push_at);
+  Register_Test(test_buffer_remove_at);
+  Register_Test(test_buffer_clear);
+  Register_Test(test_buffer_push_all);
 }
