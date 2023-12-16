@@ -424,6 +424,10 @@ int main(void)
   printf("|                           Executando Testes                           |\n");
   printf("-------------------------------------------------------------------------\n");
 
+  test_suit_buffer();
+  test_suit_sorting();
+  test_suit_utils();
+
   Register_Test(test_list_char_prt_implementation);
   Register_Test(test_list_char_prt_allocation_implementation);
   Register_Test(test_list_of_floats_implementation);
@@ -434,9 +438,6 @@ int main(void)
   Register_Test(test_skip_word_to_the_left_02);
   Register_Test(test_skip_word_to_the_right_01);
   
-  test_suit_buffer();
-  test_suit_sorting();
-  test_suit_utils();
   test_suit_parser();
 
   test_runner();
