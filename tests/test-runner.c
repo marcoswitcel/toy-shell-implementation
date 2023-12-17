@@ -9,16 +9,25 @@
 #include "../src/list.implementations.h"
 #include "../src/ansi-escape-sequences.h"
 
+MAKE_LIST_IMPLEMENTATION(List_Of_Tests, list_of_tests, Test_Proc)
 
 static int number_of_tests = 0;
 static int number_of_success_tests = 0;
 static int number_of_failed_tests = 0;
-
-
-MAKE_LIST_IMPLEMENTATION(List_Of_Tests, list_of_tests, Test_Proc)
-
 static List_Of_Tests *tests = NULL;
 static List_Of_Strings *proc_names = NULL;
+
+typedef struct Test_State {
+  bool at_least_one_failed;
+  unsigned passed;
+  unsigned failed;
+  const char *filename;
+  const char *expr;
+  unsigned line_number;
+  // @todo João, adicionar o tempo por teste
+} Test_State;
+
+static Test_State current_state = { 0 };
 
 static void ensure_is_initialized()
 {
@@ -33,12 +42,6 @@ static void ensure_is_initialized()
   }
 }
 
-/**
- * @brief Registra o teste com o seu nome
- * 
- * @param test 
- * @param name 
- */
 void register_test(Test_Proc test, const char *name)
 {
   ensure_is_initialized();
@@ -50,21 +53,6 @@ void register_test(Test_Proc test, const char *name)
   list_of_tests_push(tests, test);
   list_of_strings_push(proc_names, name);
 }
-
-typedef struct Test_State {
-  bool at_least_one_failed;
-  unsigned passed;
-  unsigned failed;
-  const char *filename;
-  const char *expr;
-  unsigned line_number;
-  // @todo João, adicionar o tempo por teste
-} Test_State;
-
-static Test_State current_state = { 0 };
-
-
-
 
 void test_runner(void)
 {

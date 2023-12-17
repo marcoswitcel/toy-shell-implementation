@@ -3,9 +3,24 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief Definição da função de teste. A transmissão de informação acontece através das rotinas 
+ * de asserção.
+ */
 typedef void (*Test_Proc)(void);
 
+/**
+ * @brief Faz o registro de uma nova função de teste com o seu respectivo nome de apresentação.
+ * Ver a macro `Register_Test` para uma versão de um argumento que usa o nome do símbolo como nome do teste.
+ * 
+ * @param test função de teste
+ * @param name nome da função de teste, usado na apresentação do log de sucesso ou erro
+ */
 void register_test(Test_Proc test, const char *name);
+
+/**
+ * @brief Função responsável por disparar os testes.
+ */
 void test_runner(void);
 
 /**
@@ -28,7 +43,7 @@ void test_runner(void);
 }
 
 /**
- * @brief Facilita o registro de uma função usando seu nome como nome do teste
+ * @brief Facilita o registro de uma função usando o nome do símbolo como nome do teste
  * 
  */
 #define Register_Test(FUNCTION_SYMBOL_NAME) register_test(FUNCTION_SYMBOL_NAME, # FUNCTION_SYMBOL_NAME); 
