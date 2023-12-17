@@ -408,10 +408,6 @@ void test_skip_word_to_the_right_01(void)
   Assert(new_cursor_position == 28);  
 }
 
-// @todo João, testar PIPE (aguardar até ele estar funcional)
-
-// @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
-
 int main(void)
 {
   /**

@@ -675,6 +675,42 @@ void test_tokenize_02(void)
   Assert(tokens->data[4].data.string.cstring && strcmp(tokens->data[4].data.string.cstring, "arquivo.txt") == 0);
 }
 
+void test_tokenize_03(void)
+{
+  const char parse_input_sample[] = "echo teste | grep teste";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Assert(context.error == NULL);
+  Assert(context.index == 0);
+  Assert(context.length == strlen(parse_input_sample));
+
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Assert(tokens->index == 5);
+
+  Assert(context.error == NULL);
+  Assert(context.index == context.length);
+  Assert(context.length == strlen(parse_input_sample));
+
+  
+  Assert(tokens->data[0].type == STRING);
+  Assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
+
+  Assert(tokens->data[1].type == STRING);
+  Assert(tokens->data[1].data.string.cstring && strcmp(tokens->data[1].data.string.cstring, "teste") == 0);
+
+  Assert(tokens->data[2].type == PIPE);
+  Assert(tokens->data[2].data.pipe.cstring && strcmp(tokens->data[2].data.globbing.cstring, "|") == 0);
+
+  Assert(tokens->data[3].type == STRING);
+  Assert(tokens->data[3].data.string.cstring && strcmp(tokens->data[3].data.redirect.cstring, "grep") == 0);
+
+  Assert(tokens->data[4].type == STRING);
+  Assert(tokens->data[4].data.string.cstring && strcmp(tokens->data[4].data.string.cstring, "teste") == 0);
+}
+
+// @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
+
 extern void test_suit_parser(void)
 {
   Register_Test(test_try_parse_string_01);
@@ -713,4 +749,5 @@ extern void test_suit_parser(void)
   Register_Test(test_try_query_status_04);
   Register_Test(test_tokenize_01);
   Register_Test(test_tokenize_02);
+  Register_Test(test_tokenize_03);
 }
