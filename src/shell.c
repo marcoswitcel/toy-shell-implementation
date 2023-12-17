@@ -746,7 +746,7 @@ int shell_execute_command(const Process_Parameter process_parameter)
     {
       close(process_parameter.fd_stdout);
       // @todo João, aqui temos um problema pois estou ignorando um erro potencial.
-      // Além do que, esse código está de certa forma duplicado e imcompleto, pois, se o 
+      // Além do que, esse código está de certa forma duplicado e incompleto, pois, se o 
       // comando builtin aparecer no meio de uma pipe complexa, apresentará mal funcionamento.
       shell_execute_command(*process_parameter.pipe_through);
     }
