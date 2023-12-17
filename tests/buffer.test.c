@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "../src/types.h"
-#include "./test-runner.c"
+#include "./test-runner.h"
 
 #define LINE_BUFFER_SIZE 1024
 

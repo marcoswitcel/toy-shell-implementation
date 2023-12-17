@@ -2,7 +2,7 @@
 
 #include "../src/sorting.c"
 #include "../src/utils.macro.h"
-#include "./test-runner.c"
+#include "./test-runner.h"
 
 void test_lista_pequena()
 {

@@ -15,7 +15,7 @@
 #include "../src/parser.h"
 #include "../src/utils.macro.h"
 #include "../src/shell.c"
-#include "./test-runner.c"
+#include "./test-runner.h"
 
 void test_try_parse_string_01(void)
 {

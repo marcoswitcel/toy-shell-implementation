@@ -2,15 +2,12 @@
 #define _TEST_RUNNER_C_
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
+#include "./test-runner.h"
 #include "../src/list.macro.h"
 #include "../src/list.implementations.h"
 #include "../src/ansi-escape-sequences.h"
-
-
-typedef void (*Test_Proc)(void);
 
 
 static int number_of_tests = 0;
@@ -23,18 +20,25 @@ MAKE_LIST_IMPLEMENTATION(List_Of_Tests, list_of_tests, Test_Proc)
 static List_Of_Tests *tests = NULL;
 static List_Of_Strings *proc_names = NULL;
 
-void ensure_is_initialized()
+static void ensure_is_initialized()
 {
   if (tests == NULL)
   {
     tests = create_list_of_tests(1024, 124);
   }
+
   if (proc_names == NULL)
   {
     proc_names = create_list_of_strings(1024, 124);
   }
 }
 
+/**
+ * @brief Registra o teste com o seu nome
+ * 
+ * @param test 
+ * @param name 
+ */
 void register_test(Test_Proc test, const char *name)
 {
   ensure_is_initialized();
@@ -59,36 +63,12 @@ typedef struct Test_State {
 
 static Test_State current_state = { 0 };
 
-/**
- * @brief Mecanismo que faz a asserção no framework de teste
- * 
- */
-#define Assert(EXPR) {                        \
-  if (EXPR) {                                 \
-    current_state.passed += 1;                \
-  }                                           \
-  else                                        \
-  {                                           \
-    current_state.failed += 1;                \
-    current_state.at_least_one_failed = true; \
-    current_state.filename = __FILE__;        \
-    current_state.expr = # EXPR;              \
-    current_state.line_number = __LINE__;     \
-    return;                                   \
-  }                                           \
-}
 
-/**
- * @brief Facilita o registro de uma função usando seu nome como nome do teste
- * 
- */
-#define Register_Test(FUNCTION_SYMBOL_NAME) register_test(FUNCTION_SYMBOL_NAME, # FUNCTION_SYMBOL_NAME); 
+
 
 void test_runner(void)
 {
   ensure_is_initialized();
-
-
   
   for (unsigned i = 0; i < tests->index; i++)
   {

@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "../src/utils.c"
-#include "./test-runner.c"
+#include "./test-runner.h"
 
 void test_int_to_cstring(void)
 {
