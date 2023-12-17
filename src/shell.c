@@ -739,8 +739,18 @@ int shell_execute_command(const Process_Parameter process_parameter)
   // caracteres manualmente tudo já está funcionando corretamente.
   Builtin_Function builtin_func = has_builtin_for(args[0]);
   if (builtin_func)
-  {    
-    return builtin_func(&process_parameter);
+  {
+    int result = builtin_func(&process_parameter);
+
+    if (process_parameter.pipe_through)
+    {
+      close(process_parameter.fd_stdout);
+      // @todo João, aqui temos um problema pois estou ignorando um erro potencial.
+      // Além do que, esse código está de certa forma duplicado e imcompleto, pois, se o 
+      // comando builtin aparecer no meio de uma pipe complexa, apresentará mal funcionamento.
+      shell_execute_command(*process_parameter.pipe_through);
+    }
+    return result;
   }
 
   // @todo João, não necessariamente aqui, mas seria importante validar se o comando será encontrado
