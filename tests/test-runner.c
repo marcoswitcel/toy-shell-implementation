@@ -7,6 +7,8 @@
 
 #include "../src/list.macro.h"
 #include "../src/list.implementations.h"
+#include "./ansi-colors.c"
+
 
 typedef void (*Test_Proc)(void);
 
@@ -86,9 +88,7 @@ void test_runner(void)
 {
   ensure_is_initialized();
 
-  static const char green[] = "\x1B[32m";
-  static const char red[] =  "\x1B[31m";
-  static const char reset[] = "\x1B[0m";
+
   
   for (unsigned i = 0; i < tests->index; i++)
   {
