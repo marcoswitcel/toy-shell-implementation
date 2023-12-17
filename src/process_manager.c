@@ -63,8 +63,6 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
 
   if (pid == 0)
   {
-    // @todo João, validar se o stdin pode ser setado da mesma forma que os file descriptors de output
-    // @todo João, talvez incluir um cheque para não fazer o dup2, caso os atributos fd_* contiverem o valor padrão para o file descriptor 
     if (process_parameter.fd_stdin > -1 && process_parameter.fd_stdin != STDIN_FILENO)
     {
       dup2(process_parameter.fd_stdin, STDIN_FILENO);
@@ -139,18 +137,14 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
       // @note João, por hora só de fechar esse file descriptor o processo na pipe consegue terminar
       close(process_parameter.fd_stdout);
 
-      // @todo João, continuar implementando e testar
-      // https://www.geeksforgeeks.org/pipe-system-call/
       // @todo João, o problema é que launch_process espera o processo terminar e nesse caso, acho que seria interessante
-      // fechar os fd para terminar o processo.
+      // fechar os fd para terminar o processo. Testar mais
       launch_process(*process_parameter.pipe_through, false);
     }
 
     status = wait_child_process(pid);
   }
 
-  // @todo João, pensar em como isso vai funcionar quando estiver fazendo o tunelamento de output
-  // @todo João, validar se ficou tudo certo removendo a estrutura Process_Handles (parece que sim, mas checar mais)
   // @note considerar fazer o `close` fora do método deste método
   if (process_parameter.fd_stdin != STDIN_FILENO) close(process_parameter.fd_stdin);
   if (process_parameter.fd_stdout != STDOUT_FILENO) close(process_parameter.fd_stdout);
