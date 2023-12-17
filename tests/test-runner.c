@@ -7,7 +7,7 @@
 
 #include "../src/list.macro.h"
 #include "../src/list.implementations.h"
-#include "./ansi-colors.c"
+#include "../src/ansi-escape-sequences.h"
 
 
 typedef void (*Test_Proc)(void);
@@ -113,14 +113,14 @@ void test_runner(void)
     // @reference https://stackoverflow.com/questions/276827/string-padding-in-c
     if (current_state.at_least_one_failed)
     {
-      printf("%04d %-69s %sFAILED%s\n", i + 1, name, red, reset);
+      printf("%04d %-69s %sFAILED%s\n", i + 1, name, RED, RESET);
       printf("     %s:%d Assertion: '%s'\n", current_state.filename, current_state.line_number, current_state.expr);
       number_of_failed_tests += 1;
     }
     else
     {
       number_of_success_tests += 1;
-      printf("%04d %-69s %sOK%s\n", i + 1, name, green, reset);
+      printf("%04d %-69s %sOK%s\n", i + 1, name, GREEN, RESET);
     } 
   }
 

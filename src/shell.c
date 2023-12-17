@@ -18,6 +18,7 @@
 #include "./dev-utils.c"
 #include "./utils.c"
 #include "./sorting.c"
+#include "./ansi-escape-sequences.h"
 
 #define HISTORY_MAX_ELEMENTS 20
 
@@ -61,15 +62,11 @@ static inline void print_input_mark(Shell_Context_Data *context, const char *cst
   // fflush(stdout); // @note esta linha e a abaixo resolvem o problema de bufferização
   setbuf(stdout, NULL);
 
-  // @note https://stackoverflow.com/questions/3585846/color-text-in-terminal-applications-in-unix
-  static const char green[] = "\x1B[32m";
-  static const char reset[] = "\x1B[0m";
-
-  if (context->colorful) write(STDOUT_FILENO, green, SIZE_OF_STATIC_STRING(green));
+  if (context->colorful) write(STDOUT_FILENO, GREEN, SIZE_OF_STATIC_STRING(GREEN));
 
   write(STDOUT_FILENO, "|>", 2);
 
-  if (context->colorful) write(STDOUT_FILENO, reset, SIZE_OF_STATIC_STRING(reset));
+  if (context->colorful) write(STDOUT_FILENO, RESET, SIZE_OF_STATIC_STRING(RESET));
 
   if (cstring)
   {
