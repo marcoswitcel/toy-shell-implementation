@@ -29,6 +29,7 @@ bool is_string_present_in_argv(const char *switch_name, int argc, const char *ar
 void command_line_arguments_apply_argv(Command_Line_Arguments *arguments, int argc, const char *argv[])
 {
   arguments->colorful = is_string_present_in_argv("--colorful", argc, argv);
+  // @note Talvez adicionar um argumento para controlar a emissão de som?
 }
 
 /**
@@ -54,19 +55,16 @@ void handle_sigint(int signal)
 
 int main(int argc, const char *argv[])
 {
-  // @note Aceitar argumentos pela linha de comando? que argumentos?
   Command_Line_Arguments arguments = { 0 };
   command_line_arguments_apply_argv(&arguments, argc, argv);
 
   activate_raw_mode(true);
   signal(SIGINT, handle_sigint);
 
-  // @note talvez ler um arquivo de configuração? mas que configurações aceitar?
+  // @note talvez ler um arquivo de configuração? aceitar a configuração do modo colorful e do modo sem som?
 
   // loop principal, toda lógica roda aqui
   read_eval_shell_loop(arguments.colorful);
-
-  // @note Cleanup se tiver algum para fazer
 
   return EXIT_SUCCESS;
 }

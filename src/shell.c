@@ -543,10 +543,10 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 }
 
 /**
- * @brief Função que percorre os argumentos e verifica se os argumentos contém algum dos símbolos de query e realiza
- * a substituição com a informação provida.
+ * @brief Função que percorre e verifica se os argumentos contém algum dos símbolos estáticos; caso encontre,
+ *  realiza a substituição com a informação provida.
  * 
- * Símbolo de query atualmente suportados: $?
+ * Símbolos estáticos atualmente suportados: $? e * 
  * 
  * @param execute_command_node 
  * @param last_status_code 
@@ -555,8 +555,8 @@ void replace_static_symbols_with_query_info(Execute_Command_Node *execute_comman
 {
   assert(execute_command_node->args != NULL);
 
-  // @todo João, poderia skippar todo código abaixo se não houvesse símbolos pra processar,
-  // não teenho certeza se a economia de tempo e processamente compensam a lógica extra.
+  // @todo João, poderia pular todo código abaixo se não houvesse símbolos pra processar,
+  // não tenho certeza se a economia de tempo e processamente compensam a lógica extra.
 
   char **pointer_array = execute_command_node->args;
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
@@ -675,7 +675,7 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
 }
 
 /**
- * @brief Parseaia o comando e se não houver erros retorna o nós que representa ordem de execução.
+ * @brief Parseia o comando, se não houver erros retorna os nós que representam a ordem de execução.
  * 
  * @note No passado cogitei retornar um ponteiro alocado o heap, para facilitar a função
  * `release_execute_command_nodes`, mas considerando que pode ser interessante fazer um solução ainda
@@ -714,7 +714,6 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
     return STATIC_EXECUTE_COMMAND_NODE();
   }
   
-  // @note o bloco abaixo é apenas para visualizar o resultado
   if (DEBUG_INFO)
   {
     print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
