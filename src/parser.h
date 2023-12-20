@@ -453,7 +453,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   return tokens;
 }
 
-Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, const Sequence_Of_Tokens *tokens, bool piping)
+Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context, const Sequence_Of_Tokens *tokens, bool piping)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
   bool has_stdout_redirect_token = false;
@@ -558,7 +558,7 @@ Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, 
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
         context->token_index += 1;
         assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
-        *execute_command_sub_node = parse_execute_command_node_interal(context, tokens, true);
+        *execute_command_sub_node = parse_execute_command_node_internal(context, tokens, true);
         pipe = execute_command_sub_node;
         piped = true;
 
@@ -596,7 +596,7 @@ Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, 
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
         context->token_index += 1;
         assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
-        *execute_command_sub_node = parse_execute_command_node_interal(context, tokens, false);
+        *execute_command_sub_node = parse_execute_command_node_internal(context, tokens, false);
         next_command_node = execute_command_sub_node;
         next_command_found = true;
 
@@ -639,7 +639,7 @@ Execute_Command_Node parse_execute_command_node_interal(Parse_Context *context, 
 // `shell_execute_command`.
 Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Sequence_Of_Tokens *tokens)
 {
-  return parse_execute_command_node_interal(context, tokens, false);
+  return parse_execute_command_node_internal(context, tokens, false);
 }
 
 #endif // PARSER_H
