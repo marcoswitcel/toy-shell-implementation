@@ -10,5 +10,6 @@
 #define GREEN "\x1B[32m"
 #define RED   "\x1B[31m"
 #define RESET "\x1B[0m"
+#define HI_BLACK "\x1B[0;90m"
 
 #endif // _ANSI_ESCAPE_SEQUENCES_H_

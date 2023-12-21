@@ -84,7 +84,6 @@ void test_runner(void)
 
   for (unsigned i = 0; i < tests->index; i++)
   {
-    // @todo João, resetar estrutura com contador de asserts e erros 
     current_state.at_least_one_failed = false;
     current_state.passed = 0;
     current_state.failed = 0;
@@ -92,27 +91,24 @@ void test_runner(void)
     current_state.line_number = 0;
     current_state.expr = NULL;
     
+    const char *name = proc_names->data[i];
     Test_Proc test = tests->data[i];
     test();
 
     write_test_index(buffer, index_size_in_chars, i + 1);
 
-    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(" "));
-
-    // @todo João, pendências
-    // - número de testes com zero a esquerda (fazer o max dos testes registrados para saber quantos zeros)
-    // - limitar o número de caracteres por linha
-    // - em caso de erro reportar dados úteis (line number, filename, etc...)
-    // - usar um print apenas e um buffer para montar a linha
-    const char *name = proc_names->data[i];
+    buffer_push(buffer, ' ');
     
     buffer_push_all(buffer, name, strlen(name));
 
+
+    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(HI_BLACK));
     // @todo João, possível loop infinito(até o limite numérico do inteiro) por causa de underflow
     for (unsigned i = 0; i < (column_size - strlen(name) - index_size_in_chars - 1); i++)
     {
       buffer_push(buffer, '.');
     }
+    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(RESET));
 
     if (current_state.at_least_one_failed)
     {
