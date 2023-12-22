@@ -825,7 +825,7 @@ void read_eval_shell_loop(bool colorful)
       {
         bool tried_opening_file_and_failed = false;
 
-        // @Note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
+        // @note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
         // do resultado da execução do comando anterior
         replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
         // @todo João, quando o 'pipe_through' estiver implementado vou precisar fazer o release dessa estrutura
@@ -847,15 +847,8 @@ void read_eval_shell_loop(bool colorful)
         }
         else
         {
-          // @todo João, é necessário checar se o comando executou corretamente, acredito que o método que inicia o processo filho
-          // não está retornando o status do mesmo. É necessário fazer o ajuste na função `launch_process`
           int result = shell_execute_command(process_parameter);
           shell_context.last_status_code = result;
-
-          // @todo João, agora que desativei a conversão de \n pra \r\n com o OPOST os processos filhos não estão
-          // printando corretamente. A linha abaixo corrige a falta de carriage return, mas não corrige se não houve enter,
-          // neste caso inclusive causa falhas na apresentação do output. Talvez resetar o ouput processing do processo filho
-          write(STDOUT_FILENO, "\r", 1);
 
           if (result)
           {
@@ -875,7 +868,7 @@ void read_eval_shell_loop(bool colorful)
       write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!"));
       FREE_AND_NULLIFY(context.error);
     }
-    else // @note se exit_requested for false, no momento ele reporta o erro pro tentar parsear input vazio
+    else // @note se exit_requested for false, no momento ele reporta o erro por tentar parsear input vazio
     {
       shell_report_parse_error(&context);
       FREE_AND_NULLIFY(context.error);
