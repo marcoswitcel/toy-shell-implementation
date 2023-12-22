@@ -62,13 +62,17 @@ void register_test(Test_Proc test, const char *name)
 static void write_test_index(Buffer *buffer, unsigned reserved_space, unsigned current_index)
 {
   char *test_number = int_to_cstring(current_index);
-    
-  for (unsigned i = 0; i < reserved_space - strlen(test_number); i++)
+  size_t test_number_length = strlen(test_number);
+  
+  if (reserved_space > test_number_length)
   {
-    buffer_push(buffer, '0');
+    for (unsigned i = 0; i < reserved_space - test_number_length; i++)
+    {
+      buffer_push(buffer, '0');
+    }
   }
 
-  buffer_push_all(buffer, test_number, strlen(test_number));
+  buffer_push_all(buffer, test_number, test_number_length);
 
   free(test_number);
 }
@@ -80,7 +84,7 @@ void test_runner(void)
   Buffer *buffer = create_buffer(1024, 1024);
   // @leak
   unsigned index_size_in_chars = strlen(int_to_cstring(number_of_tests));
-  const int column_size = 80 - 1 - SIZE_OF_STATIC_STRING(" FAILED");
+  const unsigned column_size = 80 - 1 - SIZE_OF_STATIC_STRING(" FAILED");
 
   for (unsigned i = 0; i < tests->index; i++)
   {
@@ -92,6 +96,7 @@ void test_runner(void)
     current_state.expr = NULL;
     
     const char *name = proc_names->data[i];
+    size_t name_length = strlen(name);
     Test_Proc test = tests->data[i];
     test();
 
@@ -99,14 +104,16 @@ void test_runner(void)
 
     buffer_push(buffer, ' ');
     
-    buffer_push_all(buffer, name, strlen(name));
-
+    buffer_push_all(buffer, name, name_length);
 
     buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(HI_BLACK));
-    // @todo João, possível loop infinito(até o limite numérico do inteiro) por causa de underflow
-    for (unsigned i = 0; i < (column_size - strlen(name) - index_size_in_chars - 1); i++)
+
+    if (column_size > (name_length + index_size_in_chars + 1))
     {
-      buffer_push(buffer, '.');
+      for (unsigned i = 0; i < (column_size - (name_length + index_size_in_chars + 1)); i++)
+      {
+        buffer_push(buffer, '.');
+      }
     }
     buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(RESET));
 
@@ -152,11 +159,11 @@ void test_runner(void)
   printf("Total de testes: %d", number_of_tests);
   if (number_of_tests == number_of_success_tests)
   {
-    printf(" - 100%% sucesso\n");
+    printf("\n\n100%% sucesso\n");
   }
   else
   {
-    printf(" - %0.2f%% sucesso", number_of_success_tests / (float) number_of_tests * 100.00);
+    printf("\n\n%0.2f%% sucesso", number_of_success_tests / (float) number_of_tests * 100.00);
   }
 }
 
