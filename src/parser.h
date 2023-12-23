@@ -406,6 +406,21 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
   *success = false;
 }
 
+/**
+ * @brief Protótipo/assinatura para as funções que realizam o 'parse' dos tokens.
+ * 
+ * Algumas observações gerais para fins de documentação:
+ * - o booleano de sucesso deve sempre ser atualizado com o status, false para 
+ *   fracasso e true para sucesso.
+ * - caso seja sinalizado o sucesso o token deve ser escrito para o endereço provido.
+ * - em caso de fracasso no 'parse' se for adicionado um erro ao contexto será 
+ *   considerado com um erro impeditivo, se não for, será considerado como um não 
+ *   'match' e será executado o próximo 'parser'.
+ * 
+ * @param context contexto de parse atual
+ * @param token endereço de memória do token que deve ser preenchido
+ * @param success endereço do 'boolean' que que deve ser atualizado com o status de sucesso do 'parse'
+ */
 typedef void (*Parse_Function)(Parse_Context *, Token *, bool *);
 
 const Parse_Function parse_functions[] = {
