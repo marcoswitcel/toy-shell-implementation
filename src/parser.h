@@ -1,5 +1,5 @@
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef _PARSER_C_
+#define _PARSER_C_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -657,4 +657,4 @@ Execute_Command_Node parse_execute_command_node(Parse_Context *context, const Se
   return parse_execute_command_node_internal(context, tokens, false);
 }
 
-#endif // PARSER_H
+#endif // _PARSER_C_
