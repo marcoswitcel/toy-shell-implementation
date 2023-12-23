@@ -14,7 +14,7 @@
 #include "./test-runner.c"
 #include "../src/types.h"
 #include "../src/tokens.h"
-#include "../src/parser.h"
+#include "../src/parser.c"
 #include "../src/list.implementations.h"
 #include "../src/utils.macro.h"
 #include "../src/shell.c"

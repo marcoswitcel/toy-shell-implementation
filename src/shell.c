@@ -8,7 +8,7 @@
 
 #include "./compilation_definitions.h"
 #include "./list.implementations.h"
-#include "./parser.h"
+#include "./parser.c"
 #include "./process_manager.c"
 #include "./types.h"
 #include "./nodes.h"

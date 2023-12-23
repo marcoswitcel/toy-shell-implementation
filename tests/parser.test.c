@@ -12,7 +12,7 @@
 
 #include "../src/types.h"
 #include "../src/tokens.h"
-#include "../src/parser.h"
+#include "../src/parser.c"
 #include "../src/utils.macro.h"
 #include "../src/shell.c"
 #include "./test-runner.h"
