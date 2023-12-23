@@ -43,7 +43,7 @@ void test_ordena_lista_duas_vezes_em_sequencia()
   Assert(strcmp(arquivos[3], "uva") == 0);
 }
 
-void test_list_alfabeto()
+void test_lista_alfabeto()
 {
   const char *arquivos[] = {
     "z",
@@ -99,7 +99,7 @@ void test_lista_de_tres_elementos()
 
 extern void test_suit_sorting()
 {
-  Register_Test(test_list_alfabeto);
+  Register_Test(test_lista_alfabeto);
   Register_Test(test_lista_de_um_elemento);
   Register_Test(test_lista_de_dois_elementos);
   Register_Test(test_lista_de_tres_elementos);
