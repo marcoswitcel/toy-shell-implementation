@@ -743,6 +743,40 @@ void test_tokenize_04(void)
   Assert(context.error_start_index == SIZE_OF_STATIC_STRING(parse_input_sample));
 }
 
+void test_parse_execute_command_node_01(void)
+{
+  const char parse_input_sample[] = "echo teste | grep teste";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert(node.stdout_redirect_filename == NULL);
+  Assert(node.stderr_redirect_filename == NULL);
+  Assert(node.next_command == NULL);
+  Assert(!node.append_mode);
+
+  Assert(node.args);
+  Assert(strcmp(node.args[0], "echo") == 0);
+
+  Assert(node.args[1]);
+  Assert(strcmp(node.args[1], "teste") == 0);
+
+  Assert(node.pipe);
+
+  Assert(node.pipe->stdout_redirect_filename == NULL);
+  Assert(node.pipe->stderr_redirect_filename == NULL);
+  Assert(!node.pipe->append_mode);
+  Assert(node.pipe->next_command == NULL);
+
+  Assert(node.pipe->args);
+  Assert(strcmp(node.pipe->args[0], "grep") == 0);
+
+  Assert(node.pipe->args[1]);
+  Assert(strcmp(node.pipe->args[1], "teste") == 0);
+}
+
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
 
 extern void test_suit_parser(void)
@@ -786,4 +820,5 @@ extern void test_suit_parser(void)
   Register_Test(test_tokenize_02);
   Register_Test(test_tokenize_03);
   Register_Test(test_tokenize_04);
+  Register_Test(test_parse_execute_command_node_01);
 }
