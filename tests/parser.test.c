@@ -709,6 +709,29 @@ void test_tokenize_03(void)
   Assert(tokens->data[4].data.string.cstring && strcmp(tokens->data[4].data.string.cstring, "teste") == 0);
 }
 
+void test_tokenize_04(void)
+{
+  const char parse_input_sample[] = "echo \"teste";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Assert(context.error == NULL);
+  Assert(context.index == 0);
+  Assert(context.length == strlen(parse_input_sample));
+
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Assert(tokens->index == 1);
+
+  Assert(context.length == strlen(parse_input_sample));
+
+  
+  Assert(tokens->data[0].type == STRING);
+  Assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
+
+  Assert(context.error);
+  Assert(context.error_start_index);
+}
+
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
 
 extern void test_suit_parser(void)
@@ -750,4 +773,5 @@ extern void test_suit_parser(void)
   Register_Test(test_tokenize_01);
   Register_Test(test_tokenize_02);
   Register_Test(test_tokenize_03);
+  Register_Test(test_tokenize_04);
 }
