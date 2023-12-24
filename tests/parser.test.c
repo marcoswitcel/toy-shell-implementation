@@ -17,6 +17,20 @@
 #include "../src/shell.c"
 #include "./test-runner.h"
 
+void test_create_parse_context()
+{
+  const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  
+  Assert(context.source == parse_input_sample);
+  Assert(context.length == strlen(parse_input_sample));
+  Assert(context.index == 0);
+  Assert(context.error == NULL);
+  Assert(context.error_start_index == -1);
+  Assert(context.token_index == 0);
+}
+
 void test_try_parse_string_01(void)
 {
   Parse_Context context = create_parse_context("ls -lha");
@@ -733,6 +747,7 @@ void test_tokenize_04(void)
 
 extern void test_suit_parser(void)
 {
+  Register_Test(test_create_parse_context);
   Register_Test(test_try_parse_string_01);
   Register_Test(test_try_parse_string_02);
   Register_Test(test_try_parse_string_03);
