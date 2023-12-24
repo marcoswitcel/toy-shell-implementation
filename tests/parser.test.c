@@ -722,14 +722,11 @@ void test_tokenize_04(void)
 
   Assert(tokens->index == 1);
 
-  Assert(context.length == strlen(parse_input_sample));
-
-  
   Assert(tokens->data[0].type == STRING);
   Assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
 
   Assert(context.error);
-  Assert(context.error_start_index);
+  Assert(context.error_start_index == SIZE_OF_STATIC_STRING(parse_input_sample));
 }
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
