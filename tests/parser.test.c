@@ -41,7 +41,8 @@ void test_try_parse_string_01(void)
   Assert(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
-  Assert(strcmp("ls", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("ls", token.data.string.cstring);
+  Assert_Sring_Equals("ls", token.data.string.cstring);
   Assert(context.index == 2);
 
 
@@ -56,7 +57,7 @@ void test_try_parse_string_01(void)
   Assert(token.type == STRING);
   Assert(context.index == 7);
   Assert(token.data.string.cstring);
-  Assert(strcmp("-lha", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("-lha", token.data.string.cstring);
 }
 
 void test_try_parse_string_02(void)
@@ -69,7 +70,7 @@ void test_try_parse_string_02(void)
   Assert(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
-  Assert(strcmp("ls", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("ls", token.data.string.cstring);
   Assert(context.index == 2);
 
 
@@ -95,7 +96,7 @@ void test_try_parse_string_03(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert(strcmp("echo", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("echo", token.data.string.cstring);
   Assert(context.index == 4);
   Assert(context.error_start_index == -1);
 
@@ -118,7 +119,7 @@ void test_try_parse_string_04(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert(strcmp("asd", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("asd", token.data.string.cstring);
   Assert(context.index == 5);
   Assert(context.error_start_index == -1);
 }
@@ -134,7 +135,7 @@ void test_try_parse_string_05(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert(strcmp("asd", token.data.string.cstring) == 0);
+  Assert_Sring_Equals("asd", token.data.string.cstring);
   Assert(context.index == 3);
   Assert(context.error_start_index == -1);
 }
@@ -758,10 +759,10 @@ void test_parse_execute_command_node_01(void)
   Assert(!node.append_mode);
 
   Assert(node.args);
-  Assert(strcmp(node.args[0], "echo") == 0);
+  Assert_Sring_Equals(node.args[0], "echo");
 
   Assert(node.args[1]);
-  Assert(strcmp(node.args[1], "teste") == 0);
+  Assert_Sring_Equals(node.args[1], "teste");
 
   Assert(node.pipe);
 
@@ -771,10 +772,10 @@ void test_parse_execute_command_node_01(void)
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
-  Assert(strcmp(node.pipe->args[0], "grep") == 0);
+  Assert_Sring_Equals(node.pipe->args[0], "grep");
 
   Assert(node.pipe->args[1]);
-  Assert(strcmp(node.pipe->args[1], "teste") == 0);
+  Assert_Sring_Equals(node.pipe->args[1], "teste");
 }
 
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`

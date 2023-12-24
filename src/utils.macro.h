@@ -28,6 +28,7 @@
 
 #define CONCAT_EXPANSION(A, B) A ## B 
 #define CONCAT(A, B) CONCAT_EXPANSION(A, B)
+
 /**
  * @brief concatena o símbolo ao número da linha para ter nomes de variáveis com menos
  * chance de colisão.
