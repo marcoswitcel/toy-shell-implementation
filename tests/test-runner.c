@@ -22,18 +22,6 @@ static int number_of_failed_tests = 0;
 static List_Of_Tests *tests = NULL;
 static List_Of_Strings *proc_names = NULL;
 
-typedef struct Test_State {
-  bool at_least_one_failed;
-  unsigned passed;
-  unsigned failed;
-  const char *filename;
-  const char *expr;
-  unsigned line_number;
-  // @todo João, adicionar o tempo por teste
-} Test_State;
-
-static Test_State current_state = { 0 };
-
 static void ensure_is_initialized()
 {
   if (tests == NULL)

@@ -3,6 +3,18 @@
 
 #include <stdbool.h>
 
+typedef struct Test_State {
+  bool at_least_one_failed;
+  unsigned passed;
+  unsigned failed;
+  const char *filename;
+  const char *expr;
+  unsigned line_number;
+  // @todo João, adicionar o tempo por teste
+} Test_State;
+
+Test_State current_state = { 0 };
+
 /**
  * @brief Definição da função de teste. A transmissão de informação acontece através das rotinas 
  * de asserção.
