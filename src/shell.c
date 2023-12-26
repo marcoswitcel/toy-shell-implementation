@@ -38,6 +38,7 @@ List_Of_Strings *last_typed_commands = NULL;
 typedef struct Shell_Context_Data
 {
   bool colorful;
+  bool soundful;
   List_Of_Strings *last_typed_commands;
   int next_typed_command_to_show;
   int last_status_code;
@@ -47,6 +48,7 @@ Shell_Context_Data create_shell_context_data()
 {
   return (Shell_Context_Data) {
     .colorful = false,
+    .soundful = true,
     .last_typed_commands = create_list_of_strings(64, 64),
     .next_typed_command_to_show = -1,
     .last_status_code = 0,
@@ -71,6 +73,14 @@ static inline void print_input_mark(Shell_Context_Data *context, const char *cst
   if (cstring)
   {
     write(STDOUT_FILENO, cstring, strlen(cstring));
+  }
+}
+
+void should_emmit_ring_bell(Shell_Context_Data *context)
+{
+  if (context->soundful)
+  {
+    emmit_ring_bell();
   }
 }
 
@@ -294,7 +304,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
       }
       else
       {
-        emmit_ring_bell();
+        should_emmit_ring_bell(context);
       }
 
     }; break;
@@ -313,7 +323,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
       }
       else
       {
-        emmit_ring_bell();
+        should_emmit_ring_bell(context);
       }
     }; break;
     case ARROW_RIGHT:
@@ -491,7 +501,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
         }
         else
         {
-          emmit_ring_bell();
+          should_emmit_ring_bell(context);
         }
       }
       else if (c == CTRL_KEY('c'))
@@ -799,10 +809,11 @@ void shell_report_parse_error(Parse_Context *context)
   shell_report_error(context->error, context->error_start_index);
 }
 
-void read_eval_shell_loop(bool colorful)
+void read_eval_shell_loop(bool colorful, bool no_sound)
 {
   Shell_Context_Data shell_context = create_shell_context_data();
   shell_context.colorful = colorful;
+  shell_context.soundful = !no_sound;
 
   // @todo João, acho que a ideia mais interessante seria mover a variável `exit_requested` para dentro
   // da estrutura `Shell_Context_Data` e começar a passar ela para os builtins. Parece razoável

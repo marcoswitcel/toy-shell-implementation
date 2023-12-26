@@ -42,7 +42,7 @@ int main(int argc, const char *argv[])
   // @note talvez ler um arquivo de configuração? aceitar a configuração do modo colorful e do modo sem som?
 
   // loop principal, toda lógica roda aqui
-  read_eval_shell_loop(arguments.colorful);
+  read_eval_shell_loop(arguments.colorful, arguments.no_sound);
 
   return EXIT_SUCCESS;
 }
