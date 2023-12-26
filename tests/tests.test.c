@@ -22,6 +22,7 @@
 #include "./sorting.test.c"
 #include "./utils.test.c"
 #include "./parser.test.c"
+#include "./command-line-arguments.test.c"
 
 void test_list_char_prt_implementation(void)
 {
@@ -435,6 +436,7 @@ int main(void)
   Register_Test(test_skip_word_to_the_right_01);
   
   test_suit_parser();
+  test_suit_test_command_line_arguments();
 
   test_runner();
 
