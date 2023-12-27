@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include <unistd.h>
+
+#include "./utils.macro.h"
 
 /**
  * @brief Define e documenta os parâmetros aceitos pela linha de comando
@@ -18,12 +21,16 @@ typedef struct Command_Line_Arguments {
    * Padrão: false
    */
   bool no_sound;
+  /**
+   * @brief define se o usuário está requisitando auxílio com os parâmetros
+   */
+  bool help;
 } Command_Line_Arguments;
 
 /**
  * @brief aqui estão definidos os valores padrões para os parâmetros
  */
-#define ARGUMENTS_DEFAULTS() { .colorful = false, .no_sound = false }
+#define ARGUMENTS_DEFAULTS() { .colorful = false, .no_sound = false, .help = false }
 
 bool is_string_present_in_argv(const char *switch_name, int argc, const char *argv[])
 {
@@ -42,7 +49,14 @@ void command_line_arguments_apply_argv(Command_Line_Arguments *arguments, int ar
 {
   arguments->colorful = is_string_present_in_argv("--colorful", argc, argv);
   arguments->no_sound = is_string_present_in_argv("--no_sound", argc, argv);
-  // @note Talvez adicionar um argumento para controlar a emissão de som?
+  arguments->help = is_string_present_in_argv("--help", argc, argv);
+}
+
+void handle_help_request(void)
+{
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Toy Shell Implementation - João Marcos\r\n"));
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Baseado no tutorial de Stephen Brennan\r\n"));
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("Link: https://brennan.io/2015/01/16/write-a-shell-in-c/"));
 }
 
 #endif // _COMMAND_LINE_ARGUMENTS_C_
