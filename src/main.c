@@ -33,7 +33,7 @@ void handle_sigint(int signal)
 
 int main(int argc, const char *argv[])
 {
-  Command_Line_Arguments arguments = { 0 };
+  Command_Line_Arguments arguments = ARGUMENTS_DEFAULTS();
   command_line_arguments_apply_argv(&arguments, argc, argv);
 
   activate_raw_mode(true);

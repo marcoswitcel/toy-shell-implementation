@@ -4,10 +4,26 @@
 #include <stdbool.h>
 #include <string.h>
 
+/**
+ * @brief Define e documenta os parâmetros aceitos pela linha de comando
+ */
 typedef struct Command_Line_Arguments {
+  /**
+   * @brief define se pode usar "escape sequences" para colorir e destacar aspectos da interface de texto
+   * Padrão: false
+   */
   bool colorful;
+  /**
+   * @brief define se o interpretador pode emitir caracteres que causem som no terminal 
+   * Padrão: false
+   */
   bool no_sound;
 } Command_Line_Arguments;
+
+/**
+ * @brief aqui estão definidos os valores padrões para os parâmetros
+ */
+#define ARGUMENTS_DEFAULTS() { .colorful = false, .no_sound = false }
 
 bool is_string_present_in_argv(const char *switch_name, int argc, const char *argv[])
 {
