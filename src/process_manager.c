@@ -92,8 +92,7 @@ int launch_process(const Process_Parameter process_parameter, bool revert_raw_mo
     {
       /**
        * @note como diferenciar e printar erros
-       * @todo João, otimizar isso aqui
-       * @reference https://stackoverflow.com/questions/503878/how-to-know-what-the-errno-means
+       * @link https://stackoverflow.com/questions/503878/how-to-know-what-the-errno-means
        */
       if (errno == EACCES)
       {

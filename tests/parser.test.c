@@ -778,6 +778,47 @@ void test_parse_execute_command_node_01(void)
   Assert_Sring_Equals(node.pipe->args[1], "teste");
 }
 
+void test_parse_execute_command_node_02(void)
+{
+  const char parse_input_sample[] = "echo teste | grep teste && echo \"teste final\"";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert(node.stdout_redirect_filename == NULL);
+  Assert(node.stderr_redirect_filename == NULL);
+  Assert(!node.append_mode);
+
+  Assert(node.args);
+  Assert_Sring_Equals(node.args[0], "echo");
+
+  Assert(node.args[1]);
+  Assert_Sring_Equals(node.args[1], "teste");
+
+  Assert(node.pipe);
+
+  Assert(node.pipe->stdout_redirect_filename == NULL);
+  Assert(node.pipe->stderr_redirect_filename == NULL);
+  Assert(!node.pipe->append_mode);
+  Assert(node.pipe->next_command == NULL);
+
+  Assert(node.pipe->args);
+  Assert_Sring_Equals(node.pipe->args[0], "grep");
+
+  Assert(node.pipe->args[1]);
+  Assert_Sring_Equals(node.pipe->args[1], "teste");
+
+  Assert(node.next_command);
+
+  Assert(node.next_command->args);
+  Assert_Sring_Equals(node.next_command->args[0], "echo");
+
+  Assert(node.next_command->args[1]);
+  Assert_Sring_Equals(node.next_command->args[1], "teste final");
+}
+
 // @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
 
 extern void test_suit_parser(void)
@@ -822,4 +863,5 @@ extern void test_suit_parser(void)
   Register_Test(test_tokenize_03);
   Register_Test(test_tokenize_04);
   Register_Test(test_parse_execute_command_node_01);
+  Register_Test(test_parse_execute_command_node_02);
 }
