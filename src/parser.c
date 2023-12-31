@@ -567,6 +567,10 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       {
         parse_context_report_error(context, "Token | encontrado mais de uma vez.", token.token_index_start);
         break;
+      } else if (has_stdout_redirect_token)
+      {
+        parse_context_report_error(context, "Token | encontrado, porém ele conflita com uma regra de redirecionamento de stdout anterior.", token.token_index_start);
+        break;
       }
       else
       {
