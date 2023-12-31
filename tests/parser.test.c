@@ -753,6 +753,8 @@ void test_parse_execute_command_node_01(void)
 
   Execute_Command_Node node = parse_execute_command_node(&context, tokens);
 
+  Assert_Is_Null(context.error);
+
   Assert(node.stdout_redirect_filename == NULL);
   Assert(node.stderr_redirect_filename == NULL);
   Assert(node.next_command == NULL);
@@ -786,6 +788,8 @@ void test_parse_execute_command_node_02(void)
   Sequence_Of_Tokens *tokens = tokenize(&context);
 
   Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Null(context.error);
 
   Assert(node.stdout_redirect_filename == NULL);
   Assert(node.stderr_redirect_filename == NULL);
@@ -828,6 +832,8 @@ void test_parse_execute_command_node_03(void)
 
   Execute_Command_Node node = parse_execute_command_node(&context, tokens);
 
+  Assert_Is_Null(context.error);
+
   Assert_Sring_Equals(node.stdout_redirect_filename, "arquivo.txt");
   Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode);
@@ -860,6 +866,8 @@ void test_parse_execute_command_node_04(void)
 
   Execute_Command_Node node = parse_execute_command_node(&context, tokens);
 
+  Assert_Is_Null(context.error);
+
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode);
@@ -882,6 +890,22 @@ void test_parse_execute_command_node_04(void)
   Assert_Is_Not_Null(node.next_command->args[1]);
   Assert_Sring_Equals(node.next_command->args[1], "teste final");
 }
+
+void test_parse_execute_command_node_05(void)
+{
+  const char parse_input_sample[] = "echo teste > arquivo.txt 1> arquivo-out.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  (void) node; // suppress unused variable
+
+  Assert_Is_Not_Null(context.error);
+  Assert(context.error_start_index > 0);
+}
+
 
 extern void test_suit_parser(void)
 {
@@ -928,4 +952,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_02);
   Register_Test(test_parse_execute_command_node_03);
   Register_Test(test_parse_execute_command_node_04);
+  Register_Test(test_parse_execute_command_node_05);
 }

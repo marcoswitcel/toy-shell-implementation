@@ -1,0 +1,39 @@
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000103
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000161
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000232
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000244
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000226
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000216
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000239
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -------------------------------------------------------------------------------------------------------------------------------^
+  Problema: String incompleta, àspas de fechamento faltando.
+report_error :: teste
+tempo em segundos 0.000207
+|>echo "joasdasdasdasdasasdasdasdasdasdasdasasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss

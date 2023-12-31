@@ -22,7 +22,7 @@
  */
 void handle_sigint(int signal)
 {
-  (void) signal;
+  (void) signal; // suppress unused variable
   /**
    * Estou restaurando o modo "normal" do terminal enquanto o processo filho executa.
    * Por isso os handlers são acionados em caso de algum sinal ser disparado.
