@@ -27,6 +27,7 @@ Posso criar um stdin separado para o processo filho e duplicar meu input pra lá
     https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c
     https://stackoverflow.com/questions/34036642/reading-from-stdin-by-multiple-processes
 * implementar suporte a inputs de multiplas linhas, permitindo navegar e reportando erros de forma clara
+* uma funcionalidade interessante para os testes seria poder agrupar testes em alguma estrura de "subcategoria"
 
 
 ## Anotações 15/08/2023
