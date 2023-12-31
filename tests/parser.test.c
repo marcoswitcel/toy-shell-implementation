@@ -851,7 +851,37 @@ void test_parse_execute_command_node_03(void)
   Assert_Sring_Equals(node.next_command->args[1], "teste final");
 }
 
-// @todo João, reestruturar o teste do parse command para testar essa função também `parse_execute_command_node`
+void test_parse_execute_command_node_04(void)
+{
+  const char parse_input_sample[] = "echo teste 2> arquivo.txt && echoo \"teste final\" 1> arquivo2.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Null(node.stdout_redirect_filename);
+  Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
+  Assert(!node.append_mode);
+
+  Assert_Is_Not_Null(node.args);
+  Assert_Sring_Equals(node.args[0], "echo");
+
+  Assert_Is_Not_Null(node.args[1]);
+  Assert_Sring_Equals(node.args[1], "teste");
+
+  Assert_Is_Not_Null(node.next_command);
+
+  Assert_Sring_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
+  Assert_Is_Null(node.next_command->stderr_redirect_filename);
+  Assert(!node.next_command->append_mode);
+
+  Assert_Is_Not_Null(node.next_command->args);
+  Assert_Sring_Equals(node.next_command->args[0], "echoo");
+
+  Assert_Is_Not_Null(node.next_command->args[1]);
+  Assert_Sring_Equals(node.next_command->args[1], "teste final");
+}
 
 extern void test_suit_parser(void)
 {
@@ -897,4 +927,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_01);
   Register_Test(test_parse_execute_command_node_02);
   Register_Test(test_parse_execute_command_node_03);
+  Register_Test(test_parse_execute_command_node_04);
 }

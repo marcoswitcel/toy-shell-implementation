@@ -57,7 +57,17 @@ void test_runner(void);
 /**
  * @brief Macro utilitária para facilitar a asserção de strings
  */
-#define Assert_Sring_Equals(STR1, STR2) Assert(strcmp(STR1, STR2) == 0)
+#define Assert_Sring_Equals(EXPR1, EXPR2) Assert(strcmp(EXPR1, EXPR2) == 0)
+
+/**
+ * @brief Macro utilitária para facilitar a asserção de nulo
+ */
+#define Assert_Is_Null(EXPR) Assert((EXPR) == NULL)
+
+/**
+ * @brief Macro utilitária para facilitar a asserção de não nulos
+ */
+#define Assert_Is_Not_Null(EXPR) Assert((EXPR) != NULL)
 
 /**
  * @brief Facilita o registro de uma função usando o nome do símbolo como nome do teste
