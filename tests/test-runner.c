@@ -65,8 +65,18 @@ static void write_test_index(Buffer *buffer, unsigned reserved_space, unsigned c
   free(test_number);
 }
 
+/**
+ * @note João, uma ideia interessante seria melhorar o report do teste, algumas formas que podería usar seriam.
+ * Adicionar algum mecanismo para contar os testes, adicionar um mecanismo para medir o tempo, fazer os testes rodam independentes
+ * uns dos outros, apresentar ao final quantidade de sucessos e falhas, junto ao tempo decorrido.
+ * Printar uma linha para cada teste, talvez colorido? formatação bonita.
+ */
 void test_runner(void)
 {
+  printf("-------------------------------------------------------------------------\n");
+  printf("|                           Executando Testes                           |\n");
+  printf("-------------------------------------------------------------------------\n");
+
   ensure_is_initialized();
 
   Buffer *buffer = create_buffer(1024, 1024);
