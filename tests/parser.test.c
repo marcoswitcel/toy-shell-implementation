@@ -906,6 +906,30 @@ void test_parse_execute_command_node_05(void)
   Assert(context.error_start_index > 0);
 }
 
+void test_parse_execute_command_node_06(void)
+{
+  const char parse_input_sample[] = "echo teste 1> stdout.txt 2> stderr.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Null(context.error);
+
+  Assert(node.args);
+  Assert_Sring_Equals(node.args[0], "echo");
+
+  Assert(node.args[1]);
+  Assert_Sring_Equals(node.args[1], "teste");
+
+  Assert_Is_Null(node.next_command);
+  Assert_Is_Null(node.pipe);
+
+  Assert_Sring_Equals(node.stdout_redirect_filename, "stdout.txt");
+  Assert_Sring_Equals(node.stderr_redirect_filename, "stderr.txt");
+  Assert(!node.append_mode);
+}
 
 extern void test_suit_parser(void)
 {
@@ -953,4 +977,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_03);
   Register_Test(test_parse_execute_command_node_04);
   Register_Test(test_parse_execute_command_node_05);
+  Register_Test(test_parse_execute_command_node_06);
 }
