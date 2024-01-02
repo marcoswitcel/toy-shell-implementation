@@ -798,7 +798,7 @@ void shell_report_error(const char*error, signed error_start_index)
   buffer_push_all(buffer, "\r\n", 2);
 
   // @todo João, passar o contexto aqui, pra pegar o stdout configurado
-  write(1, buffer->buffer, buffer->index);
+  write(STDOUT_FILENO, buffer->buffer, buffer->index);
   
   destroy_buffer(buffer);
   // MEASURE_TIME(report_error, "teste");

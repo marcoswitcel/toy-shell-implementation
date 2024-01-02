@@ -538,8 +538,9 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         break;
       }
 
-      append_mode = token.data.redirect.appending; // @todo João, compiando o último modo para ambos os redirects por hora
-
+      // @todo João, copiando o último modo para ambos os redirects por hora
+      append_mode = token.data.redirect.appending;
+      
       if (fd == STDOUT_FILENO)
       {
         has_stdout_redirect_token = true;
