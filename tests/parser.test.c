@@ -26,7 +26,7 @@ void test_create_parse_context()
   Assert(context.source == parse_input_sample);
   Assert(context.length == strlen(parse_input_sample));
   Assert(context.index == 0);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.error_start_index == -1);
   Assert(context.token_index == 0);
 }
@@ -387,7 +387,7 @@ void test_try_parse_pipe02()
   
   try_parse_pipe(&context, &token, &success);
   Assert(!success);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
 }
@@ -404,7 +404,7 @@ void test_try_parse_and01()
   try_parse_and(&context, &token, &success);
   Assert(success);
   Assert(token.type == AND);
-  Assert(token.data.and.cstring);
+  Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -421,7 +421,7 @@ void test_try_parse_and02()
   
   try_parse_and(&context, &token, &success);
   Assert(!success);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
 }
@@ -437,7 +437,7 @@ void test_try_parse_and03()
   
   try_parse_and(&context, &token, &success);
   Assert(!success);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
 }
@@ -453,7 +453,7 @@ void test_try_parse_and04()
   
   try_parse_and(&context, &token, &success);
   Assert(!success);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
 }
@@ -469,7 +469,7 @@ void test_try_parse_and05()
   
   try_parse_and(&context, &token, &success);
   Assert(!success);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
 }
@@ -488,7 +488,7 @@ void test_try_parse_and06()
   
   try_parse_and(&context, &token, &success);
   Assert(!success);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
 }
@@ -553,7 +553,7 @@ void test_try_query_status_01()
   try_parse_query_last_status(&context, &token, &success);
   Assert(success);
   Assert(token.type == QUERY_LAST_STATUS);
-  Assert(token.data.and.cstring);
+  Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -571,7 +571,7 @@ void test_try_query_status_02()
   try_parse_query_last_status(&context, &token, &success);
   Assert(success);
   Assert(token.type == QUERY_LAST_STATUS);
-  Assert(token.data.and.cstring);
+  Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -590,7 +590,7 @@ void test_try_query_status_03()
   Assert(!success);
   Assert(token.type == UNINITIALIZED);
   Assert(token.token_index_start == -1);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
 }
@@ -608,7 +608,7 @@ void test_try_query_status_04()
   Assert(!success);
   Assert(token.type == UNINITIALIZED);
   Assert(token.token_index_start == -1);
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
 }
@@ -618,7 +618,7 @@ void test_tokenize_01(void)
   const char parse_input_sample[] = "echo teste teste2 * > arquivo.txt";
 
   Parse_Context context = create_parse_context(parse_input_sample);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -626,7 +626,7 @@ void test_tokenize_01(void)
 
   Assert(tokens->index == 6);
 
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == context.length);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -661,7 +661,7 @@ void test_tokenize_02(void)
   const char parse_input_sample[] = "echo \"teste' teste2\" * > arquivo.txt";
 
   Parse_Context context = create_parse_context(parse_input_sample);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -669,7 +669,7 @@ void test_tokenize_02(void)
 
   Assert(tokens->index == 5);
 
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == context.length);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -695,7 +695,7 @@ void test_tokenize_03(void)
   const char parse_input_sample[] = "echo teste | grep teste";
 
   Parse_Context context = create_parse_context(parse_input_sample);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -703,7 +703,7 @@ void test_tokenize_03(void)
 
   Assert(tokens->index == 5);
 
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == context.length);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -729,7 +729,7 @@ void test_tokenize_04(void)
   const char parse_input_sample[] = "echo \"teste";
 
   Parse_Context context = create_parse_context(parse_input_sample);
-  Assert(context.error == NULL);
+  Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.length == strlen(parse_input_sample));
 
@@ -740,7 +740,7 @@ void test_tokenize_04(void)
   Assert(tokens->data[0].type == STRING);
   Assert(tokens->data[0].data.string.cstring && strcmp(tokens->data[0].data.string.cstring, "echo") == 0);
 
-  Assert(context.error);
+  Assert_Is_Not_Null(context.error);
   Assert(context.error_start_index == SIZE_OF_STATIC_STRING(parse_input_sample));
 }
 
