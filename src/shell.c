@@ -23,6 +23,13 @@
 
 #define HISTORY_MAX_ELEMENTS 20
 
+/**
+ * @brief Por hora essa macro define a constante que representa a máscara,
+ * mas vou acredito que o melhor seria criar campos na estrutura `Shell_Context_Data`
+ * para conter a referência da string e comprimento
+ */
+#define INPUT_MARK "|>" 
+
 Shell_Context_Data *the_shell_context;
 
 Shell_Context_Data create_shell_context_data()
@@ -47,7 +54,7 @@ static inline void print_input_mark(Shell_Context_Data *context, const char *cst
 
   if (context->colorful) write(STDOUT_FILENO, GREEN, SIZE_OF_STATIC_STRING(GREEN));
 
-  write(STDOUT_FILENO, "|>", 2);
+  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT(INPUT_MARK));
 
   if (context->colorful) write(STDOUT_FILENO, RESET, SIZE_OF_STATIC_STRING(RESET));
 
@@ -520,7 +527,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       int row = 1, col = 1;
       if (get_cursor_position(&row, &col) > -1)
       {
-        set_cursor_position(row, (int) cursor_position + 3);
+        set_cursor_position(row, (int) cursor_position + 1 + SIZE_OF_STATIC_STRING(INPUT_MARK));
       }
     }
   }
