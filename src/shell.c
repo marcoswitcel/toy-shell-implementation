@@ -19,30 +19,11 @@
 #include "./utils.c"
 #include "./sorting.c"
 #include "./ansi-escape-sequences.h"
+#include "./shell.h"
 
 #define HISTORY_MAX_ELEMENTS 20
 
-/**
- * @brief usada como controle para o loop de interpretação do shell, quando setada para falso
- * o loop irá terminar
- * 
- */
-bool exit_requested = false;
-
-/**
- * @brief Usada como variável global para compartilhar a lista de histórico com os builtins
- * 
- */
-List_Of_Strings *last_typed_commands = NULL;
-
-typedef struct Shell_Context_Data
-{
-  bool colorful;
-  bool soundful;
-  List_Of_Strings *last_typed_commands;
-  int next_typed_command_to_show;
-  int last_status_code;
-} Shell_Context_Data;
+Shell_Context_Data *the_shell_context;
 
 Shell_Context_Data create_shell_context_data()
 {
@@ -495,7 +476,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       {
         if (buffer->index == 0)
         {
-          exit_requested = true;
+          context->exit_requested = true;
           write(STDOUT_FILENO, "\r\n", 2);
           break;
         }
@@ -812,16 +793,18 @@ void shell_report_parse_error(Parse_Context *context)
 void read_eval_shell_loop(bool colorful, bool no_sound)
 {
   Shell_Context_Data shell_context = create_shell_context_data();
+  the_shell_context = &shell_context;
+
   shell_context.colorful = colorful;
   shell_context.soundful = !no_sound;
 
-  // @todo João, acho que a ideia mais interessante seria mover a variável `exit_requested` para dentro
+  // @todo João, acho que a ideia mais interessante seria mover a variável `shell_context.exit_requested` para dentro
   // da estrutura `Shell_Context_Data` e começar a passar ela para os builtins. Parece razoável
   // e deixaria claro o acesso dos builtins a esses dados, também poderia ser criado algum tipo de `getter`,
   // mas, não está clara a estrutura ainda então prefiro só passar a estrutura toda.
-  last_typed_commands = shell_context.last_typed_commands;
+  //last_typed_commands = shell_context.last_typed_commands;
 
-  while (!exit_requested)
+  while (!shell_context.exit_requested)
   {
     char *readed_line = shell_wait_command_input(&shell_context);
     Parse_Context context = create_parse_context(readed_line);
@@ -874,12 +857,12 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
         current_command = current_command->next_command;
       }
     }
-    else if (exit_requested)
+    else if (shell_context.exit_requested)
     {
       write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!"));
       FREE_AND_NULLIFY(context.error);
     }
-    else // @note se exit_requested for false, no momento ele reporta o erro por tentar parsear input vazio
+    else // @note se `shell_context.exit_requested` for false, no momento ele reporta o erro por tentar parsear input vazio
     {
       shell_report_parse_error(&context);
       FREE_AND_NULLIFY(context.error);

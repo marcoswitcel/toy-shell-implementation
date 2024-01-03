@@ -6,13 +6,11 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "./shell.h"
 #include "./list.implementations.h"
 #include "./process_manager.c"
 #include "./utils.macro.h"
 
-// @note globais compartilhadas com o shell
-extern bool exit_requested;
-extern List_Of_Strings *last_typed_commands;
 
 typedef int (*Builtin_Function)(const Process_Parameter *);
 
@@ -99,7 +97,7 @@ int builtin_exit(const Process_Parameter *process_parameter)
   }
 
   write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("saindo, até mais!!!\r\n"));
-  exit_requested = true;
+  the_shell_context->exit_requested = true;
   
   return 0;
 }
@@ -119,6 +117,8 @@ int builtin_clear(const Process_Parameter *process_parameter)
 int builtin_history(const Process_Parameter *process_parameter)
 {  
   write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Resumo:\r\n"));
+
+  List_Of_Strings *last_typed_commands = the_shell_context->last_typed_commands;
 
   if (last_typed_commands && last_typed_commands->index)
   {
