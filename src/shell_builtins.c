@@ -17,6 +17,7 @@ typedef int (*Builtin_Function)(const Process_Parameter *);
 // Definições
 
 int builtin_cd(const Process_Parameter *process_parameter);
+int builtin_set(const Process_Parameter *process_parameter);
 int builtin_help(const Process_Parameter *process_parameter);
 int builtin_exit(const Process_Parameter *process_parameter);
 int builtin_clear(const Process_Parameter *process_parameter);
@@ -24,6 +25,7 @@ int builtin_history(const Process_Parameter *process_parameter);
 
 const char *builtin_cstring[] = {
   "cd",
+  "set",
   "help",
   "exit",
   "clear",
@@ -32,6 +34,7 @@ const char *builtin_cstring[] = {
 
 const Builtin_Function builtin_func[] = {
   &builtin_cd,
+  &builtin_set,
   &builtin_help,
   &builtin_exit,
   &builtin_clear,
@@ -56,6 +59,39 @@ int builtin_cd(const Process_Parameter *process_parameter)
     write(process_parameter->fd_stderr, target_folder, strlen(target_folder));
     write(process_parameter->fd_stderr, EXPAND_STRING_REF_AND_COUNT("\"\r\n"));
 
+    return 1;
+  }
+
+  return 0;
+}
+
+int builtin_set(const Process_Parameter *process_parameter)
+{
+  // @todo João, ajustar aqui para poder trocar o modo colorful e no_sound, talvez também o input mark
+  // @todo João, seria interessante checar do lado do shell aonde o cursor está? ao invés de forçar uma linha
+  // nova nos builtins sempre 
+
+  if (process_parameter->args[1] != NULL)
+  {
+    char *arg1 =  process_parameter->args[1];
+    if (strcmp(arg1, "--help") == 0)
+    {
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set colorful para trocar\r\n")); 
+    }
+    else if (strcmp(arg1, "colorful") == 0)
+    {
+      the_shell_context->colorful = !the_shell_context->colorful;
+    }
+    else
+    {
+      // @todo João, concatenar o argumento aqui
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("argumento não conhecido\r\n"));
+      return 1;
+    }
+  }
+  else
+  {
+    write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("use --help para receber ajuda\r\n"));
     return 1;
   }
 
