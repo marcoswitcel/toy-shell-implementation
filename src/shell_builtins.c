@@ -76,11 +76,31 @@ int builtin_set(const Process_Parameter *process_parameter)
     char *arg1 =  process_parameter->args[1];
     if (strcmp(arg1, "--help") == 0)
     {
-      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set colorful para trocar\r\n")); 
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Descrição do comando 'set'\r\nPermite alterar o valor de parâmetros:\r\nset colorful 1|0\n\r")); 
     }
     else if (strcmp(arg1, "colorful") == 0)
     {
-      the_shell_context->colorful = !the_shell_context->colorful;
+      if (process_parameter->args[2] != NULL)
+      {
+        char *arg2 = process_parameter->args[2];
+        if (strcmp(arg2, "1") == 0)
+        {
+          the_shell_context->colorful = true;
+        }
+        else if (strcmp(arg2, "0") == 0)
+        {
+          the_shell_context->colorful = false;
+        }
+        else
+        {
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set\r\n"));
+          return 1;
+        }
+      }
+      else
+      {
+        the_shell_context->colorful = !the_shell_context->colorful;
+      }
     }
     else
     {
