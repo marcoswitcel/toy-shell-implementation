@@ -102,6 +102,30 @@ int builtin_set(const Process_Parameter *process_parameter)
         the_shell_context->colorful = !the_shell_context->colorful;
       }
     }
+    else if (strcmp(arg1, "no_sound") == 0)
+    {
+      if (process_parameter->args[2] != NULL)
+      {
+        char *arg2 = process_parameter->args[2];
+        if (strcmp(arg2, "1") == 0)
+        {
+          the_shell_context->soundful = false;
+        }
+        else if (strcmp(arg2, "0") == 0)
+        {
+          the_shell_context->soundful = true;
+        }
+        else
+        {
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set\r\n"));
+          return 1;
+        }
+      }
+      else
+      {
+        the_shell_context->soundful = !the_shell_context->soundful;
+      }
+    }
     else
     {
       // @todo João, concatenar o argumento aqui

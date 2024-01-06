@@ -861,6 +861,8 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
           }
         }
 
+        // @todo João, reportar em qual comando o problema ocorreu? adicionar parâmetro para suprimir isso
+
         current_command = current_command->next_command;
       }
     }
