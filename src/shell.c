@@ -28,7 +28,7 @@
  * mas vou acredito que o melhor seria criar campos na estrutura `Shell_Context_Data`
  * para conter a referência da string e comprimento
  */
-#define INPUT_MARK "|>" 
+#define DEFAULT_INPUT_MARK "|>" 
 
 Shell_Context_Data *the_shell_context;
 
@@ -40,6 +40,8 @@ Shell_Context_Data create_shell_context_data()
     .last_typed_commands = create_list_of_strings(64, 64),
     .next_typed_command_to_show = -1,
     .last_status_code = 0,
+    .input_mark = DEFAULT_INPUT_MARK,
+    .input_mark_length = SIZE_OF_STATIC_STRING(DEFAULT_INPUT_MARK),
   };
 }
 
@@ -54,7 +56,7 @@ static inline void print_input_mark(Shell_Context_Data *context, const char *cst
 
   if (context->colorful) write(STDOUT_FILENO, GREEN, SIZE_OF_STATIC_STRING(GREEN));
 
-  write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT(INPUT_MARK));
+  write(STDOUT_FILENO, context->input_mark, context->input_mark_length);
 
   if (context->colorful) write(STDOUT_FILENO, RESET, SIZE_OF_STATIC_STRING(RESET));
 
@@ -527,7 +529,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       int row = 1, col = 1;
       if (get_cursor_position(&row, &col) > -1)
       {
-        set_cursor_position(row, (int) cursor_position + 1 + SIZE_OF_STATIC_STRING(INPUT_MARK));
+        set_cursor_position(row, (int) cursor_position + 1 + context->input_mark_length);
       }
     }
   }

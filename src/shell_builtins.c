@@ -126,6 +126,21 @@ int builtin_set(const Process_Parameter *process_parameter)
         the_shell_context->soundful = !the_shell_context->soundful;
       }
     }
+    else if (strcmp(arg1, "input_mark") == 0)
+    {
+      if (process_parameter->args[2] != NULL)
+      {
+        // @sanitize precisa checar por caracteres de controle no mínimo
+        // @leak preciso formalizar um jeito de saber como fazer o release da memória caso o usuário troque a partir do default
+        char *value = copy(process_parameter->args[2]);
+        the_shell_context->input_mark = value;
+        the_shell_context->input_mark_length = strlen(value);
+      }
+      else
+      {
+        write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("argumento não conhecido\r\n"));
+      }
+    }
     else
     {
       // @todo João, concatenar o argumento aqui

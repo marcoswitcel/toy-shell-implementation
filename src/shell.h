@@ -17,6 +17,8 @@ typedef struct Shell_Context_Data
    * @brief Usada como controle para o loop de interpretação do shell
    */
   bool exit_requested;
+  const char *input_mark;
+  unsigned input_mark_length;
 } Shell_Context_Data;
 
 /**
