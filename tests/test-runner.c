@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 #include "./test-runner.h"
 #include "../src/buffer.h"
@@ -65,6 +66,14 @@ static void write_test_index(Buffer *buffer, unsigned reserved_space, unsigned c
   free(test_number);
 }
 
+static void print_time_to_buffer(Buffer *buffer, time_t time)
+{
+  char formatted_date_buff[20];
+  strftime(formatted_date_buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&time));
+
+  buffer_push_all(buffer, formatted_date_buff, strlen(formatted_date_buff));
+}
+
 /**
  * @note João, uma ideia interessante seria melhorar o report do teste, algumas formas que podería usar seriam.
  * Adicionar algum mecanismo para contar os testes, adicionar um mecanismo para medir o tempo, fazer os testes rodam independentes
@@ -77,12 +86,19 @@ void test_runner(void)
   printf("|                           Executando Testes                           |\n");
   printf("-------------------------------------------------------------------------\n");
 
+  time_t start_time, end_time;
+  time(&start_time);
+
   ensure_is_initialized();
 
   Buffer *buffer = create_buffer(1024, 1024);
   // @leak
   unsigned index_size_in_chars = strlen(int_to_cstring(number_of_tests));
   const unsigned column_size = 80 - 1 - SIZE_OF_STATIC_STRING(" FAILED");
+
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\nIniciado em: "));
+  print_time_to_buffer(buffer, start_time);
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\n\n"));
 
   for (unsigned i = 0; i < tests->index; i++)
   {
@@ -154,6 +170,16 @@ void test_runner(void)
 
   // resumo
   printf("\n");
+
+  time(&end_time);
+
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\nTerminado em: "));
+  print_time_to_buffer(buffer, start_time);
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\n\n"));
+
+  write(STDOUT_FILENO, buffer->buffer, buffer->index);
+  buffer_clear(buffer);
+
   printf("Total de testes: %d", number_of_tests);
   if (number_of_tests == number_of_success_tests)
   {
