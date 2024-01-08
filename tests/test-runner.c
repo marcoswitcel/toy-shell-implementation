@@ -168,8 +168,7 @@ void test_runner(void)
     buffer_clear(buffer);
   }
 
-  // resumo
-  printf("\n");
+  // O resumo começa daqui pra baixo
 
   time(&end_time);
 
@@ -183,11 +182,11 @@ void test_runner(void)
   printf("Total de testes: %d", number_of_tests);
   if (number_of_tests == number_of_success_tests)
   {
-    printf("\n\n100%% sucesso\n");
+    printf("\n100%% sucesso\n");
   }
   else
   {
-    printf("\n\n%0.2f%% sucesso", number_of_success_tests / (float) number_of_tests * 100.00);
+    printf("\n%0.2f%% sucesso", number_of_success_tests / (float) number_of_tests * 100.00);
   }
 }
 
