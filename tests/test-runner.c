@@ -114,7 +114,9 @@ void test_runner(void)
     Test_Proc test = tests->data[i];
     test();
 
+    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(HI_BLACK));
     write_test_index(buffer, index_size_in_chars, i + 1);
+    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT(RESET));
 
     buffer_push(buffer, ' ');
     
