@@ -86,6 +86,8 @@ void test_runner(void)
   printf("|                           Executando Testes                           |\n");
   printf("-------------------------------------------------------------------------\n");
 
+  const clock_t start_clock = clock(); 
+
   time_t start_time, end_time;
   time(&start_time);
 
@@ -173,13 +175,16 @@ void test_runner(void)
   // O resumo começa daqui pra baixo
 
   time(&end_time);
+  double diff = ((double) (clock() - start_clock)) / CLOCKS_PER_SEC; // @note poderia fazer dom `difftime`, mas tem pouca precisão
 
   buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\nTerminado em: "));
   print_time_to_buffer(buffer, start_time);
-  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\n\n"));
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\n"));
 
   write(STDOUT_FILENO, buffer->buffer, buffer->index);
   buffer_clear(buffer);
+
+  printf("Tempo total: %f (segundos)\n\n", diff);
 
   printf("Total de testes: %d", number_of_tests);
   if (number_of_tests == number_of_success_tests)
