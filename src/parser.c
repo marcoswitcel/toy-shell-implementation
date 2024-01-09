@@ -247,7 +247,8 @@ void try_parse_pipe(Parse_Context *context, Token *token, bool *success)
       *success = true;
       token->type = PIPE;
       token->data.pipe = (Pipe_Token) { .cstring = NULL };
-      token->data.pipe.cstring = copy("|");
+      // @note João, avaliar se vai voltar pro copy aqui
+      token->data.pipe.cstring = "|";
       return;
     }
 
@@ -317,7 +318,7 @@ void try_parse_query_last_status(Parse_Context *context, Token *token, bool *suc
         *success = true;
         token->type = QUERY_LAST_STATUS;
         token->data.query_last_status = (Query_Last_Status_Token) { .cstring = NULL };
-        // @todo João, avaliar se vai voltar pro copy aqui
+        // @note João, avaliar se vai voltar pro copy aqui
         token->data.and.cstring = "$?";
         return;
       }
@@ -346,7 +347,8 @@ void try_parse_globbing(Parse_Context *context, Token *token, bool *success)
       *success = true;
       token->type = GLOBBING;
       token->data.globbing = (Globbing_Token) { .cstring = NULL };
-      token->data.globbing.cstring = copy("*");
+      // @note João, avaliar se vai voltar pro copy aqui
+      token->data.globbing.cstring = "*";
       return;
     }
 
@@ -393,7 +395,8 @@ void try_parse_redirect(Parse_Context *context, Token *token, bool *success)
       *success = true;
       token->type = REDIRECT;
       token->data.redirect = (Redirect_Token) { .cstring = NULL };
-      token->data.redirect.cstring = copy(">");
+      // @note João, avaliar se vai voltar pro copy aqui
+      token->data.redirect.cstring = ">";
       token->data.redirect.fd = fd;
       token->data.redirect.appending = appending;
       return;
