@@ -471,6 +471,27 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
   return tokens;
 }
 
+/**
+ * @brief Função que faz o release das memórias alocadas dinâmicamentes 
+ * 
+ * @note Deveria apenas chamar alguma função tipo `destroy_token_type` pra manter agrupadas
+ * as reponsabilidades.
+ * @note Essa função não está sendo usada por hora por as STRINGS são passadas adiante para os `Node`
+ * e vira responabilidade deles fazerem a limpeza.
+ * 
+ * @param tokens 
+ */
+void release_cstrings_from_tokens(Sequence_Of_Tokens *tokens)
+{
+  for (unsigned i = 0; i < tokens->index; i++)
+  {
+    if (tokens->data[i].type == STRING)
+    {
+      FREE_AND_NULLIFY(tokens->data[i].data.string.cstring);
+    }
+  }
+}
+
 Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context, const Sequence_Of_Tokens *tokens, bool piping)
 {
   List_Of_Strings *list_of_args = create_list_of_strings(1024, 1024);
