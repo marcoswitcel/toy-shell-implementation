@@ -166,6 +166,22 @@ void test_try_parse_string_07(void)
   Assert(context.error_start_index == 3);
 }
 
+void test_try_parse_string_08()
+{
+  Parse_Context context = create_parse_context("");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  Assert(token.token_index_start == -1);
+  Assert(context.error_start_index == -1);
+  
+  try_parse_string(&context, &token, &success);
+  Assert(!success);
+  Assert_Is_Null(context.error);
+  Assert(context.index == 0);
+  Assert(context.error_start_index == -1);
+}
+
 void test_try_parse_redirect_01(void)
 {
   Parse_Context context = create_parse_context(">");
@@ -358,6 +374,22 @@ void test_try_parse_redirect_12(void)
   Assert(context.error_start_index == -1);
 }
 
+void test_try_parse_redirect_13()
+{
+  Parse_Context context = create_parse_context("echo > a.txt");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  Assert(token.token_index_start == -1);
+  Assert(context.error_start_index == -1);
+  
+  try_parse_redirect(&context, &token, &success);
+  Assert(!success);
+  Assert_Is_Null(context.error);
+  Assert(context.index == 0);
+  Assert(context.error_start_index == -1);
+}
+
 void test_try_parse_pipe01()
 {
   Parse_Context context = create_parse_context("| grep");
@@ -390,6 +422,22 @@ void test_try_parse_pipe02()
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
+}
+
+void test_try_parse_pipe_03()
+{
+  Parse_Context context = create_parse_context("asd |");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  Assert(token.token_index_start == -1);
+  Assert(context.error_start_index == -1);
+  
+  try_parse_pipe(&context, &token, &success);
+  Assert(!success);
+  Assert_Is_Null(context.error);
+  Assert(context.index == 0);
+  Assert(context.error_start_index == -1);
 }
 
 void test_try_parse_and01()
@@ -474,9 +522,8 @@ void test_try_parse_and05()
   Assert(context.error_start_index == 2);
 }
 
-// @todo João, replicar esse teste para os outros 'parsers'
-// a ideia por trás desse teste é que o parser tem o conceito de 
-// fracasso que não gera aviso e fracaso de parsing que gera aviso.
+// @note a ideia por trás desse teste é que o parser tem o conceito de 
+// fracasso que não gera aviso e fracasso de parsing que gera aviso.
 void test_try_parse_and06()
 {
   Parse_Context context = create_parse_context("asd &&");
@@ -539,6 +586,22 @@ void test_try_parse_globbing_03(void)
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
+}
+
+void test_try_parse_globbing_04()
+{
+  Parse_Context context = create_parse_context("echo *");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  Assert(token.token_index_start == -1);
+  Assert(context.error_start_index == -1);
+  
+  try_parse_globbing(&context, &token, &success);
+  Assert(!success);
+  Assert_Is_Null(context.error);
+  Assert(context.index == 0);
+  Assert(context.error_start_index == -1);
 }
 
 void test_try_query_status_01()
@@ -611,6 +674,22 @@ void test_try_query_status_04()
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
+}
+
+void test_try_query_status_05()
+{
+  Parse_Context context = create_parse_context("echo $?");
+  Token token = STATIC_TOKEN(UNINITIALIZED);
+  bool success = false;
+
+  Assert(token.token_index_start == -1);
+  Assert(context.error_start_index == -1);
+  
+  try_parse_query_last_status(&context, &token, &success);
+  Assert(!success);
+  Assert_Is_Null(context.error);
+  Assert(context.index == 0);
+  Assert(context.error_start_index == -1);
 }
 
 void test_tokenize_01(void)
@@ -941,6 +1020,7 @@ extern void test_suit_parser(void)
   Register_Test(test_try_parse_string_05);
   Register_Test(test_try_parse_string_06);
   Register_Test(test_try_parse_string_07);
+  Register_Test(test_try_parse_string_08);
   Register_Test(test_try_parse_redirect_01);
   Register_Test(test_try_parse_redirect_02);
   Register_Test(test_try_parse_redirect_03);
@@ -953,11 +1033,14 @@ extern void test_suit_parser(void)
   Register_Test(test_try_parse_redirect_10);
   Register_Test(test_try_parse_redirect_11);
   Register_Test(test_try_parse_redirect_12);
+  Register_Test(test_try_parse_redirect_13);
   Register_Test(test_try_parse_globbing_01);
   Register_Test(test_try_parse_globbing_02);
   Register_Test(test_try_parse_globbing_03);
+  Register_Test(test_try_parse_globbing_04);
   Register_Test(test_try_parse_pipe01);
   Register_Test(test_try_parse_pipe02);
+  Register_Test(test_try_parse_pipe_03);
   Register_Test(test_try_parse_and01);
   Register_Test(test_try_parse_and02);
   Register_Test(test_try_parse_and03);
@@ -968,6 +1051,7 @@ extern void test_suit_parser(void)
   Register_Test(test_try_query_status_02);
   Register_Test(test_try_query_status_03);
   Register_Test(test_try_query_status_04);
+  Register_Test(test_try_query_status_05);
   Register_Test(test_tokenize_01);
   Register_Test(test_tokenize_02);
   Register_Test(test_tokenize_03);
