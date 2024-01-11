@@ -3,6 +3,12 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief Estrutura interna usada para representar e conter o estado de um 
+ * teste que foi executado.
+ * @note João, uma possível melhoria seria adicionar o tempo por teste, mas
+ * posso esperar um caso real de uso antes de decidir implementar.
+ */
 typedef struct Test_State {
   bool at_least_one_failed;
   unsigned passed;
@@ -10,7 +16,6 @@ typedef struct Test_State {
   const char *filename;
   const char *expr;
   unsigned line_number;
-  // @todo João, adicionar o tempo por teste
 } Test_State;
 
 Test_State current_state = { 0 };
