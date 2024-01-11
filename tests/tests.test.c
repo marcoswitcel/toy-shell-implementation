@@ -170,8 +170,10 @@ void test_shell_parse_command01(void)
   Assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
   Assert(strcmp(execute_command_node.stderr_redirect_filename, "arquivo.txt") == 0);
   Assert(execute_command_node.pipe == NULL);
-  // @todo João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
-  // do último token parseado, nesse caso a string "arquivo.txt"
+  // @note João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
+  // do último token parseado, nesse caso a string "arquivo.txt".
+  // @resposta Na verdade o token_index_start aponta para o Token_String que contém a string
+  // com o nome do "arquivo.txt"
   Assert(execute_command_node.token_index_start == 13);
 }
 
@@ -203,7 +205,7 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.stderr_redirect_filename == NULL);
   Assert(execute_command_node.stdout_redirect_filename == NULL);
   Assert(execute_command_node.pipe == NULL);
-  Assert(execute_command_node.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(execute_command_node.token_index_start == -1);
 
   // o comando AND a seguir
   Assert(execute_command_node.next_command->args != NULL);
@@ -219,7 +221,7 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
   Assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
   Assert(execute_command_node.next_command->pipe == NULL);
-  Assert(execute_command_node.next_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(execute_command_node.next_command->token_index_start == -1);
 }
 
 void test_shell_parse_command03(void)
@@ -250,7 +252,7 @@ void test_shell_parse_command03(void)
   Assert(first_command.stderr_redirect_filename == NULL);
   Assert(first_command.stdout_redirect_filename == NULL);
   Assert(first_command.pipe == NULL);
-  Assert(first_command.token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(first_command.token_index_start == -1);
 
   // o comando AND a seguir
   Execute_Command_Node *second_command = first_command.next_command;
@@ -267,7 +269,7 @@ void test_shell_parse_command03(void)
   Assert(second_command->stderr_redirect_filename == NULL);
   Assert(second_command->stdout_redirect_filename == NULL);
   Assert(second_command->pipe);
-  Assert(second_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(second_command->token_index_start == -1);
   
   // pipe
   Execute_Command_Node *second_command_pipe = second_command->pipe;
@@ -284,7 +286,7 @@ void test_shell_parse_command03(void)
   Assert(second_command_pipe->stderr_redirect_filename == NULL);
   Assert(second_command_pipe->stdout_redirect_filename == NULL);
   Assert(second_command_pipe->pipe == NULL);
-  Assert(second_command_pipe->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(second_command_pipe->token_index_start == -1);
 
   // o comando AND a seguir
   Execute_Command_Node *third_command = first_command.next_command->next_command;
@@ -301,7 +303,7 @@ void test_shell_parse_command03(void)
   Assert(third_command->stderr_redirect_filename == NULL);
   Assert(third_command->stdout_redirect_filename == NULL);
   Assert(third_command->pipe == NULL);
-  Assert(third_command->token_index_start == -1); // @todo João, isso aqui está inconsistente com o caso '01'
+  Assert(third_command->token_index_start == -1);
 }
 
 void test_skip_word_to_the_left_01(void)

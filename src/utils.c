@@ -140,7 +140,9 @@ void emmit_ring_bell()
 /**
  * @brief Gera um string com a representação textual do inteiro
  * 
- * @todo João, adicionar uma versão que suporta bases alternativas como base: 2, 16 e etc...
+ * @note João, não seria complexo adicionar uma versão que suporte bases
+ * alternativas como base: 2, 16 e etc... Pode-se usar o código e os links de
+ * referência abaixo. 
  * 
  * Referências
  * @link https://daveparillo.github.io/cisc187-reader/recursion/to_string.html
@@ -149,7 +151,7 @@ void emmit_ring_bell()
  * @param number 
  * @return char* 
  */
-char * int_to_cstring(int number)
+char *int_to_cstring(int number)
 {
   const int base = 10;
   bool is_negative_number = number < 0;
