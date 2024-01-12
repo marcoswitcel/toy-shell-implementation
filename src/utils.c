@@ -31,7 +31,17 @@ void print_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_a
   }
 }
 
-char* copy(const char *source)
+/**
+ * @brief Utilitário geral para facilitar a cópia de strings
+ * 
+ * @note Acredito para otimizar as alocações e facilitar a liberação da memória,
+ * talvez seria interessante fazer alguma versão que usa um `Bump Alocator` e 
+ * libera a memória toda de uma vez ao final do siclo de processamento.
+ * 
+ * @param source String a ser copiada
+ * @return char* 
+ */
+char *copy(const char *source)
 {
   size_t size = strlen(source);
   char * copy = (char *) malloc(size + 1);

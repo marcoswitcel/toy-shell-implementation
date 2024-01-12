@@ -67,7 +67,6 @@ int builtin_cd(const Process_Parameter *process_parameter)
 
 int builtin_set(const Process_Parameter *process_parameter)
 {
-  // @todo João, ajustar aqui para poder trocar o modo colorful e no_sound, talvez também o input mark
   // @todo João, seria interessante checar do lado do shell aonde o cursor está? ao invés de forçar uma linha
   // nova nos builtins sempre 
 
