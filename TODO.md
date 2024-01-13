@@ -29,7 +29,8 @@ Posso criar um stdin separado para o processo filho e duplicar meu input pra lá
 * implementar suporte a inputs de multiplas linhas, permitindo navegar e reportando erros de forma clara
 * uma funcionalidade interessante para os testes seria poder agrupar testes em alguma estrura de "subcategoria"
 * permitir trocar o símbolo de "input", se for possível trocar durante execução, melhor ainda
-* adicionar builtin que permite trocar em tempo de execução parâmetros do terminal 
+* adicionar builtin que permite trocar em tempo de execução parâmetros do terminal
+* adicionar suporte a busca na history, exemplo: 2! execute comando 2
 
 
 ## Anotações 15/08/2023
