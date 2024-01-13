@@ -23,13 +23,6 @@
 
 #define HISTORY_MAX_ELEMENTS 20
 
-/**
- * @brief Por hora essa macro define a constante que representa a máscara,
- * mas vou acredito que o melhor seria criar campos na estrutura `Shell_Context_Data`
- * para conter a referência da string e comprimento
- */
-#define DEFAULT_INPUT_MARK "|>" 
-
 Shell_Context_Data *the_shell_context;
 
 Shell_Context_Data create_shell_context_data()
@@ -40,8 +33,8 @@ Shell_Context_Data create_shell_context_data()
     .last_typed_commands = create_list_of_strings(64, 64),
     .next_typed_command_to_show = -1,
     .last_status_code = 0,
-    .input_mark = DEFAULT_INPUT_MARK,
-    .input_mark_length = SIZE_OF_STATIC_STRING(DEFAULT_INPUT_MARK),
+    .input_mark = default_input_mark,
+    .input_mark_length = SIZE_OF_STATIC_STRING(default_input_mark),
   };
 }
 

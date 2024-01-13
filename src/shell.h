@@ -27,4 +27,9 @@ typedef struct Shell_Context_Data
  */
 extern Shell_Context_Data *the_shell_context;
 
+/**
+ * @brief Define a constante que representa a marca de input padrão
+ */
+const char default_input_mark[] = "|>";
+
 #endif // _SHELL_H_

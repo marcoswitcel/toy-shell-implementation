@@ -94,7 +94,10 @@ void test_runner(void)
   ensure_is_initialized();
 
   Buffer *buffer = create_buffer(1024, 1024);
-  // @leak
+  // @note João, aqui aloco memória para a string apenas para rodar o strlen em cima,
+  // porém como esse processo não roda muitas vezes e o `test_runner` não é um processo
+  // que deve ficar rodando direto esse leak não tem problema. Será liberado assim que
+  // o programa encerrar.
   unsigned index_size_in_chars = strlen(int_to_cstring(number_of_tests));
   const unsigned column_size = 80 - 1 - SIZE_OF_STATIC_STRING(" FAILED");
 

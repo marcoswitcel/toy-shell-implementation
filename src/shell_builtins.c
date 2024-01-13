@@ -130,8 +130,13 @@ int builtin_set(const Process_Parameter *process_parameter)
       if (process_parameter->args[2] != NULL)
       {
         // @sanitize precisa checar por caracteres de controle no mínimo
-        // @leak preciso formalizar um jeito de saber como fazer o release da memória caso o usuário troque a partir do default
         char *value = copy(process_parameter->args[2]);
+        
+        if (the_shell_context->input_mark != default_input_mark)
+        {
+          FREE_AND_NULLIFY(the_shell_context->input_mark);
+        }
+
         the_shell_context->input_mark = value;
         the_shell_context->input_mark_length = strlen(value);
       }
