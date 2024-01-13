@@ -655,7 +655,7 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
     // executar de uma forma mais segmentada para poder reportar melhor, ou só, retornar alguma indicação de qual
     // node estava sendo executado
     bool failed = false;
-    // @todo João, @leak @fixme posso montar uma função pra release de `Process_Paramter`
+
     process.pipe_through = ALLOC(Process_Parameter, 1);
     *process.pipe_through = shell_convert_execute_command_into_process_parameter(execute_command_node->pipe, &failed);
 
