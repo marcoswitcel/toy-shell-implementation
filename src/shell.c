@@ -864,6 +864,8 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
         // o bash não faz isso, não sei se acho interessante adicionar output
 
         current_command = current_command->next_command;
+
+        release_process_parameters(&process_parameter, false, false);
       }
     }
     else if (shell_context.exit_requested)

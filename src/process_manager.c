@@ -12,6 +12,9 @@
 
 #include "./list.implementations.h"
 #include "./utils.c"
+// @note Talvez deveria mover a função `release_cstring_from_null_terminated_pointer_array_skipping_symbols`
+// para o utils, para remover essa dependência.
+#include "./nodes.h"
 #include "./terminal.c"
 
 typedef struct Process_Parameter {
@@ -23,6 +26,30 @@ typedef struct Process_Parameter {
 } Process_Parameter;
 
 #define STATIC_PROCESS_PARAMETER(ARGS) (Process_Parameter) { .args = ARGS, .fd_stdin = STDIN_FILENO, .fd_stdout = STDOUT_FILENO, .fd_stderr = STDERR_FILENO, .pipe_through = NULL, }
+
+void release_process_parameters(Process_Parameter *process_parameter, const bool clear_root_parameter, const bool free_args)
+{
+  Process_Parameter *current_parameter = process_parameter;
+  Process_Parameter *next_parameter = NULL;
+
+  while (current_parameter)
+  {
+    next_parameter = current_parameter->pipe_through;
+
+    // @note Os args são emprestados da estrutura `Execute_Command_Node` por isso nem sempre precisam 
+    // ser liberados, o código abaixo precisa ser testado antes de usar.
+    if (free_args)
+    {
+      // @note Caso necessário descomentar e testar
+      // if (current_parameter->args) release_cstring_from_null_terminated_pointer_array_skipping_symbols(current_parameter->args);
+      // FREE_AND_NULLIFY(current_parameter->args);
+    }
+
+    if (current_parameter != process_parameter || clear_root_parameter) free(current_parameter);
+
+    current_parameter = next_parameter;
+  }
+}
 
 /**
  * @brief espera o processo terminar e retornar o status
