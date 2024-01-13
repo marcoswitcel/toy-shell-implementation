@@ -650,8 +650,12 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
   if (execute_command_node->pipe)
   {
     // @todo João, terminar de implementar tratativa de erros, como por exemplo, "não pode abrir o arquivo" (validar)
+    // Até avisa que não pode abrir, mas não consegue reportar o índice, isso porque do ponto de vista do `calle`
+    // quem está sendo executado é `execute_command_node` e não `execute_command_node->pipe`, talvez fosse melhor
+    // executar de uma forma mais segmentada para poder reportar melhor, ou só, retornar alguma indicação de qual
+    // node estava sendo executado
     bool failed = false;
-    // @todo João, leak fixme
+    // @todo João, @leak @fixme posso montar uma função pra release de `Process_Paramter`
     process.pipe_through = ALLOC(Process_Parameter, 1);
     *process.pipe_through = shell_convert_execute_command_into_process_parameter(execute_command_node->pipe, &failed);
 
