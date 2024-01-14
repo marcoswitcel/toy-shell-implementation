@@ -68,6 +68,18 @@ Internal: Processo filho não pode executar o programa alvo.
 teste com &&
 |>^C
 ```
+* se o usuário digitar apenas um token reservado e tentar rodar a aplicação pode crashar
+```bash
+|>   &&
+  -----^
+  Problema: Nenhum comando encontrado, possivelmente por se tratar de uma linha apenas com espaços.
+```
+* se o usuário digitar apenas "&&" e dar um espaço o input passa na tokenização mas não gera um nó válido, infelizmente o sistema tenta executar esse nó possivelmente contendo valores nulos e crasha
+```bash
+|>   && 
+main: src/./shell.c:729: shell_execute_command: Assertion `false && "Não deveria ser atingido nunca"' failed.
+
+```
 
 
 ## Onde parei
