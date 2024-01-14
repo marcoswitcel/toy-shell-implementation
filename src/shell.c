@@ -758,14 +758,20 @@ int shell_execute_command(const Process_Parameter process_parameter)
   return launch_process(process_parameter, true);
 }
 
-void shell_report_error(const char*error, signed error_start_index)
+void shell_report_error(Shell_Context_Data *shell_context, const char*error, signed error_start_index)
 {
   // RECORD_TIME(report_error);
   Buffer *buffer = create_buffer(LINE_BUFFER_SIZE, LINE_BUFFER_SIZE);
 
   if (error_start_index > -1)
   {
-    buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  "));
+    // @note verificar uma forma mais eficiente de imprimir várias vezes o mesmo caracter,
+    // isso acontece em vários lugares
+    for (unsigned i = 0; i < shell_context->input_mark_length; i++)
+    {
+      buffer_push(buffer, ' ');
+    }
+    
     for (signed i = 0; i < error_start_index+1; i++)
     {
       if (i == error_start_index)
@@ -780,7 +786,12 @@ void shell_report_error(const char*error, signed error_start_index)
     buffer_push_all(buffer, "\r\n", 2);
   }
 
-  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("  Problema: "));
+  for (unsigned i = 0; i < shell_context->input_mark_length; i++)
+  {
+    buffer_push(buffer, ' ');
+  }
+  
+  buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("Problema: "));
   buffer_push_all(buffer, error, strlen(error));
   buffer_push_all(buffer, "\r\n", 2);
 
@@ -791,9 +802,9 @@ void shell_report_error(const char*error, signed error_start_index)
   // MEASURE_TIME(report_error, "teste");
 }
 
-void shell_report_parse_error(Parse_Context *context)
+void shell_report_parse_error(Shell_Context_Data *shell_context, Parse_Context *context)
 {
-  shell_report_error(context->error, context->error_start_index);
+  shell_report_error(shell_context, context->error, context->error_start_index);
 }
 
 void read_eval_shell_loop(bool colorful, bool no_sound)
@@ -842,7 +853,7 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
           print_input_mark(&shell_context, readed_line);
           write(STDOUT_FILENO, "\r\n", 2);
 
-          shell_report_parse_error(&context);
+          shell_report_parse_error(&shell_context, &context);
           should_interrupt = true;
         }
         else
@@ -875,7 +886,7 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
     }
     else // @note se `shell_context.exit_requested` for false, no momento ele reporta o erro por tentar parsear input vazio
     {
-      shell_report_parse_error(&context);
+      shell_report_parse_error(&shell_context, &context);
       FREE_AND_NULLIFY(context.error);
     }
 
