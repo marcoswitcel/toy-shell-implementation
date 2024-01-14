@@ -68,7 +68,7 @@ Internal: Processo filho não pode executar o programa alvo.
 teste com &&
 |>^C
 ```
-* se o usuário digitar apenas um token reservado e tentar rodar a aplicação pode crashar
+* se o usuário digitar apenas um token reservado e tentar rodar a aplicação não reporta o erro correto -- OK
 ```bash
 |>   &&
   -----^

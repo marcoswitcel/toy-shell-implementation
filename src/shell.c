@@ -689,7 +689,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
   Sequence_Of_Tokens *tokens = tokenize(context);
 
-  if (tokens->index == 0)
+  if (tokens->index == 0 && context->error == NULL)
   {
     context->error = copy("Nenhum comando encontrado, possivelmente por se tratar de uma linha apenas com espaços.");
   }
