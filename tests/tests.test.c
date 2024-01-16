@@ -165,7 +165,7 @@ void test_shell_parse_command01(void)
   Assert(strcmp(execute_command_node.args[1], "teste") == 0);
   Assert(execute_command_node.args[2] == NULL);
 
-  Assert(execute_command_node.append_mode == false);
+  Assert(execute_command_node.append_mode_stdout == false);
   Assert(execute_command_node.next_command == NULL);
   Assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
   Assert(strcmp(execute_command_node.stderr_redirect_filename, "arquivo.txt") == 0);
@@ -200,7 +200,7 @@ void test_shell_parse_command02(void)
   Assert(strcmp(execute_command_node.args[1], "teste") == 0);
   Assert(execute_command_node.args[2] == NULL);
 
-  Assert(execute_command_node.append_mode == false);
+  Assert(execute_command_node.append_mode_stdout == false);
   Assert(execute_command_node.next_command != NULL);
   Assert(execute_command_node.stderr_redirect_filename == NULL);
   Assert(execute_command_node.stdout_redirect_filename == NULL);
@@ -216,7 +216,7 @@ void test_shell_parse_command02(void)
   Assert(strcmp(execute_command_node.next_command->args[1], "teste2") == 0);
   Assert(execute_command_node.next_command->args[2] == NULL);
 
-  Assert(execute_command_node.next_command->append_mode == false);
+  Assert(execute_command_node.next_command->append_mode_stdout == false);
   Assert(execute_command_node.next_command->next_command == NULL);
   Assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
   Assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
@@ -247,7 +247,7 @@ void test_shell_parse_command03(void)
   Assert(strcmp(first_command.args[1], "primeiro") == 0);
   Assert(first_command.args[2] == NULL);
 
-  Assert(first_command.append_mode == false);
+  Assert(first_command.append_mode_stdout == false);
   Assert(first_command.next_command != NULL);
   Assert(first_command.stderr_redirect_filename == NULL);
   Assert(first_command.stdout_redirect_filename == NULL);
@@ -264,7 +264,7 @@ void test_shell_parse_command03(void)
   Assert(strcmp(second_command->args[1], "segundo") == 0);
   Assert(second_command->args[2] == NULL);
 
-  Assert(second_command->append_mode == false);
+  Assert(second_command->append_mode_stdout == false);
   Assert(second_command->next_command);
   Assert(second_command->stderr_redirect_filename == NULL);
   Assert(second_command->stdout_redirect_filename == NULL);
@@ -281,7 +281,7 @@ void test_shell_parse_command03(void)
   Assert(strcmp(second_command_pipe->args[1], "segundo") == 0);
   Assert(second_command_pipe->args[2] == NULL);
 
-  Assert(second_command_pipe->append_mode == false);
+  Assert(second_command_pipe->append_mode_stdout == false);
   Assert(second_command_pipe->next_command == NULL);
   Assert(second_command_pipe->stderr_redirect_filename == NULL);
   Assert(second_command_pipe->stdout_redirect_filename == NULL);
@@ -298,7 +298,7 @@ void test_shell_parse_command03(void)
   Assert(strcmp(third_command->args[1], "terceiro") == 0);
   Assert(third_command->args[2] == NULL);
 
-  Assert(third_command->append_mode == false);
+  Assert(third_command->append_mode_stdout == false);
   Assert(third_command->next_command == NULL);
   Assert(third_command->stderr_redirect_filename == NULL);
   Assert(third_command->stdout_redirect_filename == NULL);
