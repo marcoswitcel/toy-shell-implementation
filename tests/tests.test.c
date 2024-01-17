@@ -166,6 +166,7 @@ void test_shell_parse_command01(void)
   Assert(execute_command_node.args[2] == NULL);
 
   Assert(execute_command_node.append_mode_stdout == false);
+  Assert(execute_command_node.append_mode_stderr == false);
   Assert(execute_command_node.next_command == NULL);
   Assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
   Assert(strcmp(execute_command_node.stderr_redirect_filename, "arquivo.txt") == 0);
@@ -201,6 +202,7 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.args[2] == NULL);
 
   Assert(execute_command_node.append_mode_stdout == false);
+  Assert(execute_command_node.append_mode_stderr == false);
   Assert(execute_command_node.next_command != NULL);
   Assert(execute_command_node.stderr_redirect_filename == NULL);
   Assert(execute_command_node.stdout_redirect_filename == NULL);
@@ -217,6 +219,7 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.next_command->args[2] == NULL);
 
   Assert(execute_command_node.next_command->append_mode_stdout == false);
+  Assert(execute_command_node.next_command->append_mode_stderr == false);
   Assert(execute_command_node.next_command->next_command == NULL);
   Assert(execute_command_node.next_command->stderr_redirect_filename == NULL);
   Assert(execute_command_node.next_command->stdout_redirect_filename == NULL);
@@ -248,6 +251,7 @@ void test_shell_parse_command03(void)
   Assert(first_command.args[2] == NULL);
 
   Assert(first_command.append_mode_stdout == false);
+  Assert(first_command.append_mode_stderr == false);
   Assert(first_command.next_command != NULL);
   Assert(first_command.stderr_redirect_filename == NULL);
   Assert(first_command.stdout_redirect_filename == NULL);
@@ -265,6 +269,7 @@ void test_shell_parse_command03(void)
   Assert(second_command->args[2] == NULL);
 
   Assert(second_command->append_mode_stdout == false);
+  Assert(second_command->append_mode_stderr == false);
   Assert(second_command->next_command);
   Assert(second_command->stderr_redirect_filename == NULL);
   Assert(second_command->stdout_redirect_filename == NULL);
@@ -282,6 +287,7 @@ void test_shell_parse_command03(void)
   Assert(second_command_pipe->args[2] == NULL);
 
   Assert(second_command_pipe->append_mode_stdout == false);
+  Assert(second_command_pipe->append_mode_stderr == false);
   Assert(second_command_pipe->next_command == NULL);
   Assert(second_command_pipe->stderr_redirect_filename == NULL);
   Assert(second_command_pipe->stdout_redirect_filename == NULL);
@@ -305,6 +311,9 @@ void test_shell_parse_command03(void)
   Assert(third_command->pipe == NULL);
   Assert(third_command->token_index_start == -1);
 }
+
+// @todo João, adicionar teste com 1>> e 2> a nível de comando para validar direct individual
+// e principalmente, se o append_mode individual está correto
 
 void test_skip_word_to_the_left_01(void)
 {

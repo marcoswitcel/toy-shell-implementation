@@ -838,6 +838,7 @@ void test_parse_execute_command_node_01(void)
   Assert(node.stderr_redirect_filename == NULL);
   Assert(node.next_command == NULL);
   Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
 
   Assert(node.args);
   Assert_Sring_Equals(node.args[0], "echo");
@@ -850,6 +851,7 @@ void test_parse_execute_command_node_01(void)
   Assert(node.pipe->stdout_redirect_filename == NULL);
   Assert(node.pipe->stderr_redirect_filename == NULL);
   Assert(!node.pipe->append_mode_stdout);
+  Assert(!node.pipe->append_mode_stderr);
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
@@ -873,6 +875,7 @@ void test_parse_execute_command_node_02(void)
   Assert(node.stdout_redirect_filename == NULL);
   Assert(node.stderr_redirect_filename == NULL);
   Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
 
   Assert(node.args);
   Assert_Sring_Equals(node.args[0], "echo");
@@ -885,6 +888,7 @@ void test_parse_execute_command_node_02(void)
   Assert(node.pipe->stdout_redirect_filename == NULL);
   Assert(node.pipe->stderr_redirect_filename == NULL);
   Assert(!node.pipe->append_mode_stdout);
+  Assert(!node.pipe->append_mode_stderr);
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
@@ -916,6 +920,7 @@ void test_parse_execute_command_node_03(void)
   Assert_Sring_Equals(node.stdout_redirect_filename, "arquivo.txt");
   Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
 
   Assert(node.args);
   Assert_Sring_Equals(node.args[0], "echo");
@@ -928,6 +933,7 @@ void test_parse_execute_command_node_03(void)
   Assert_Sring_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
   Assert_Sring_Equals(node.next_command->stderr_redirect_filename, "arquivo2.txt");
   Assert(node.next_command->append_mode_stdout);
+  Assert(node.next_command->append_mode_stderr);
 
   Assert(node.next_command->args);
   Assert_Sring_Equals(node.next_command->args[0], "echoo");
@@ -950,6 +956,7 @@ void test_parse_execute_command_node_04(void)
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
 
   Assert_Is_Not_Null(node.args);
   Assert_Sring_Equals(node.args[0], "echo");
@@ -962,6 +969,7 @@ void test_parse_execute_command_node_04(void)
   Assert_Sring_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
   Assert_Is_Null(node.next_command->stderr_redirect_filename);
   Assert(!node.next_command->append_mode_stdout);
+  Assert(!node.next_command->append_mode_stderr);
 
   Assert_Is_Not_Null(node.next_command->args);
   Assert_Sring_Equals(node.next_command->args[0], "echoo");
@@ -1008,6 +1016,7 @@ void test_parse_execute_command_node_06(void)
   Assert_Sring_Equals(node.stdout_redirect_filename, "stdout.txt");
   Assert_Sring_Equals(node.stderr_redirect_filename, "stderr.txt");
   Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
 }
 
 extern void test_suit_parser(void)
