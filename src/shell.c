@@ -632,7 +632,7 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
     else
     {
       int oflags = O_RDWR|O_CREAT;
-      if (execute_command_node->append_mode_stdout) oflags |= O_APPEND;
+      if (execute_command_node->append_mode_stderr) oflags |= O_APPEND;
       
       int fd = open(execute_command_node->stderr_redirect_filename, oflags, 0600);
       

@@ -13,11 +13,12 @@ typedef struct Execute_Command_Node {
    */
   signed token_index_start;
   bool append_mode_stdout;
+  bool append_mode_stderr;
   struct Execute_Command_Node *pipe;
   struct Execute_Command_Node *next_command;
 } Execute_Command_Node;
 
-#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .stdout_redirect_filename = NULL, .stderr_redirect_filename = NULL, .token_index_start = -1, .append_mode_stdout = false, .pipe = NULL, .next_command = NULL, }
+#define STATIC_EXECUTE_COMMAND_NODE() (Execute_Command_Node) { .args = NULL, .stdout_redirect_filename = NULL, .stderr_redirect_filename = NULL, .token_index_start = -1, .append_mode_stdout = false, .append_mode_stderr = false, .pipe = NULL, .next_command = NULL, }
 
 /**
  * @brief Função que libera a memória da cstrings individuais referenciadas pelo pointer_array

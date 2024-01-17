@@ -503,9 +503,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
   const char *stderr_redirect_filename = NULL;
   signed token_index_start = -1;
   bool append_mode_stdout = false;
-  // @todo João, terminar de implementar o suporte a append_mode individualisado no redirect 
-  // @todo João, revisar testes que usam append_mode_stdout
-  // bool append_mode_stderr = false;
+  bool append_mode_stderr = false;
   bool piped = false;
   Execute_Command_Node *pipe = NULL;
   bool next_command_found = false;
@@ -564,19 +562,18 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
         break;
       }
-
-      // @todo João, copiando o último modo para ambos os redirects por hora
-      append_mode_stdout = token.data.redirect.appending;
       
       if (fd == STDOUT_FILENO)
       {
         has_stdout_redirect_token = true;
         stdout_redirect_expect_file_name = true;
+        append_mode_stdout = token.data.redirect.appending;
       }
       else if (fd == STDERR_FILENO)
       {
         has_stderr_redirect_token = true;
         stderr_redirect_expect_file_name = true;
+        append_mode_stderr = token.data.redirect.appending;
       }
       else
       {
@@ -584,6 +581,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         stdout_redirect_expect_file_name = true;
         has_stderr_redirect_token = true;
         stderr_redirect_expect_file_name = true;
+        append_mode_stdout = token.data.redirect.appending;
+        append_mode_stderr = token.data.redirect.appending;
       } 
     }
 
@@ -689,7 +688,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
 
   destroy_list_of_strings(list_of_args);
 
-  return (Execute_Command_Node) { .args = args, .stdout_redirect_filename = stdout_redirect_filename, .stderr_redirect_filename = stderr_redirect_filename, .token_index_start = token_index_start, .append_mode_stdout = append_mode_stdout, .pipe = pipe, .next_command = next_command_node };
+  return (Execute_Command_Node) { .args = args, .stdout_redirect_filename = stdout_redirect_filename, .stderr_redirect_filename = stderr_redirect_filename, .token_index_start = token_index_start, .append_mode_stdout = append_mode_stdout, .append_mode_stderr = append_mode_stderr, .pipe = pipe, .next_command = next_command_node };
 }
 
 // @todo João, acho que é melhor retornar uma referência alocada no heap
