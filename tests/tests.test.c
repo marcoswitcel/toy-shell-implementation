@@ -338,8 +338,8 @@ void test_shell_parse_command04(void)
   Assert(execute_command_node.append_mode_stdout);
   Assert(execute_command_node.append_mode_stderr == false);
   Assert_Is_Null(execute_command_node.next_command);
-  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "b.txt");
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "b.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 24); // índice da letra 'b' de 'b.txt'
 }
@@ -370,8 +370,8 @@ void test_shell_parse_command05(void)
   Assert(execute_command_node.append_mode_stdout == false);
   Assert(execute_command_node.append_mode_stderr);
   Assert_Is_Null(execute_command_node.next_command);
-  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "b.txt");
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "b.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 24); // índice da letra 'b' de 'b.txt'
 }
@@ -402,8 +402,8 @@ void test_shell_parse_command06(void)
   Assert(execute_command_node.append_mode_stdout);
   Assert(execute_command_node.append_mode_stderr);
   Assert_Is_Null(execute_command_node.next_command);
-  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "b.txt");
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "b.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 25); // índice da letra 'b' de 'b.txt'
 }
@@ -426,16 +426,16 @@ void test_shell_parse_command07(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(!execute_command_node.append_mode_stdout);
   Assert(!execute_command_node.append_mode_stderr);
   Assert_Is_Null(execute_command_node.next_command);
-  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 13); // índice da letra 'a' de 'a.txt'
 }
@@ -458,16 +458,16 @@ void test_shell_parse_command08(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(execute_command_node.append_mode_stdout);
   Assert(execute_command_node.append_mode_stderr);
   Assert_Is_Null(execute_command_node.next_command);
-  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 14); // índice da letra 'a' de 'a.txt'
 }
@@ -490,16 +490,16 @@ void test_shell_parse_command09(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(!execute_command_node.append_mode_stdout);
   Assert(execute_command_node.append_mode_stderr);
   Assert_Is_Null(execute_command_node.next_command);
   Assert_Is_Null(execute_command_node.stdout_redirect_filename);
-  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
   Assert_Is_Null(execute_command_node.pipe);
   Assert(execute_command_node.token_index_start == 15); // índice da letra 'a' de 'a.txt'
 }

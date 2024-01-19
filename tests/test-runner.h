@@ -62,7 +62,7 @@ void test_runner(void);
 /**
  * @brief Macro utilitária para facilitar a asserção de strings
  */
-#define Assert_Sring_Equals(EXPR1, EXPR2) Assert(strcmp(EXPR1, EXPR2) == 0)
+#define Assert_String_Equals(EXPR1, EXPR2) Assert(strcmp(EXPR1, EXPR2) == 0)
 
 /**
  * @brief Macro utilitária para facilitar a asserção de nulo

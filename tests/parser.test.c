@@ -41,8 +41,8 @@ void test_try_parse_string_01(void)
   Assert(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
-  Assert_Sring_Equals("ls", token.data.string.cstring);
-  Assert_Sring_Equals("ls", token.data.string.cstring);
+  Assert_String_Equals("ls", token.data.string.cstring);
+  Assert_String_Equals("ls", token.data.string.cstring);
   Assert(context.index == 2);
 
 
@@ -57,7 +57,7 @@ void test_try_parse_string_01(void)
   Assert(token.type == STRING);
   Assert(context.index == 7);
   Assert(token.data.string.cstring);
-  Assert_Sring_Equals("-lha", token.data.string.cstring);
+  Assert_String_Equals("-lha", token.data.string.cstring);
 }
 
 void test_try_parse_string_02(void)
@@ -70,7 +70,7 @@ void test_try_parse_string_02(void)
   Assert(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
-  Assert_Sring_Equals("ls", token.data.string.cstring);
+  Assert_String_Equals("ls", token.data.string.cstring);
   Assert(context.index == 2);
 
 
@@ -96,7 +96,7 @@ void test_try_parse_string_03(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert_Sring_Equals("echo", token.data.string.cstring);
+  Assert_String_Equals("echo", token.data.string.cstring);
   Assert(context.index == 4);
   Assert(context.error_start_index == -1);
 
@@ -119,7 +119,7 @@ void test_try_parse_string_04(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert_Sring_Equals("asd", token.data.string.cstring);
+  Assert_String_Equals("asd", token.data.string.cstring);
   Assert(context.index == 5);
   Assert(context.error_start_index == -1);
 }
@@ -135,7 +135,7 @@ void test_try_parse_string_05(void)
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
-  Assert_Sring_Equals("asd", token.data.string.cstring);
+  Assert_String_Equals("asd", token.data.string.cstring);
   Assert(context.index == 3);
   Assert(context.error_start_index == -1);
 }
@@ -841,10 +841,10 @@ void test_parse_execute_command_node_01(void)
   Assert(!node.append_mode_stderr);
 
   Assert(node.args);
-  Assert_Sring_Equals(node.args[0], "echo");
+  Assert_String_Equals(node.args[0], "echo");
 
   Assert(node.args[1]);
-  Assert_Sring_Equals(node.args[1], "teste");
+  Assert_String_Equals(node.args[1], "teste");
 
   Assert(node.pipe);
 
@@ -855,10 +855,10 @@ void test_parse_execute_command_node_01(void)
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
-  Assert_Sring_Equals(node.pipe->args[0], "grep");
+  Assert_String_Equals(node.pipe->args[0], "grep");
 
   Assert(node.pipe->args[1]);
-  Assert_Sring_Equals(node.pipe->args[1], "teste");
+  Assert_String_Equals(node.pipe->args[1], "teste");
 }
 
 void test_parse_execute_command_node_02(void)
@@ -878,10 +878,10 @@ void test_parse_execute_command_node_02(void)
   Assert(!node.append_mode_stderr);
 
   Assert(node.args);
-  Assert_Sring_Equals(node.args[0], "echo");
+  Assert_String_Equals(node.args[0], "echo");
 
   Assert(node.args[1]);
-  Assert_Sring_Equals(node.args[1], "teste");
+  Assert_String_Equals(node.args[1], "teste");
 
   Assert(node.pipe);
 
@@ -892,18 +892,18 @@ void test_parse_execute_command_node_02(void)
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
-  Assert_Sring_Equals(node.pipe->args[0], "grep");
+  Assert_String_Equals(node.pipe->args[0], "grep");
 
   Assert(node.pipe->args[1]);
-  Assert_Sring_Equals(node.pipe->args[1], "teste");
+  Assert_String_Equals(node.pipe->args[1], "teste");
 
   Assert(node.next_command);
 
   Assert(node.next_command->args);
-  Assert_Sring_Equals(node.next_command->args[0], "echo");
+  Assert_String_Equals(node.next_command->args[0], "echo");
 
   Assert(node.next_command->args[1]);
-  Assert_Sring_Equals(node.next_command->args[1], "teste final");
+  Assert_String_Equals(node.next_command->args[1], "teste final");
 }
 
 void test_parse_execute_command_node_03(void)
@@ -917,29 +917,29 @@ void test_parse_execute_command_node_03(void)
 
   Assert_Is_Null(context.error);
 
-  Assert_Sring_Equals(node.stdout_redirect_filename, "arquivo.txt");
-  Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
+  Assert_String_Equals(node.stdout_redirect_filename, "arquivo.txt");
+  Assert_String_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode_stdout);
   Assert(!node.append_mode_stderr);
 
   Assert(node.args);
-  Assert_Sring_Equals(node.args[0], "echo");
+  Assert_String_Equals(node.args[0], "echo");
 
   Assert(node.args[1]);
-  Assert_Sring_Equals(node.args[1], "teste");
+  Assert_String_Equals(node.args[1], "teste");
 
   Assert(node.next_command);
 
-  Assert_Sring_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
-  Assert_Sring_Equals(node.next_command->stderr_redirect_filename, "arquivo2.txt");
+  Assert_String_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
+  Assert_String_Equals(node.next_command->stderr_redirect_filename, "arquivo2.txt");
   Assert(node.next_command->append_mode_stdout);
   Assert(node.next_command->append_mode_stderr);
 
   Assert(node.next_command->args);
-  Assert_Sring_Equals(node.next_command->args[0], "echoo");
+  Assert_String_Equals(node.next_command->args[0], "echoo");
 
   Assert(node.next_command->args[1]);
-  Assert_Sring_Equals(node.next_command->args[1], "teste final");
+  Assert_String_Equals(node.next_command->args[1], "teste final");
 }
 
 void test_parse_execute_command_node_04(void)
@@ -954,28 +954,28 @@ void test_parse_execute_command_node_04(void)
   Assert_Is_Null(context.error);
 
   Assert_Is_Null(node.stdout_redirect_filename);
-  Assert_Sring_Equals(node.stderr_redirect_filename, "arquivo.txt");
+  Assert_String_Equals(node.stderr_redirect_filename, "arquivo.txt");
   Assert(!node.append_mode_stdout);
   Assert(!node.append_mode_stderr);
 
   Assert_Is_Not_Null(node.args);
-  Assert_Sring_Equals(node.args[0], "echo");
+  Assert_String_Equals(node.args[0], "echo");
 
   Assert_Is_Not_Null(node.args[1]);
-  Assert_Sring_Equals(node.args[1], "teste");
+  Assert_String_Equals(node.args[1], "teste");
 
   Assert_Is_Not_Null(node.next_command);
 
-  Assert_Sring_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
+  Assert_String_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
   Assert_Is_Null(node.next_command->stderr_redirect_filename);
   Assert(!node.next_command->append_mode_stdout);
   Assert(!node.next_command->append_mode_stderr);
 
   Assert_Is_Not_Null(node.next_command->args);
-  Assert_Sring_Equals(node.next_command->args[0], "echoo");
+  Assert_String_Equals(node.next_command->args[0], "echoo");
 
   Assert_Is_Not_Null(node.next_command->args[1]);
-  Assert_Sring_Equals(node.next_command->args[1], "teste final");
+  Assert_String_Equals(node.next_command->args[1], "teste final");
 }
 
 void test_parse_execute_command_node_05(void)
@@ -1005,16 +1005,16 @@ void test_parse_execute_command_node_06(void)
   Assert_Is_Null(context.error);
 
   Assert(node.args);
-  Assert_Sring_Equals(node.args[0], "echo");
+  Assert_String_Equals(node.args[0], "echo");
 
   Assert(node.args[1]);
-  Assert_Sring_Equals(node.args[1], "teste");
+  Assert_String_Equals(node.args[1], "teste");
 
   Assert_Is_Null(node.next_command);
   Assert_Is_Null(node.pipe);
 
-  Assert_Sring_Equals(node.stdout_redirect_filename, "stdout.txt");
-  Assert_Sring_Equals(node.stderr_redirect_filename, "stderr.txt");
+  Assert_String_Equals(node.stdout_redirect_filename, "stdout.txt");
+  Assert_String_Equals(node.stderr_redirect_filename, "stderr.txt");
   Assert(!node.append_mode_stdout);
   Assert(!node.append_mode_stderr);
 }
