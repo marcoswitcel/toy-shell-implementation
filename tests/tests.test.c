@@ -408,6 +408,102 @@ void test_shell_parse_command06(void)
   Assert(execute_command_node.token_index_start == 25); // índice da letra 'b' de 'b.txt'
 }
 
+void test_shell_parse_command07(void)
+{
+  const char parse_input_sample[] = "echo teste > a.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == 0);
+  Assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == strlen(parse_input_sample));
+
+  Assert_Is_Not_Null(execute_command_node.args);
+
+  Assert_Is_Not_Null(execute_command_node.args[0]);
+  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_Is_Not_Null(execute_command_node.args[1]);
+  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_Is_Null(execute_command_node.args[2]);
+
+  Assert(!execute_command_node.append_mode_stdout);
+  Assert(!execute_command_node.append_mode_stderr);
+  Assert_Is_Null(execute_command_node.next_command);
+  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
+  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_Is_Null(execute_command_node.pipe);
+  Assert(execute_command_node.token_index_start == 13); // índice da letra 'a' de 'a.txt'
+}
+
+void test_shell_parse_command08(void)
+{
+  const char parse_input_sample[] = "echo teste >> a.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == 0);
+  Assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == strlen(parse_input_sample));
+
+  Assert_Is_Not_Null(execute_command_node.args);
+
+  Assert_Is_Not_Null(execute_command_node.args[0]);
+  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_Is_Not_Null(execute_command_node.args[1]);
+  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_Is_Null(execute_command_node.args[2]);
+
+  Assert(execute_command_node.append_mode_stdout);
+  Assert(execute_command_node.append_mode_stderr);
+  Assert_Is_Null(execute_command_node.next_command);
+  Assert_Sring_Equals(execute_command_node.stdout_redirect_filename, "a.txt");
+  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_Is_Null(execute_command_node.pipe);
+  Assert(execute_command_node.token_index_start == 14); // índice da letra 'a' de 'a.txt'
+}
+
+void test_shell_parse_command09(void)
+{
+  const char parse_input_sample[] = "echo teste 2>> a.txt";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == 0);
+  Assert(context.length == strlen(parse_input_sample));
+
+  Execute_Command_Node execute_command_node = shell_parse_command(&context);
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+  Assert(context.index == strlen(parse_input_sample));
+
+  Assert_Is_Not_Null(execute_command_node.args);
+
+  Assert_Is_Not_Null(execute_command_node.args[0]);
+  Assert_Sring_Equals(execute_command_node.args[0], "echo");
+  Assert_Is_Not_Null(execute_command_node.args[1]);
+  Assert_Sring_Equals(execute_command_node.args[1], "teste");
+  Assert_Is_Null(execute_command_node.args[2]);
+
+  Assert(!execute_command_node.append_mode_stdout);
+  Assert(execute_command_node.append_mode_stderr);
+  Assert_Is_Null(execute_command_node.next_command);
+  Assert_Is_Null(execute_command_node.stdout_redirect_filename);
+  Assert_Sring_Equals(execute_command_node.stderr_redirect_filename, "a.txt");
+  Assert_Is_Null(execute_command_node.pipe);
+  Assert(execute_command_node.token_index_start == 15); // índice da letra 'a' de 'a.txt'
+}
+
 void test_skip_word_to_the_left_01(void)
 {
   const char command[] = "echo teste";
@@ -528,6 +624,9 @@ int main(void)
   Register_Test(test_shell_parse_command04);
   Register_Test(test_shell_parse_command05);
   Register_Test(test_shell_parse_command06);
+  Register_Test(test_shell_parse_command07);
+  Register_Test(test_shell_parse_command08);
+  Register_Test(test_shell_parse_command09);
   Register_Test(test_skip_word_to_the_left_01);
   Register_Test(test_skip_word_to_the_left_02);
   Register_Test(test_skip_word_to_the_right_01);
