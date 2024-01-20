@@ -75,7 +75,7 @@ int builtin_set(const Process_Parameter *process_parameter)
     char *arg1 =  process_parameter->args[1];
     if (strcmp(arg1, "--help") == 0)
     {
-      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Descrição do comando 'set'\r\nPermite alterar o valor de parâmetros:\r\nset colorful 1|0\n\r")); 
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("Descrição do comando 'set'\r\nPermite alterar o valor de parâmetros:\r\n  set colorful 1|0\n\r  set no_sound 1|0\n\r  set input_mark <string>\r\n")); 
     }
     else if (strcmp(arg1, "colorful") == 0)
     {
@@ -92,7 +92,9 @@ int builtin_set(const Process_Parameter *process_parameter)
         }
         else
         {
-          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set\r\n"));
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set '"));
+          write(process_parameter->fd_stdout, arg2, strlen(arg2));
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("'\r\n"));
           return 1;
         }
       }
@@ -116,7 +118,9 @@ int builtin_set(const Process_Parameter *process_parameter)
         }
         else
         {
-          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set\r\n"));
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("set: opção invalida para o set '"));
+          write(process_parameter->fd_stdout, arg2, strlen(arg2));
+          write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("'\r\n"));
           return 1;
         }
       }
@@ -147,8 +151,9 @@ int builtin_set(const Process_Parameter *process_parameter)
     }
     else
     {
-      // @todo João, concatenar o argumento aqui
-      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("argumento não conhecido\r\n"));
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("argumento não conhecido '"));
+      write(process_parameter->fd_stdout, arg1, strlen(arg1));
+      write(process_parameter->fd_stdout, EXPAND_STRING_REF_AND_COUNT("'\r\n"));
       return 1;
     }
   }
