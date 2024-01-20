@@ -815,12 +815,6 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
   shell_context.colorful = colorful;
   shell_context.soundful = !no_sound;
 
-  // @todo João, acho que a ideia mais interessante seria mover a variável `shell_context.exit_requested` para dentro
-  // da estrutura `Shell_Context_Data` e começar a passar ela para os builtins. Parece razoável
-  // e deixaria claro o acesso dos builtins a esses dados, também poderia ser criado algum tipo de `getter`,
-  // mas, não está clara a estrutura ainda então prefiro só passar a estrutura toda.
-  //last_typed_commands = shell_context.last_typed_commands;
-
   while (!shell_context.exit_requested)
   {
     char *readed_line = shell_wait_command_input(&shell_context);

@@ -9,7 +9,7 @@ typedef struct Execute_Command_Node {
   const char *stderr_redirect_filename;
   /**
    * @brief esse campo está sendo usado para armazenar o índice do token
-   * que representa o nome do arquivo.
+   * que representa o nome do último argumento que indica um arquivo.
    */
   signed token_index_start;
   bool append_mode_stdout;

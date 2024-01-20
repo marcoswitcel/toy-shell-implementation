@@ -67,7 +67,7 @@ int builtin_cd(const Process_Parameter *process_parameter)
 
 int builtin_set(const Process_Parameter *process_parameter)
 {
-  // @todo João, seria interessante checar do lado do shell aonde o cursor está? ao invés de forçar uma linha
+  // @note João, seria interessante checar do lado do shell aonde o cursor está? ao invés de forçar uma linha
   // nova nos builtins sempre 
 
   if (process_parameter->args[1] != NULL)
