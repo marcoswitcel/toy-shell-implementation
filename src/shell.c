@@ -833,7 +833,7 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
         // @note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
         // do resultado da execução do comando anterior
         replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
-        // @todo João, quando o 'pipe_through' estiver implementado vou precisar fazer o release dessa estrutura
+
         Process_Parameter process_parameter = shell_convert_execute_command_into_process_parameter(current_command, &tried_opening_file_and_failed);
         if (tried_opening_file_and_failed)
         {
