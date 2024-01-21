@@ -433,10 +433,12 @@ char *shell_wait_command_input(Shell_Context_Data *context)
 
       if (list->index > 0)
       {
+        // @note Talvez usar um buffer aqui também @speedup 
         write(STDOUT_FILENO, "\r\n", 2);
         for (unsigned i = 0; i < list->index; i++)
         {
-          printf("%s ", list->data[i]);
+          write(STDOUT_FILENO, list->data[i], strlen(list->data[i]));
+          write(STDOUT_FILENO, ESRAC(" "));
         }
 
         write(STDOUT_FILENO, "\r\n", 2);
