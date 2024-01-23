@@ -599,6 +599,18 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         parse_context_report_error(context, "Token | encontrado, porém ele conflita com uma regra de redirecionamento de stdout anterior.", token.token_index_start);
         break;
       }
+      // @note João, os dois `else if` a seguir possivelmente precisarão existir em outros comandos
+      // a regra de parsing começa a ficar cada vez mais complexa aqui. @duplicado @especifico
+      else if (list_of_args->index == 0)
+      {
+        parse_context_report_error(context, "Token | encontrado antes de qualquer argumento.", token.token_index_start);
+        break;
+      }
+      else if (context->token_index+1 >= tokens->index)
+      {
+        parse_context_report_error(context, "Token | encontrado mas não há nada mais para parsear.", token.token_index_start);
+        break;
+      }
       else
       {
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
@@ -638,7 +650,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         break;
       }
       // @note João, os dois `else if` a seguir possivelmente precisarão existir em outros comandos
-      // a regra de parsing começa a ficar cada vez mais complexa aqui.
+      // a regra de parsing começa a ficar cada vez mais complexa aqui. @duplicado @especifico
       else if (list_of_args->index == 0)
       {
         parse_context_report_error(context, "Token && encontrado antes de qualquer argumento.", token.token_index_start);
