@@ -516,6 +516,13 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
     Token token = tokens->data[i];
     assert(token.token_index_start > -1);
 
+    /**
+     * @todo João, aqui o início do processo eu posso checar todos os tokens que são mandatórios, por exemplo:
+     * Quando estiver esperando um nome de arquivo, graças a um comando de redirect, seria interessante checar isso
+     * logo no começo do loop e reportar o erro na hora, isso para não precisar replicar essa lógica para dentro de cada
+     * `if` abaixo.
+     */
+
     if (token.type == STRING && token.data.string.cstring)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
@@ -560,6 +567,18 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
           (fd != STDOUT_FILENO && fd != STDERR_FILENO && (has_stdout_redirect_token  || has_stderr_redirect_token)))
       {
         parse_context_report_error(context, "Token > encontrado mais de uma vez.", token.token_index_start);
+        break;
+      }
+      // @note João, os dois `else if` a seguir possivelmente precisarão existir em outros comandos
+      // a regra de parsing começa a ficar cada vez mais complexa aqui. @duplicado @especifico
+      else if (list_of_args->index == 0)
+      {
+        parse_context_report_error(context, "Token de redirect > encontrado antes de qualquer argumento.", token.token_index_start);
+        break;
+      }
+      else if (context->token_index+1 >= tokens->index)
+      {
+        parse_context_report_error(context, "Nome do arquivo que deve receber o redirecionamento não foi especificado e não há nada mais para parsear.", token.token_index_start);
         break;
       }
       
@@ -690,6 +709,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
 
   if ((stdout_redirect_expect_file_name || stderr_redirect_expect_file_name) && context->error == NULL)
   {
+    // @todo João, ajustar aqui, no caso do input `echo joao >> && echo depois` o sistema reporta que o arquivo está faltando
+    // no final do input, sendo que a regra de redirect está no 'meio' do input.
     parse_context_report_error(context, "Nome do arquivo que deve receber o redirecionamento não foi especificado.", context->length);
   }
 
