@@ -521,7 +521,12 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
      * Quando estiver esperando um nome de arquivo, graças a um comando de redirect, seria interessante checar isso
      * logo no começo do loop e reportar o erro na hora, isso para não precisar replicar essa lógica para dentro de cada
      * `if` abaixo.
+     * @note Primeiro if trazido para cá, embora ainda é necessário mantê-lo após o termino do loop também
      */
+    if ((stdout_redirect_expect_file_name || stderr_redirect_expect_file_name) && token.type != STRING)
+    {
+      parse_context_report_error(context, "Esperando um nome de arquivo e encontrou.", token.token_index_start);
+    }
 
     if (token.type == STRING && token.data.string.cstring)
     {
@@ -709,8 +714,6 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
 
   if ((stdout_redirect_expect_file_name || stderr_redirect_expect_file_name) && context->error == NULL)
   {
-    // @todo João, ajustar aqui, no caso do input `echo joao >> && echo depois` o sistema reporta que o arquivo está faltando
-    // no final do input, sendo que a regra de redirect está no 'meio' do input.
     parse_context_report_error(context, "Nome do arquivo que deve receber o redirecionamento não foi especificado.", context->length);
   }
 
