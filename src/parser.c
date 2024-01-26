@@ -526,6 +526,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
     if ((stdout_redirect_expect_file_name || stderr_redirect_expect_file_name) && token.type != STRING)
     {
       parse_context_report_error(context, "Esperando um nome de arquivo e encontrou.", token.token_index_start);
+      break;
     }
 
     if (token.type == STRING && token.data.string.cstring)
