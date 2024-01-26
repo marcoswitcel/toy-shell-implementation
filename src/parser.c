@@ -721,6 +721,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
   // @todo João, analisar se considerando a necessidade de expandir a lista de argumentos na função `replace_static_symbols_with_query_info`
   // não seria interessante que o atributo `args` fosse na verdade uma lista de strings ao invés de um char ** terminado com null.
   // Por hora decidi montar uma lista nova na função e reconstruir o array
+  // @todo João, notei que estou alocando um bloco de memória nos casos de lista vazia, na prática o que faço é criar uma lista
+  // de um item com `null` como valor
   Null_Terminated_Pointer_Array args = convert_list_to_argv(list_of_args);
 
   destroy_list_of_strings(list_of_args);
