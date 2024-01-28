@@ -686,7 +686,7 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
  */
 Execute_Command_Node shell_parse_command(Parse_Context *context)
 {
-  // @note João, provavelemente seria interessante tokenizar sobre demanda, consumir um token e passar
+  // @note João, provavelmente seria interessante tokenizar sobre demanda, consumir um token e passar
   // direto para a função de análise sintática/semântica, pra evitar tokenizar tudo e depois falhar no primeiro 
   // token na próxima etapa. Mas tudo isso falta fazer, apenas anotando
   Sequence_Of_Tokens *tokens = tokenize(context);
@@ -732,7 +732,7 @@ int shell_execute_command(const Process_Parameter process_parameter)
     return 1;
   }
 
-  // @todo João, investigar se não alguma forma de distorção do output nesse caso
+  // @todo João, investigar se não tem alguma forma de distorção de output nesse caso
   // já que não estou reativando a flag opost aqui. Me parece que por emitirmos os
   // caracteres manualmente tudo já está funcionando corretamente.
   Builtin_Function builtin_func = has_builtin_for(args[0]);
@@ -832,7 +832,7 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
       {
         bool tried_opening_file_and_failed = false;
 
-        // @note Aqui antes de executar o comando eu faço a substituiçãodo $? pelo status, porque depende
+        // @note Aqui antes de executar o comando eu faço a substituição do $? pelo status, porque depende
         // do resultado da execução do comando anterior
         replace_static_symbols_with_query_info(current_command, shell_context.last_status_code);
 
