@@ -1173,7 +1173,7 @@ void test_parse_execute_command_node_13(void)
   Execute_Command_Node node = parse_execute_command_node(&context, tokens);
 
   Assert_Is_Not_Null(context.error);
-  //Assert(context.error_start_index == 13);
+  Assert(context.error_start_index == 24);
 
   Assert_Is_Not_Null(node.args);
   Assert_Is_Not_Null(node.args[0]);
@@ -1181,7 +1181,7 @@ void test_parse_execute_command_node_13(void)
   Assert_Is_Null(node.args[2]);
 
   Assert_Is_Null(node.next_command);
-  Assert_Is_Null(node.pipe); // Nullo por que deu erro?
+  Assert_Is_Null(node.pipe);
   Assert_String_Equals(node.stdout_redirect_filename, "teste.txt");
   Assert_Is_Null(node.stderr_redirect_filename);
   Assert(!node.append_mode_stdout);
