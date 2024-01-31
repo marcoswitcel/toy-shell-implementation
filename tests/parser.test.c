@@ -147,7 +147,7 @@ void test_try_parse_string_06(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 4);
@@ -160,7 +160,7 @@ void test_try_parse_string_07(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 3);
@@ -176,7 +176,7 @@ void test_try_parse_string_08()
   Assert(context.error_start_index == -1);
   
   try_parse_string(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -224,7 +224,7 @@ void test_try_parse_redirect_03(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
@@ -270,7 +270,7 @@ void test_try_parse_redirect_06(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
@@ -351,7 +351,7 @@ void test_try_parse_redirect_11(void)
   
   try_parse_redirect(&context, &token, &success);
   Assert(success);
-  Assert(!token.data.redirect.appending);
+  Assert_Is_False(token.data.redirect.appending);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
   Assert(context.error_start_index == -1);
@@ -384,7 +384,7 @@ void test_try_parse_redirect_13()
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -418,7 +418,7 @@ void test_try_parse_pipe02()
   Assert(context.error_start_index == -1);
   
   try_parse_pipe(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
@@ -434,7 +434,7 @@ void test_try_parse_pipe_03()
   Assert(context.error_start_index == -1);
   
   try_parse_pipe(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -468,7 +468,7 @@ void test_try_parse_and02()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
@@ -484,7 +484,7 @@ void test_try_parse_and03()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
@@ -500,7 +500,7 @@ void test_try_parse_and04()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
@@ -516,7 +516,7 @@ void test_try_parse_and05()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Not_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == 2);
@@ -534,7 +534,7 @@ void test_try_parse_and06()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -582,7 +582,7 @@ void test_try_parse_globbing_03(void)
   Assert(context.error_start_index == -1);
   
   try_parse_globbing(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.token_index_start == -1);
   Assert(context.index == 0);
   Assert(context.error_start_index == 1);
@@ -598,7 +598,7 @@ void test_try_parse_globbing_04()
   Assert(context.error_start_index == -1);
   
   try_parse_globbing(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -650,7 +650,7 @@ void test_try_query_status_03()
   Assert(context.error_start_index == -1);
   
   try_parse_query_last_status(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.type == UNINITIALIZED);
   Assert(token.token_index_start == -1);
   Assert_Is_Not_Null(context.error);
@@ -668,7 +668,7 @@ void test_try_query_status_04()
   Assert(context.error_start_index == -1);
   
   try_parse_query_last_status(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert(token.type == UNINITIALIZED);
   Assert(token.token_index_start == -1);
   Assert_Is_Not_Null(context.error);
@@ -686,7 +686,7 @@ void test_try_query_status_05()
   Assert(context.error_start_index == -1);
   
   try_parse_query_last_status(&context, &token, &success);
-  Assert(!success);
+  Assert_Is_False(success);
   Assert_Is_Null(context.error);
   Assert(context.index == 0);
   Assert(context.error_start_index == -1);
@@ -837,8 +837,8 @@ void test_parse_execute_command_node_01(void)
   Assert(node.stdout_redirect_filename == NULL);
   Assert(node.stderr_redirect_filename == NULL);
   Assert(node.next_command == NULL);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 
   Assert(node.args);
   Assert_String_Equals(node.args[0], "echo");
@@ -850,8 +850,8 @@ void test_parse_execute_command_node_01(void)
 
   Assert(node.pipe->stdout_redirect_filename == NULL);
   Assert(node.pipe->stderr_redirect_filename == NULL);
-  Assert(!node.pipe->append_mode_stdout);
-  Assert(!node.pipe->append_mode_stderr);
+  Assert_Is_False(node.pipe->append_mode_stdout);
+  Assert_Is_False(node.pipe->append_mode_stderr);
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
@@ -874,8 +874,8 @@ void test_parse_execute_command_node_02(void)
 
   Assert(node.stdout_redirect_filename == NULL);
   Assert(node.stderr_redirect_filename == NULL);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 
   Assert(node.args);
   Assert_String_Equals(node.args[0], "echo");
@@ -887,8 +887,8 @@ void test_parse_execute_command_node_02(void)
 
   Assert(node.pipe->stdout_redirect_filename == NULL);
   Assert(node.pipe->stderr_redirect_filename == NULL);
-  Assert(!node.pipe->append_mode_stdout);
-  Assert(!node.pipe->append_mode_stderr);
+  Assert_Is_False(node.pipe->append_mode_stdout);
+  Assert_Is_False(node.pipe->append_mode_stderr);
   Assert(node.pipe->next_command == NULL);
 
   Assert(node.pipe->args);
@@ -919,8 +919,8 @@ void test_parse_execute_command_node_03(void)
 
   Assert_String_Equals(node.stdout_redirect_filename, "arquivo.txt");
   Assert_String_Equals(node.stderr_redirect_filename, "arquivo.txt");
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 
   Assert(node.args);
   Assert_String_Equals(node.args[0], "echo");
@@ -955,8 +955,8 @@ void test_parse_execute_command_node_04(void)
 
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_String_Equals(node.stderr_redirect_filename, "arquivo.txt");
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 
   Assert_Is_Not_Null(node.args);
   Assert_String_Equals(node.args[0], "echo");
@@ -968,8 +968,8 @@ void test_parse_execute_command_node_04(void)
 
   Assert_String_Equals(node.next_command->stdout_redirect_filename, "arquivo2.txt");
   Assert_Is_Null(node.next_command->stderr_redirect_filename);
-  Assert(!node.next_command->append_mode_stdout);
-  Assert(!node.next_command->append_mode_stderr);
+  Assert_Is_False(node.next_command->append_mode_stdout);
+  Assert_Is_False(node.next_command->append_mode_stderr);
 
   Assert_Is_Not_Null(node.next_command->args);
   Assert_String_Equals(node.next_command->args[0], "echoo");
@@ -1015,8 +1015,8 @@ void test_parse_execute_command_node_06(void)
 
   Assert_String_Equals(node.stdout_redirect_filename, "stdout.txt");
   Assert_String_Equals(node.stderr_redirect_filename, "stderr.txt");
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_07(void)
@@ -1038,8 +1038,8 @@ void test_parse_execute_command_node_07(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_08(void)
@@ -1061,8 +1061,8 @@ void test_parse_execute_command_node_08(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_09(void)
@@ -1084,8 +1084,8 @@ void test_parse_execute_command_node_09(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_10(void)
@@ -1109,8 +1109,8 @@ void test_parse_execute_command_node_10(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_11(void)
@@ -1134,8 +1134,8 @@ void test_parse_execute_command_node_11(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_12(void)
@@ -1159,8 +1159,8 @@ void test_parse_execute_command_node_12(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_13(void)
@@ -1184,8 +1184,8 @@ void test_parse_execute_command_node_13(void)
   Assert_Is_Null(node.pipe);
   Assert_String_Equals(node.stdout_redirect_filename, "teste.txt");
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 void test_parse_execute_command_node_14(void)
@@ -1208,8 +1208,8 @@ void test_parse_execute_command_node_14(void)
   Assert_Is_Null(node.pipe);
   Assert_Is_Null(node.stdout_redirect_filename);
   Assert_Is_Null(node.stderr_redirect_filename);
-  Assert(!node.append_mode_stdout);
-  Assert(!node.append_mode_stderr);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
 }
 
 extern void test_suit_parser(void)
