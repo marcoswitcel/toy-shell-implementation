@@ -1188,6 +1188,30 @@ void test_parse_execute_command_node_13(void)
   Assert(!node.append_mode_stderr);
 }
 
+void test_parse_execute_command_node_14(void)
+{
+  const char parse_input_sample[] = "echo \"teste";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Not_Null(context.error);
+  Assert(context.error_start_index == 11);
+
+  Assert_Is_Not_Null(node.args);
+  Assert_Is_Not_Null(node.args[0]);
+  Assert_Is_Null(node.args[1]);
+
+  Assert_Is_Null(node.next_command);
+  Assert_Is_Null(node.pipe);
+  Assert_Is_Null(node.stdout_redirect_filename);
+  Assert_Is_Null(node.stderr_redirect_filename);
+  Assert(!node.append_mode_stdout);
+  Assert(!node.append_mode_stderr);
+}
+
 extern void test_suit_parser(void)
 {
   Register_Test(test_create_parse_context);
@@ -1247,4 +1271,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_11);
   Register_Test(test_parse_execute_command_node_12);
   Register_Test(test_parse_execute_command_node_13);
+  Register_Test(test_parse_execute_command_node_14);
 }
