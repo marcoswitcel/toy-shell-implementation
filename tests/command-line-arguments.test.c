@@ -14,7 +14,8 @@ void test_command_line_arguments_apply_argv01()
   Command_Line_Arguments arguments = { 0 };
 
   command_line_arguments_apply_argv(&arguments, argc, argv);
-  Assert(arguments.colorful);
+  Assert_Is_True(arguments.colorful);
+  Assert_Is_False(arguments.no_sound);
 }
 
 void test_command_line_arguments_apply_argv02()
@@ -28,7 +29,8 @@ void test_command_line_arguments_apply_argv02()
   Command_Line_Arguments arguments = { 0 };
 
   command_line_arguments_apply_argv(&arguments, argc, argv);
-  Assert(arguments.colorful);
+  Assert_Is_True(arguments.no_sound);
+  Assert_Is_True(arguments.colorful);
 }
 
 void test_command_line_arguments_apply_argv03()
@@ -41,7 +43,8 @@ void test_command_line_arguments_apply_argv03()
   Command_Line_Arguments arguments = { .colorful = true };
 
   command_line_arguments_apply_argv(&arguments, argc, argv);
-  Assert(!arguments.colorful);
+  Assert_Is_False(arguments.colorful);
+  Assert_Is_True(arguments.no_sound);
 }
 
 extern void test_suit_test_command_line_arguments()
