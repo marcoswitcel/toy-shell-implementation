@@ -43,7 +43,7 @@ static void test_buffer_implementation(void)
 
   Assert(buffer->buffer[3] != '\0');
 
-  Assert(strcmp(test_name, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(test_name, buffer_ensure_null_terminated_view(buffer));
 
   Assert(buffer->buffer[3] == '\0');
 }
@@ -80,7 +80,7 @@ static void test_buffer_push_at(void)
   Assert(buffer->buffer[3] != '\0');
   Assert(buffer->index == 3);
 
-  Assert(strcmp("xxu", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals("xxu", buffer_ensure_null_terminated_view(buffer));
 
   Assert(buffer->index == 3);
   Assert(buffer->buffer[3] == '\0');
@@ -93,7 +93,7 @@ static void test_buffer_push_at(void)
 
   buffer_push_at(buffer, 'T', 1);
   Assert(buffer->index == 4);
-  Assert(strcmp("xTxx", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals("xTxx", buffer_ensure_null_terminated_view(buffer));
   Assert(buffer->index == 4);
 }
 
@@ -117,17 +117,17 @@ static void test_buffer_remove_at(void)
   Assert(buffer->index == 3);
   Assert(buffer->buffer[2] == x);
 
-  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(texto, buffer_ensure_null_terminated_view(buffer));
   buffer_pop_at(buffer, 1);
   Assert(buffer->index == 2);
   Assert(buffer->buffer[1] == x);
-  Assert(strcmp("tx", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals("tx", buffer_ensure_null_terminated_view(buffer));
 
 
   buffer_push_at(buffer, u, 1);
   Assert(buffer->index == 3);
   Assert(buffer->buffer[1] == u);
-  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(texto, buffer_ensure_null_terminated_view(buffer));
 }
 
 static void test_buffer_clear(void)
@@ -151,12 +151,12 @@ static void test_buffer_clear(void)
   buffer_push(buffer, x);
   Assert(buffer->index == 3);
 
-  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(texto, buffer_ensure_null_terminated_view(buffer));
 
   buffer_clear(buffer);
   Assert(buffer->index == 0);
 
-  Assert(strcmp("", buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals("", buffer_ensure_null_terminated_view(buffer));
 }
 
 static void test_buffer_push_all(void)
@@ -171,7 +171,7 @@ static void test_buffer_push_all(void)
   buffer_push_all(buffer, (const char *) &texto, length);
   Assert(buffer->index == length);
 
-  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(texto, buffer_ensure_null_terminated_view(buffer));
 
   buffer_push_all(buffer, (const char *) &texto, length);
   Assert(buffer->index == length * 2);
@@ -182,7 +182,7 @@ static void test_buffer_push_all(void)
   buffer_push_all(buffer, (const char *) &texto, length);
   Assert(buffer->index == length);
   
-  Assert(strcmp(texto, buffer_ensure_null_terminated_view(buffer)) == 0);
+  Assert_String_Equals(texto, buffer_ensure_null_terminated_view(buffer));
 }
 
 extern void test_suit_buffer()
