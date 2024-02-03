@@ -38,7 +38,7 @@ void test_try_parse_string_01(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert_String_Equals("ls", token.data.string.cstring);
@@ -48,12 +48,12 @@ void test_try_parse_string_01(void)
 
   try_parse_string(&context, &token, &success);
   Assert(context.index == 2);
-  Assert(success == false);
+  Assert_Is_False(success);
 
   skip_whitespace(&context);
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(context.index == 7);
   Assert(token.data.string.cstring);
@@ -67,7 +67,7 @@ void test_try_parse_string_02(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert_String_Equals("ls", token.data.string.cstring);
@@ -76,12 +76,12 @@ void test_try_parse_string_02(void)
 
   try_parse_string(&context, &token, &success);
   Assert(context.index == 2);
-  Assert(success == false);
+  Assert_Is_False(success);
 
   skip_whitespace(&context);
   
   try_parse_string(&context, &token, &success);
-  Assert(success == false);
+  Assert_Is_False(success);
 }
 
 
@@ -92,7 +92,7 @@ void test_try_parse_string_03(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
@@ -104,7 +104,7 @@ void test_try_parse_string_03(void)
   Assert(context.index == 5);
   try_parse_string(&context, &token, &success);
   Assert(context.index == 5);
-  Assert(success == false);
+  Assert_Is_False(success);
   Assert(context.error_start_index == 9);
 }
 
@@ -115,7 +115,7 @@ void test_try_parse_string_04(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
@@ -131,7 +131,7 @@ void test_try_parse_string_05(void)
   bool success = false;
   
   try_parse_string(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == STRING);
   Assert(token.data.string.cstring);
   Assert(token.token_index_start == 0);
@@ -192,7 +192,7 @@ void test_try_parse_redirect_01(void)
   Assert(token.token_index_start == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == REDIRECT);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
@@ -208,7 +208,7 @@ void test_try_parse_redirect_02(void)
   Assert(token.token_index_start == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
   Assert(context.error_start_index == -1);
@@ -239,7 +239,7 @@ void test_try_parse_redirect_04(void)
   Assert(token.token_index_start == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -254,7 +254,7 @@ void test_try_parse_redirect_05(void)
   Assert(token.token_index_start == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -286,7 +286,7 @@ void test_try_parse_redirect_07(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -302,7 +302,7 @@ void test_try_parse_redirect_08(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
   Assert(context.error_start_index == -1);
@@ -318,7 +318,7 @@ void test_try_parse_redirect_09(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 3);
   Assert(context.error_start_index == -1);
@@ -334,7 +334,7 @@ void test_try_parse_redirect_10(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.token_index_start == 0);
   Assert(context.index == 3);
   Assert(context.error_start_index == -1);
@@ -350,7 +350,7 @@ void test_try_parse_redirect_11(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert_Is_False(token.data.redirect.appending);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
@@ -367,7 +367,7 @@ void test_try_parse_redirect_12(void)
   Assert(context.error_start_index == -1);
   
   try_parse_redirect(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.data.redirect.appending);
   Assert(token.token_index_start == 0);
   Assert(context.index == 2);
@@ -400,7 +400,7 @@ void test_try_parse_pipe01()
   Assert(context.error_start_index == -1);
   
   try_parse_pipe(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == PIPE);
   Assert(token.data.pipe.cstring);
   Assert(token.token_index_start == 0);
@@ -450,7 +450,7 @@ void test_try_parse_and01()
   Assert(context.error_start_index == -1);
   
   try_parse_and(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == AND);
   Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
@@ -549,7 +549,7 @@ void test_try_parse_globbing_01(void)
   Assert(token.token_index_start == -1);
   
   try_parse_globbing(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == GLOBBING);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
@@ -565,7 +565,7 @@ void test_try_parse_globbing_02(void)
   Assert(token.token_index_start == -1);
   
   try_parse_globbing(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == GLOBBING);
   Assert(token.token_index_start == 0);
   Assert(context.index == 1);
@@ -614,7 +614,7 @@ void test_try_query_status_01()
   Assert(context.error_start_index == -1);
   
   try_parse_query_last_status(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == QUERY_LAST_STATUS);
   Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
@@ -632,7 +632,7 @@ void test_try_query_status_02()
   Assert(context.error_start_index == -1);
   
   try_parse_query_last_status(&context, &token, &success);
-  Assert(success);
+  Assert_Is_True(success);
   Assert(token.type == QUERY_LAST_STATUS);
   Assert_Is_Not_Null(token.data.and.cstring);
   Assert(token.token_index_start == 0);
