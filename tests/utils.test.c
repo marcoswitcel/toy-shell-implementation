@@ -106,8 +106,35 @@ void test_int_to_cstring(void)
   Assert(strcmp(representation, "-210056") == 0);
 }
 
+void test_is_only_spaces_or_empty_01(void)
+{
+  Assert_Is_True(is_only_spaces_or_empty(" "));
+}
+
+void test_is_only_spaces_or_empty_02(void)
+{
+  Assert_Is_True(is_only_spaces_or_empty(""));
+}
+
+void test_is_only_spaces_or_empty_03(void)
+{
+  Assert_Is_True(is_only_spaces_or_empty("    "));
+}
+
+void test_is_only_spaces_or_empty_04(void)
+{
+  Assert_Is_False(is_only_spaces_or_empty("a"));
+  Assert_Is_False(is_only_spaces_or_empty(" b"));
+  Assert_Is_False(is_only_spaces_or_empty(" c "));
+  Assert_Is_False(is_only_spaces_or_empty("d "));
+  Assert_Is_False(is_only_spaces_or_empty("fg "));
+}
+
 extern void test_suit_utils(void)
 {
   Register_Test(test_int_to_cstring);
+  Register_Test(test_is_only_spaces_or_empty_01);
+  Register_Test(test_is_only_spaces_or_empty_02);
+  Register_Test(test_is_only_spaces_or_empty_03);
+  Register_Test(test_is_only_spaces_or_empty_04);
 }
-

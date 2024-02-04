@@ -199,4 +199,24 @@ char *int_to_cstring(int number)
   return number_cstring;
 }
 
+/**
+ * @brief Verifica se uma string é composta apenas de espaços ou está vazia
+ * 
+ * @param cstring texto que será analisado, nullo não é aceito
+ * @return true 
+ * @return false 
+ */
+bool is_only_spaces_or_empty(const char *cstring)
+{
+  assert(cstring != NULL);
+
+  while (*cstring != '\0')
+  {
+    if (*cstring != ' ') return false;
+    cstring++;
+  }
+
+  return true;
+}
+
 #endif // UTILS_C

@@ -819,10 +819,11 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
 
   while (!shell_context.exit_requested)
   {
-    // @todo João, considerando checar se o input é constituído apenas de espaços ou se é só um enter sem
-    // mais nada, nesse caso não precisaria nem parsear. Outro ponto seria não adicionar esse registro ao
-    // histórico.
     char *readed_line = shell_wait_command_input(&shell_context);
+
+    // não processa inputs vazios, também não adiciona no histórico
+    if (is_only_spaces_or_empty(readed_line)) continue;
+
     Parse_Context context = create_parse_context(readed_line);
     Execute_Command_Node execute_command_node = shell_parse_command(&context);
 
