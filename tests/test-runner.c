@@ -74,6 +74,15 @@ static void print_time_to_buffer(Buffer *buffer, time_t time)
   buffer_push_all(buffer, formatted_date_buff, strlen(formatted_date_buff));
 }
 
+static inline unsigned get_index_size_in_chars(int number_of_tests)
+{
+  char* number_of_tests_as_text = int_to_cstring(number_of_tests);
+  int result = strlen(number_of_tests_as_text);
+  free(number_of_tests_as_text);
+  
+  return result;
+}
+
 /**
  * @note João, uma ideia interessante seria melhorar o report do teste, algumas formas que podería usar seriam.
  * Adicionar algum mecanismo para contar os testes, adicionar um mecanismo para medir o tempo, fazer os testes rodam independentes
@@ -94,11 +103,7 @@ void test_runner(void)
   ensure_is_initialized();
 
   Buffer *buffer = create_buffer(1024, 1024);
-  // @note João, aqui aloco memória para a string apenas para rodar o strlen em cima,
-  // porém como esse processo não roda muitas vezes e o `test_runner` não é um processo
-  // que deve ficar rodando direto esse leak não tem problema. Será liberado assim que
-  // o programa encerrar.
-  unsigned index_size_in_chars = strlen(int_to_cstring(number_of_tests));
+  unsigned index_size_in_chars = get_index_size_in_chars(number_of_tests);
   const unsigned column_size = 80 - 1 - SIZE_OF_STATIC_STRING(" FAILED");
 
   buffer_push_all(buffer, EXPAND_STRING_REF_AND_COUNT("\nIniciado em: "));
