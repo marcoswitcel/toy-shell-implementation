@@ -160,16 +160,16 @@ void test_shell_parse_command01(void)
   Assert(execute_command_node.args != NULL);
 
   Assert(execute_command_node.args[0] != NULL);
-  Assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert(execute_command_node.args[1] != NULL);
-  Assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert(execute_command_node.args[2] == NULL);
 
   Assert_Is_False(execute_command_node.append_mode_stdout);
   Assert_Is_False(execute_command_node.append_mode_stderr);
   Assert(execute_command_node.next_command == NULL);
-  Assert(strcmp(execute_command_node.stdout_redirect_filename, "arquivo.txt") == 0);
-  Assert(strcmp(execute_command_node.stderr_redirect_filename, "arquivo.txt") == 0);
+  Assert_String_Equals(execute_command_node.stdout_redirect_filename, "arquivo.txt");
+  Assert_String_Equals(execute_command_node.stderr_redirect_filename, "arquivo.txt");
   Assert(execute_command_node.pipe == NULL);
   // @note João, curiosamente não lembrava que esse atributo aponta para o primeiro caractere
   // do último token parseado, nesse caso a string "arquivo.txt".
@@ -196,9 +196,9 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.args != NULL);
 
   Assert(execute_command_node.args[0] != NULL);
-  Assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert(execute_command_node.args[1] != NULL);
-  Assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert(execute_command_node.args[2] == NULL);
 
   Assert_Is_False(execute_command_node.append_mode_stdout);
@@ -213,9 +213,9 @@ void test_shell_parse_command02(void)
   Assert(execute_command_node.next_command->args != NULL);
 
   Assert(execute_command_node.next_command->args[0] != NULL);
-  Assert(strcmp(execute_command_node.next_command->args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.next_command->args[0], "echo");
   Assert(execute_command_node.next_command->args[1] != NULL);
-  Assert(strcmp(execute_command_node.next_command->args[1], "teste2") == 0);
+  Assert_String_Equals(execute_command_node.next_command->args[1], "teste2");
   Assert(execute_command_node.next_command->args[2] == NULL);
 
   Assert_Is_False(execute_command_node.next_command->append_mode_stdout);
@@ -245,9 +245,9 @@ void test_shell_parse_command03(void)
   Assert(first_command.args != NULL);
 
   Assert(first_command.args[0] != NULL);
-  Assert(strcmp(first_command.args[0], "echo") == 0);
+  Assert_String_Equals(first_command.args[0], "echo");
   Assert(first_command.args[1] != NULL);
-  Assert(strcmp(first_command.args[1], "primeiro") == 0);
+  Assert_String_Equals(first_command.args[1], "primeiro");
   Assert(first_command.args[2] == NULL);
 
   Assert_Is_False(first_command.append_mode_stdout);
@@ -263,9 +263,9 @@ void test_shell_parse_command03(void)
   Assert(second_command->args != NULL);
 
   Assert(second_command->args[0] != NULL);
-  Assert(strcmp(second_command->args[0], "echo") == 0);
+  Assert_String_Equals(second_command->args[0], "echo");
   Assert(second_command->args[1] != NULL);
-  Assert(strcmp(second_command->args[1], "segundo") == 0);
+  Assert_String_Equals(second_command->args[1], "segundo");
   Assert(second_command->args[2] == NULL);
 
   Assert_Is_False(second_command->append_mode_stdout);
@@ -281,9 +281,9 @@ void test_shell_parse_command03(void)
   Assert(second_command_pipe->args != NULL);
 
   Assert(second_command_pipe->args[0] != NULL);
-  Assert(strcmp(second_command_pipe->args[0], "grep") == 0);
+  Assert_String_Equals(second_command_pipe->args[0], "grep");
   Assert(second_command_pipe->args[1] != NULL);
-  Assert(strcmp(second_command_pipe->args[1], "segundo") == 0);
+  Assert_String_Equals(second_command_pipe->args[1], "segundo");
   Assert(second_command_pipe->args[2] == NULL);
 
   Assert_Is_False(second_command_pipe->append_mode_stdout);
@@ -299,9 +299,9 @@ void test_shell_parse_command03(void)
   Assert(third_command->args != NULL);
 
   Assert(third_command->args[0] != NULL);
-  Assert(strcmp(third_command->args[0], "echo") == 0);
+  Assert_String_Equals(third_command->args[0], "echo");
   Assert(third_command->args[1] != NULL);
-  Assert(strcmp(third_command->args[1], "terceiro") == 0);
+  Assert_String_Equals(third_command->args[1], "terceiro");
   Assert(third_command->args[2] == NULL);
 
   Assert(third_command->append_mode_stdout == false);
@@ -330,9 +330,9 @@ void test_shell_parse_command04(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(execute_command_node.append_mode_stdout);
@@ -362,9 +362,9 @@ void test_shell_parse_command05(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(execute_command_node.append_mode_stdout == false);
@@ -394,9 +394,9 @@ void test_shell_parse_command06(void)
   Assert_Is_Not_Null(execute_command_node.args);
 
   Assert_Is_Not_Null(execute_command_node.args[0]);
-  Assert(strcmp(execute_command_node.args[0], "echo") == 0);
+  Assert_String_Equals(execute_command_node.args[0], "echo");
   Assert_Is_Not_Null(execute_command_node.args[1]);
-  Assert(strcmp(execute_command_node.args[1], "teste") == 0);
+  Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert_Is_Null(execute_command_node.args[2]);
 
   Assert(execute_command_node.append_mode_stdout);
