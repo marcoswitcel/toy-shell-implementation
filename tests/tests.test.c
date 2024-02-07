@@ -157,11 +157,11 @@ void test_shell_parse_command01(void)
   Assert(context.index == strlen(parse_input_sample));
 
   
-  Assert(execute_command_node.args != NULL);
+  Assert_Is_Not_Null(execute_command_node.args);
 
-  Assert(execute_command_node.args[0] != NULL);
+  Assert_Is_Not_Null(execute_command_node.args[0]);
   Assert_String_Equals(execute_command_node.args[0], "echo");
-  Assert(execute_command_node.args[1] != NULL);
+  Assert_Is_Not_Null(execute_command_node.args[1]);
   Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert(execute_command_node.args[2] == NULL);
 
@@ -193,28 +193,28 @@ void test_shell_parse_command02(void)
   Assert(context.error_start_index == -1);
   Assert(context.index == strlen(parse_input_sample));
 
-  Assert(execute_command_node.args != NULL);
+  Assert_Is_Not_Null(execute_command_node.args);
 
-  Assert(execute_command_node.args[0] != NULL);
+  Assert_Is_Not_Null(execute_command_node.args[0]);
   Assert_String_Equals(execute_command_node.args[0], "echo");
-  Assert(execute_command_node.args[1] != NULL);
+  Assert_Is_Not_Null(execute_command_node.args[1]);
   Assert_String_Equals(execute_command_node.args[1], "teste");
   Assert(execute_command_node.args[2] == NULL);
 
   Assert_Is_False(execute_command_node.append_mode_stdout);
   Assert_Is_False(execute_command_node.append_mode_stderr);
-  Assert(execute_command_node.next_command != NULL);
+  Assert_Is_Not_Null(execute_command_node.next_command);
   Assert(execute_command_node.stderr_redirect_filename == NULL);
   Assert(execute_command_node.stdout_redirect_filename == NULL);
   Assert(execute_command_node.pipe == NULL);
   Assert(execute_command_node.token_index_start == -1);
 
   // o comando AND a seguir
-  Assert(execute_command_node.next_command->args != NULL);
+  Assert_Is_Not_Null(execute_command_node.next_command->args);
 
-  Assert(execute_command_node.next_command->args[0] != NULL);
+  Assert_Is_Not_Null(execute_command_node.next_command->args[0]);
   Assert_String_Equals(execute_command_node.next_command->args[0], "echo");
-  Assert(execute_command_node.next_command->args[1] != NULL);
+  Assert_Is_Not_Null(execute_command_node.next_command->args[1]);
   Assert_String_Equals(execute_command_node.next_command->args[1], "teste2");
   Assert(execute_command_node.next_command->args[2] == NULL);
 
@@ -242,17 +242,17 @@ void test_shell_parse_command03(void)
   Assert(context.error_start_index == -1);
   Assert(context.index == strlen(parse_input_sample));
 
-  Assert(first_command.args != NULL);
+  Assert_Is_Not_Null(first_command.args);
 
-  Assert(first_command.args[0] != NULL);
+  Assert_Is_Not_Null(first_command.args[0]);
   Assert_String_Equals(first_command.args[0], "echo");
-  Assert(first_command.args[1] != NULL);
+  Assert_Is_Not_Null(first_command.args[1]);
   Assert_String_Equals(first_command.args[1], "primeiro");
   Assert(first_command.args[2] == NULL);
 
   Assert_Is_False(first_command.append_mode_stdout);
   Assert_Is_False(first_command.append_mode_stderr);
-  Assert(first_command.next_command != NULL);
+  Assert_Is_Not_Null(first_command.next_command);
   Assert(first_command.stderr_redirect_filename == NULL);
   Assert(first_command.stdout_redirect_filename == NULL);
   Assert(first_command.pipe == NULL);
@@ -260,11 +260,11 @@ void test_shell_parse_command03(void)
 
   // o comando AND a seguir
   Execute_Command_Node *second_command = first_command.next_command;
-  Assert(second_command->args != NULL);
+  Assert_Is_Not_Null(second_command->args);
 
-  Assert(second_command->args[0] != NULL);
+  Assert_Is_Not_Null(second_command->args[0]);
   Assert_String_Equals(second_command->args[0], "echo");
-  Assert(second_command->args[1] != NULL);
+  Assert_Is_Not_Null(second_command->args[1]);
   Assert_String_Equals(second_command->args[1], "segundo");
   Assert(second_command->args[2] == NULL);
 
@@ -278,11 +278,11 @@ void test_shell_parse_command03(void)
   
   // pipe
   Execute_Command_Node *second_command_pipe = second_command->pipe;
-  Assert(second_command_pipe->args != NULL);
+  Assert_Is_Not_Null(second_command_pipe->args);
 
-  Assert(second_command_pipe->args[0] != NULL);
+  Assert_Is_Not_Null(second_command_pipe->args[0]);
   Assert_String_Equals(second_command_pipe->args[0], "grep");
-  Assert(second_command_pipe->args[1] != NULL);
+  Assert_Is_Not_Null(second_command_pipe->args[1]);
   Assert_String_Equals(second_command_pipe->args[1], "segundo");
   Assert(second_command_pipe->args[2] == NULL);
 
@@ -296,11 +296,11 @@ void test_shell_parse_command03(void)
 
   // o comando AND a seguir
   Execute_Command_Node *third_command = first_command.next_command->next_command;
-  Assert(third_command->args != NULL);
+  Assert_Is_Not_Null(third_command->args);
 
-  Assert(third_command->args[0] != NULL);
+  Assert_Is_Not_Null(third_command->args[0]);
   Assert_String_Equals(third_command->args[0], "echo");
-  Assert(third_command->args[1] != NULL);
+  Assert_Is_Not_Null(third_command->args[1]);
   Assert_String_Equals(third_command->args[1], "terceiro");
   Assert(third_command->args[2] == NULL);
 
