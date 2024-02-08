@@ -1212,6 +1212,45 @@ void test_parse_execute_command_node_14(void)
   Assert_Is_False(node.append_mode_stderr);
 }
 
+void test_parse_execute_command_node_15(void)
+{
+  const char parse_input_sample[] = "echo teste | grep teste | grep e";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+
+  Assert_Is_Not_Null(node.args);
+  Assert_Is_Not_Null(node.args[0]);
+  Assert_Is_Not_Null(node.args[1]);
+
+  Assert_Is_Null(node.next_command);
+  Assert_Is_Null(node.stdout_redirect_filename);
+  Assert_Is_Null(node.stderr_redirect_filename);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
+
+  Assert_Is_Not_Null(node.pipe);
+
+  Assert_Is_Null(node.pipe->next_command);
+  Assert_Is_Null(node.pipe->stdout_redirect_filename);
+  Assert_Is_Null(node.pipe->stderr_redirect_filename);
+  Assert_Is_False(node.pipe->append_mode_stdout);
+  Assert_Is_False(node.pipe->append_mode_stderr);
+
+  Assert_Is_Not_Null(node.pipe->pipe);
+
+  Assert_Is_Null(node.pipe->pipe->next_command);
+  Assert_Is_Null(node.pipe->pipe->stdout_redirect_filename);
+  Assert_Is_Null(node.pipe->pipe->stderr_redirect_filename);
+  Assert_Is_False(node.pipe->pipe->append_mode_stdout);
+  Assert_Is_False(node.pipe->pipe->append_mode_stderr);
+}
+
 extern void test_suit_parser(void)
 {
   Register_Test(test_create_parse_context);
@@ -1272,4 +1311,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_12);
   Register_Test(test_parse_execute_command_node_13);
   Register_Test(test_parse_execute_command_node_14);
+  Register_Test(test_parse_execute_command_node_15);
 }
