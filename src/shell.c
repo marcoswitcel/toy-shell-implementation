@@ -368,6 +368,11 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
     } break;
     case UNKNOWN:
     {
+      // @todo João, acredito que seria interessante não tratar escape sequences inválidas
+      // como erro, elas não são adicionadas ao buffer de input e não serão interpretadas.
+      // O que acho interessante seria analisar a hipótese de criar um file descriptor separado
+      // para logar quando encontrar essas sequências inválidas. Pois o stderr já é reservado para
+      // os erros reais do console. Talvez um file descriptor de debug/desenvolvimento.
       assert(false && "Escape sequence desconhecida não tratada.");
     }
     break;
