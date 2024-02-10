@@ -373,6 +373,7 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
       // O que acho interessante seria analisar a hipótese de criar um file descriptor separado
       // para logar quando encontrar essas sequências inválidas. Pois o stderr já é reservado para
       // os erros reais do console. Talvez um file descriptor de debug/desenvolvimento.
+      // @note Achei uma discussão interessante aqui: https://stackoverflow.com/questions/33754988/how-to-reserve-a-file-descriptor
       assert(false && "Escape sequence desconhecida não tratada.");
     }
     break;
