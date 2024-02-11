@@ -13,6 +13,7 @@
 #include "./utils.c"
 #include "./utils.macro.h"
 #include "./nodes.h"
+#include "./debug_log.c"
 #include "./tokens.h"
 #include "./buffer.h"
 
@@ -457,7 +458,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
       {
         progressed = true;
         sequence_of_tokens_push(tokens, token);
-        if (DEBUG_INFO && token.type == STRING) printf("[[ Token: '%s' ]]\r\n", token.data.string.cstring);
+        if (DEBUG_INFO && token.type == STRING) Debug_Log_Line("[[ Token: '%s' ]]", token.data.string.cstring);
         break;
       }
       else if (context->error)

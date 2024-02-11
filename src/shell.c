@@ -17,6 +17,7 @@
 #include "./utils.macro.h"
 #include "./dev-utils.c"
 #include "./utils.c"
+#include "./debug_log.c"
 #include "./sorting.c"
 #include "./ansi-escape-sequences.h"
 #include "./shell.h"
@@ -538,7 +539,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   char *result = copy(buffer_ensure_null_terminated_view(buffer));
   destroy_buffer(buffer);
 
-  if (DEBUG_INFO) printf("linha lida: [%s]\r\n", result);
+  if (DEBUG_INFO) Debug_Log_Line("linha lida: [%s]", result);
 
   return result;
 }
@@ -708,7 +709,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
     return STATIC_EXECUTE_COMMAND_NODE();
   }
 
-  if (DEBUG_INFO) printf("[[ tokens size: %d ]]\r\n", tokens->index);
+  if (DEBUG_INFO) Debug_Log_Line("[[ tokens size: %d ]]", tokens->index);
 
   Execute_Command_Node execute_command_node = parse_execute_command_node(context, tokens);
 

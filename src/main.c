@@ -8,6 +8,7 @@
 
 #include "./shell.c"
 #include "./terminal.c"
+#include "./debug_log.c"
 #include "./command-line-arguments.c"
 
 /**
@@ -38,6 +39,7 @@ int main(int argc, const char *argv[])
 
   activate_raw_mode(true);
   signal(SIGINT, handle_sigint);
+  init_debug_log();
 
   // @note talvez ler um arquivo de configuração? aceitar a configuração do modo colorful e do modo sem som?
 
@@ -50,6 +52,9 @@ int main(int argc, const char *argv[])
     // loop principal, toda lógica roda aqui
     read_eval_shell_loop(arguments.colorful, arguments.no_sound);
   }
+
+  // considerações finais do programa
+  close_debug_log();
 
   return EXIT_SUCCESS;
 }

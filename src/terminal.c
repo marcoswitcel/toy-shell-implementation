@@ -9,6 +9,7 @@
 #include "./compilation_definitions.h"
 #include "./types.h"
 #include "./terminal.h"
+#include "./debug_log.c"
 
 /**
  * @brief mascara a letra com o padrão binário 00011111 (decimal 31 e hexadecimal 0x1f)
@@ -63,7 +64,7 @@ bool set_cursor_position(int row, int col)
 
 void deactivate_raw_mode()
 {
-  if (DEBUG_INFO) printf("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.\r\n");
+  if (DEBUG_INFO) Debug_Log_Line("[[ deactivate_raw_mode ]] :: restaurando configurações de terminal.");
   tcsetattr(STDERR_FILENO, TCSAFLUSH, &original_config);
 }
 
