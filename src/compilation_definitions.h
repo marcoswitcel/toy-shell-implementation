@@ -6,7 +6,7 @@
 #define _DEFAULT_SOURCE
 
 // Habilita alguns logs especiais
-#define DEBUG_INFO false
+#define DEBUG_INFO true
 
 
 #endif // _COMPILATION_DEFINITIONS_H_
