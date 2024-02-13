@@ -458,6 +458,8 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
       {
         progressed = true;
         sequence_of_tokens_push(tokens, token);
+        // @todo João, achar um jeito seguro de apresentar a string do token. Acho que o layout do ponteiro
+        //  da string é garantido de ser o mesmo em todos os tokens, mas vale checar
         if (DEBUG_INFO && token.type == STRING) Debug_Log_Line("[[ Token: '%s' ]]", token.data.string.cstring);
         break;
       }

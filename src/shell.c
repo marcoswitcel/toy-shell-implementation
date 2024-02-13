@@ -691,7 +691,7 @@ void debug_print_null_terminated_pointer_array(Null_Terminated_Pointer_Array poi
   char **token = pointer_array;
   while (*token != NULL)
   {
-    Debug_Log_Line("%s: [%s]\r\n", label, *token);
+    Debug_Log_Line("%s: [%s]", label, *token);
     token++;
   }
 }
@@ -738,6 +738,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
   
   if (DEBUG_INFO)
   {
+    // @todo João, só print os argumentos do primeiro comando
     debug_print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
   }
 
