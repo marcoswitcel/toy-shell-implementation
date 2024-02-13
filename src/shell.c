@@ -681,6 +681,22 @@ Process_Parameter shell_convert_execute_command_into_process_parameter(Execute_C
 }
 
 /**
+ * @brief versão de debug da função `print_null_terminated_pointer_array`
+ * 
+ * @param pointer_array 
+ * @param label 
+ */
+void debug_print_null_terminated_pointer_array(Null_Terminated_Pointer_Array pointer_array, const char* label)
+{
+  char **token = pointer_array;
+  while (*token != NULL)
+  {
+    Debug_Log_Line("%s: [%s]\r\n", label, *token);
+    token++;
+  }
+}
+
+/**
  * @brief Parseia o comando, se não houver erros retorna os nós que representam a ordem de execução.
  * 
  * @note No passado cogitei retornar um ponteiro alocado o heap, para facilitar a função
@@ -722,7 +738,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
   
   if (DEBUG_INFO)
   {
-    print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
+    debug_print_null_terminated_pointer_array(execute_command_node.args, "Argumento extraído");
   }
 
   return execute_command_node;
