@@ -2,6 +2,7 @@
 #define TOKENS_H
 
 #include <stdbool.h>
+#include <assert.h>
 
 typedef enum Token_Type {
   UNINITIALIZED = 0, STRING = 1, GLOBBING = 2, REDIRECT = 3, PIPE = 4, AND = 5, QUERY_LAST_STATUS = 6,
@@ -56,5 +57,22 @@ static const char static_query_last_status_code_symbol[] = "$?";
 static const char static_globbing_symbol[] = "*";
 
 #define  STATIC_TOKEN(ENUM_TYPE) (Token) { .type = ENUM_TYPE, .token_index_start = -1, }
+
+const char *token_to_string(Token *token)
+{
+  switch (token->type)
+  {
+    case STRING:            return token->data.string.cstring;
+    case GLOBBING:          return token->data.globbing.cstring;
+    case REDIRECT:          return token->data.redirect.cstring;
+    case PIPE:              return token->data.pipe.cstring;
+    case AND:               return token->data.and.cstring;
+    case QUERY_LAST_STATUS: return token->data.query_last_status.cstring;
+    case UNINITIALIZED:     assert("Token não inicializado.");
+  }
+
+  assert("Token não reconhecido.");
+  return NULL;
+}
 
 #endif // TOKENS_H
