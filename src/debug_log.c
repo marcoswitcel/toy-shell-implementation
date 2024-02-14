@@ -17,8 +17,9 @@ void init_debug_log(void)
 
 /**
  * @brief Manda um linha para o log.
+ * @note https://www.geeksforgeeks.org/predefined-identifier-func-in-c/
  */
-#define Debug_Log_Line(...) { Debug_Log(__VA_ARGS__); Debug_Log_Static("\r\n") }
+#define Debug_Log_Line(...) { dprintf(debug_fd, "[%s] ", __func__); Debug_Log(__VA_ARGS__); Debug_Log_Static("\r\n") }
 
 /**
  * @brief Escreve mensagem para o log, mas antes formata com os parâmetros caso tenha algum.

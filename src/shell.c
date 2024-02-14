@@ -539,7 +539,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   char *result = copy(buffer_ensure_null_terminated_view(buffer));
   destroy_buffer(buffer);
 
-  if (DEBUG_INFO) Debug_Log_Line("linha lida: [%s]", result);
+  if (DEBUG_INFO) Debug_Log_Line("linha lida: '%s'", result);
 
   return result;
 }
@@ -691,7 +691,7 @@ void debug_print_null_terminated_pointer_array(Null_Terminated_Pointer_Array poi
   char **token = pointer_array;
   while (*token != NULL)
   {
-    Debug_Log_Line("%s: [%s]", label, *token);
+    Debug_Log_Line("%s: '%s'", label, *token);
     token++;
   }
 }
@@ -725,7 +725,7 @@ Execute_Command_Node shell_parse_command(Parse_Context *context)
     return STATIC_EXECUTE_COMMAND_NODE();
   }
 
-  if (DEBUG_INFO) Debug_Log_Line("[[ tokens size: %d ]]", tokens->index);
+  if (DEBUG_INFO) Debug_Log_Line("tokens size: %d", tokens->index);
 
   Execute_Command_Node execute_command_node = parse_execute_command_node(context, tokens);
 

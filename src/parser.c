@@ -459,7 +459,7 @@ Sequence_Of_Tokens *tokenize(Parse_Context *context)
         progressed = true;
         sequence_of_tokens_push(tokens, token);
 
-        if (DEBUG_INFO) Debug_Log_Line("[[ Token: '%s' ]]", token_to_string(&token));
+        if (DEBUG_INFO) Debug_Log_Line("consumido token '%s'", token_to_string(&token));
         break;
       }
       else if (context->error)
