@@ -86,15 +86,20 @@ typedef enum Key_Pressed {
 /**
  * @brief converte sequências de escape em um representação interna para a sequência
  * @reference https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#the-home-and-end-keys
+ * @note Para fins de depuração adicionei log dos bytes consumidos
  * 
  * @return Key_Pressed 
  */
 static Key_Pressed try_process_escape_sequence()
 {
+  Debug_Log_Line(" -- ");
+
   int c = getchar();
+  Debug_Log_Line("byte: '%c'", c);
   if (c == '[')
   {
     c = getchar();
+    Debug_Log_Line("byte: '%c'", c);
     switch(c)
     {
       case 'A': return ARROW_UP;
@@ -106,10 +111,12 @@ static Key_Pressed try_process_escape_sequence()
       case '1':
       {
         c = getchar();
+        Debug_Log_Line("byte: '%c'", c);
         if (c == '~') return HOME;
         if (c == ';')
         {
           c = getchar();
+          Debug_Log_Line("byte: '%c'", c);
           /**
            * @note Pelo que li tem mais sequências que poderia ser enviadas para representar
            * um alt + arrow_up/arrow_down/arrow_left/arrow_right. Por hora estou tratando só essa.
@@ -118,6 +125,7 @@ static Key_Pressed try_process_escape_sequence()
           if (c == '3')
           {
             c = getchar();
+            Debug_Log_Line("byte: '%c'", c);
             switch (c)
             {
               case 'A':
@@ -143,21 +151,25 @@ static Key_Pressed try_process_escape_sequence()
       case '3':
       {
         c = getchar();
+        Debug_Log_Line("byte: '%c'", c);
         if (c == '~') return DELETE;
       } break;
       case '4':
       {
         c = getchar();
+        Debug_Log_Line("byte: '%c'", c);
         if (c == '~') return END;
       } break;
       case '7':
       {
         c = getchar();
+        Debug_Log_Line("byte: '%c'", c);
         if (c == '~') return HOME;
       } break;
       case '8':
       {
         c = getchar();
+        Debug_Log_Line("byte: '%c'", c);
         if (c == '~') return END;
       } break;
     }
@@ -167,6 +179,7 @@ static Key_Pressed try_process_escape_sequence()
   else if (c == 'O')
   {
     c = getchar();
+    Debug_Log_Line("byte: '%c'", c);
     switch(c)
     {
       case 'H': return HOME;
