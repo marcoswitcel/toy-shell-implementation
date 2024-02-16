@@ -75,4 +75,21 @@ const char *token_to_string(Token *token)
   return NULL;
 }
 
+const char *type_of_token_as_cstring(Token *token)
+{
+  switch (token->type)
+  {
+    case STRING:            return "String";
+    case GLOBBING:          return "Globbing";
+    case REDIRECT:          return "Redirect";
+    case PIPE:              return "Pipe";
+    case AND:               return "And";
+    case QUERY_LAST_STATUS: return "Query_Last_Status";
+    case UNINITIALIZED:     assert("Token não inicializado.");
+  }
+
+  assert("Tipo de token não reconhecido.");
+  return NULL;
+}
+
 #endif // TOKENS_H
