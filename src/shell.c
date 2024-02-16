@@ -83,6 +83,27 @@ typedef enum Key_Pressed {
   UNKNOWN,
 } Key_Pressed;
 
+static const char* key_pressed_name(Key_Pressed key)
+{
+  switch (key)
+  {
+    case ARROW_UP:        return "ARROW_UP";
+    case ARROW_DOWN:      return "ARROW_DOWN";
+    case ARROW_LEFT:      return "ARROW_LEFT";
+    case ARROW_RIGHT:     return "ARROW_RIGHT";
+    case ALT_ARROW_UP:    return "ALT_ARROW_UP";
+    case ALT_ARROW_DOWN:  return "ALT_ARROW_DOWN";
+    case ALT_ARROW_LEFT:  return "ALT_ARROW_LEFT";
+    case ALT_ARROW_RIGHT: return "ALT_ARROW_RIGHT";
+    case DELETE:          return "DELETE";
+    case HOME:            return "HOME";
+    case END:             return "END";
+    case UNKNOWN:         return "UNKNOWN";
+  }
+
+  return "(código desconhecido)";
+}
+
 /**
  * @brief converte sequências de escape em um representação interna para a sequência
  * @reference https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#the-home-and-end-keys
@@ -430,6 +451,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     if (c == ESC)
     {
       int key = try_process_escape_sequence();
+      Debug_Log_Line("Key: %s", key_pressed_name(key))
       if (handle_control_key_pressed(context, buffer, key, &cursor_position))
       {
         erase_line();
