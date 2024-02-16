@@ -24,6 +24,18 @@
 
 static struct termios original_config;
 
+/**
+ * @brief busca os dados de posição do cursor no sistema operacional
+ * 
+ * @todo João, @bug tem um buffer overflow que crasha a aplicação potencialmente.
+ * Quando é feito o write se espera que tudo que tenha no stdin seja o retorno, porém
+ * o stdin pode não estar vazio e isso causa o overflow, pois o conteúdo do stdin é
+ * arbitrariamente longo.
+ * 
+ * @param row 
+ * @param column 
+ * @return int 
+ */
 int get_cursor_position(int *row, int *column)
 {
   // @reference https://vt100.net/docs/vt100-ug/chapter3.html#DSR

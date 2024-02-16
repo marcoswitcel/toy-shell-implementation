@@ -570,6 +570,8 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     if (should_update_cursor)
     {
       int row = 1, col = 1;
+      // @todo João, no caso de o usuário colar texto no terminal, todos os caracteres após
+      // o primeiro estão sendo lidos indevidamente pela função `get_cursor_position`
       if (get_cursor_position(&row, &col) > -1)
       {
         set_cursor_position(row, (int) cursor_position + 1 + context->input_mark_length);
