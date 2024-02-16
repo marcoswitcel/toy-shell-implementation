@@ -559,7 +559,9 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       }
 
       // @note João, se não requisitar a atualização do cursor os comandos de 'copy' e 'paste' passam
-      // a funcionar corretamente. Acho que setando novamente o curso acaba zerando o buffer de entrada.
+      // a funcionar corretamente. O problema ocorre ao chamar `get_cursor_position`, provavelmente porque
+      // para receber a resposta da posição do cursor o sistema escreve para o stdin, possivelmente apagando
+      // o que já está no buffer.
       // Parece que vou precisar reestruturar toda a forma como leio caracteres e quando atualizo.
       // Sempre precisarei checar se tem mais um char no buffer antes de mandar o update.
       should_update_cursor = true;
