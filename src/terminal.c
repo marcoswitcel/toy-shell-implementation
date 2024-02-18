@@ -27,10 +27,10 @@ static struct termios original_config;
 /**
  * @brief busca os dados de posição do cursor no sistema operacional
  * 
- * @todo João, @bug tem um buffer overflow que crasha a aplicação potencialmente.
- * Quando é feito o write se espera que tudo que tenha no stdin seja o retorno, porém
- * o stdin pode não estar vazio e isso causa o overflow, pois o conteúdo do stdin é
- * arbitrariamente longo.
+ * @note Quando é feito o write se espera que tudo que tenha no stdin seja o retorno,
+ * por isso é importante garantir que o stdin esteja vazio antes de chamar a função, 
+ * senão ela pode não conseguir ler corretamente os dados do sistema e deixar mais
+ * sujeira no stdin.
  * 
  * @param row 
  * @param column 
