@@ -455,13 +455,24 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   context->next_typed_command_to_show = -1;
   char c;
   unsigned cursor_position = 0;
+  /**
+   * Por hora essa variável controla se preciso atrasar o update em função
+   * de ter mais input no stdin para ser lido
+   * @suportando-colar-texto-terminal
+   */
+  bool delayed_update = false;
 
   print_input_mark(context, NULL);
   while (true)
   {
     bool should_update_cursor = false;
     
-    wait_to_read_a_byte(&c);
+    // @note João, por hora fica assim, a variável `next_char` não é necessária, mas adicionei pra
+    // tentar deixar mais explícito esse processo.
+    // @suportando-colar-texto-terminal
+    if (!delayed_update) wait_to_read_a_byte(&c);
+
+    delayed_update = false;
 
     if (c == ESC)
     {
@@ -580,9 +591,18 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       // Parece que vou precisar reestruturar toda a forma como leio caracteres e quando atualizo.
       // Sempre precisarei checar se tem mais um char no buffer antes de mandar o update.
       should_update_cursor = true;
+
+      // Checa se tem mais um char imediatamente disponível, isso pode ser sinal
+      // de que o usuário está colando texto no terminal
+      // @suportando-colar-texto-terminal
+      // @note João, acredito que esse check precisaria estar fora desse 'if', junto ao if
+      // do update abaixo, mas isso causa algumas inconveniências, tipo, se o usuário segurar 
+      // seta para esquerda só atualiza quando ele soltar a seta. Além de no geral ter deixado mais lento 
+      // o processamento das teclas.
+      delayed_update = read(STDIN_FILENO, &c, 1) == 1;
     }
 
-    if (should_update_cursor)
+    if (should_update_cursor && !delayed_update)
     {
       int row = 1, col = 1;
       // @todo João, no caso de o usuário colar texto no terminal, todos os caracteres após
