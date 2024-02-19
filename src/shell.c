@@ -419,6 +419,32 @@ static bool handle_control_key_pressed(Shell_Context_Data *context, Buffer *buff
   return false;
 }
 
+/**
+ * @brief Espera por um byte vindo do stdin
+ * 
+ * @todo João, essa não é a versão final, mas precisava dar um passo
+ * para deixar esse código mais explícito e possível de alterar o stdin
+ * @note VMIN e VTIME estão configurados para retornar sem esperar o usuário digitar, por isso
+ * do loop.
+ * @note Fiz a configuração acima para setar um timeout na função de leitura, coloquei um monte de asserts para garantir
+ * que minha compreensão do fluxo estava correta, não entendia bem como essa função deveria se comportar
+ * @link https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html#a-timeout-for-read
+ * 
+ * @param byte 
+ */
+static inline void wait_to_read_a_byte(char *byte)
+{
+  int readed = 0;
+  do
+  {
+    assert(readed == 0);
+    readed = read(STDIN_FILENO, byte, 1);
+    if (readed == -1) assert(false && "ainda não tratei os possíveis erros");
+  }
+  while (readed != 1);
+  assert(readed == 1);
+}
+
 // @todo João, muita complexidade e duplicidade nessa rotina, seria interessante simplificar,
 // mas antes talvez cobrir com testes. Pra poder testar vou precisar abstrair os comandos "printf"
 // pra escrever pra file descriptors previamente setados no processo ao invés de implicitamente
@@ -435,19 +461,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
   {
     bool should_update_cursor = false;
     
-    // @todo João, essa não é a versão final, mas precisava dar um passo
-    // para deixar esse código mais explícito e possível de alterar o stdin
-    // @note Fiz a configuração acima para setar um timeout na função de leitura, coloquei um monte de asserts para garantir
-    // que minha compreensão do fluxo estava correta, não entendia bem como essa função deveria se comportar
-    int readed = 0;
-    do
-    {
-      assert(readed == 0);
-      readed = read(STDIN_FILENO, &c, 1);
-      if (readed == -1) assert(false && "ainda não tratei os possíveis erros");
-    }
-    while (readed != 1);
-    assert(readed == 1);
+    wait_to_read_a_byte(&c);
 
     if (c == ESC)
     {
