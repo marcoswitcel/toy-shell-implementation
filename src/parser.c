@@ -511,9 +511,9 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
   bool next_command_found = false;
   Execute_Command_Node *next_command_node = NULL;
   
-  for (unsigned i = context->token_index; i < tokens->index; i++)
+  for (; context->token_index < tokens->index; context->token_index++)
   {
-    context->token_index = i;
+    const unsigned i = context->token_index;
     
     Token token = tokens->data[i];
     assert(token.token_index_start > -1);
@@ -617,6 +617,9 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       } 
     }
 
+    /**
+     * @todo João, preciso expandir os casos de testes para o processo de parsing das PIPE's e REDIRECT's
+     */
     if (token.type == PIPE)
     {
       // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
@@ -646,23 +649,10 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       {
         Execute_Command_Node *execute_command_sub_node = ALLOC(Execute_Command_Node, 1);
         context->token_index += 1;
-        assert(context->token_index == (i + 1)); // @note temporário enquanto faço a transição do formato de passagem dos parâmetros
         *execute_command_sub_node = parse_execute_command_node_internal(context, tokens, true);
         pipe = execute_command_sub_node;
         piped = true;
-
-        // @todo João, testar se não dá pra dar apenas um continue e deixar o loop principal encerrar, ficaria menos código aqui
-        // @note Visando remover o todo acima, adicionei mais um teste. Revisar novamente e caso não houver falhar, apenas remover
-        // os todos acia e o if e o else, deixando apenas o 'update' da variável 'i' e o 'continue'. Revisar.
-        if (context->token_index < tokens->index)
-        {
-          i = context->token_index;
-          continue;
-        }
-        else
-        {
-          break;
-        }
+        continue;
       }
     }
 
