@@ -18,6 +18,7 @@
 * implementar suporte para comandos com àspas ao redor -- ok (embora ainda possua casos aonde pode apresentar erro, ambiguidade ou comportamento inapropriado)
 * adicionar builtin que permite trocar em tempo de execução parâmetros do terminal -- ok
 * permitir trocar o símbolo de "input", se for possível trocar durante execução, melhor ainda -- ok
+* Suportar copiar e colar? -- ok
 * ler arquivo de configuração?
 * mais comandos builtin? -- em progresso
 * globing e patter matching -- em progresso
@@ -31,7 +32,6 @@ Posso criar um stdin separado para o processo filho e duplicar meu input pra lá
 * implementar suporte a inputs de multiplas linhas, permitindo navegar e reportando erros de forma clara
 * uma funcionalidade interessante para os testes seria poder agrupar testes em alguma estrura de "subcategoria"
 * adicionar suporte a busca na history, exemplo: 2! execute comando 2
-* Suportar copiar e colar? -- ok
 
 ## Anotações 15/08/2023
 

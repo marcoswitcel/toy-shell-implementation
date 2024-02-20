@@ -648,9 +648,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         piped = true;
 
         // @todo João, testar se não dá pra dar apenas um continue e deixar o loop principal encerrar, ficaria menos código aqui
-        // @todo João, testar muito a questão da PIPE
-        // @note João, visando remover os dois todo's acima, adicionei mais um teste. Revisar novamente e caso não
-        // houver falhar, apenas remover os todos acia e o if e o else, deixando apenas o 'update' da variável 'i' e o 'continue'
+        // @note Visando remover o todo acima, adicionei mais um teste. Revisar novamente e caso não houver falhar, apenas remover
+        // os todos acia e o if e o else, deixando apenas o 'update' da variável 'i' e o 'continue'. Revisar.
         if (context->token_index < tokens->index)
         {
           i = context->token_index;
