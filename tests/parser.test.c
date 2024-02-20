@@ -1251,6 +1251,79 @@ void test_parse_execute_command_node_15(void)
   Assert_Is_False(node.pipe->pipe->append_mode_stderr);
 }
 
+void test_parse_execute_command_node_16(void)
+{
+  const char parse_input_sample[] = "echo teste | grep teste && echo2 depois | grep2 depois";
+
+  Parse_Context context = create_parse_context(parse_input_sample);
+  Sequence_Of_Tokens *tokens = tokenize(&context);
+
+  Execute_Command_Node node = parse_execute_command_node(&context, tokens);
+
+  Assert_Is_Null(context.error);
+  Assert(context.error_start_index == -1);
+
+  Assert_Is_Not_Null(node.args);
+  Assert_Is_Not_Null(node.args[0]);
+  Assert_String_Equals(node.args[0], "echo");
+  Assert_Is_Not_Null(node.args[1]);
+  Assert_String_Equals(node.args[1], "teste");
+  Assert_Is_Null(node.args[2]);
+
+  Assert_Is_Not_Null(node.next_command);
+  Assert_Is_Null(node.stdout_redirect_filename);
+  Assert_Is_Null(node.stderr_redirect_filename);
+  Assert_Is_False(node.append_mode_stdout);
+  Assert_Is_False(node.append_mode_stderr);
+
+  Assert_Is_Not_Null(node.pipe);
+
+  Assert_Is_Not_Null(node.pipe->args);
+  Assert_Is_Not_Null(node.pipe->args[0]);
+  Assert_String_Equals(node.pipe->args[0], "grep");
+  Assert_Is_Not_Null(node.pipe->args[1]);
+  Assert_String_Equals(node.pipe->args[1], "teste");
+  Assert_Is_Null(node.pipe->args[2]);
+
+  Assert_Is_Null(node.pipe->next_command);
+  Assert_Is_Null(node.pipe->stdout_redirect_filename);
+  Assert_Is_Null(node.pipe->stderr_redirect_filename);
+  Assert_Is_False(node.pipe->append_mode_stdout);
+  Assert_Is_False(node.pipe->append_mode_stderr);
+
+  Assert_Is_Not_Null(node.next_command);
+
+  Assert_Is_Not_Null(node.next_command->args);
+  Assert_Is_Not_Null(node.next_command->args[0]);
+  Assert_String_Equals(node.next_command->args[0], "echo2");
+  Assert_Is_Not_Null(node.next_command->args[1]);
+  Assert_String_Equals(node.next_command->args[1], "depois");
+  Assert_Is_Null(node.next_command->args[2]);
+
+  Assert_Is_Null(node.next_command->next_command);
+  Assert_Is_Null(node.next_command->stdout_redirect_filename);
+  Assert_Is_Null(node.next_command->stderr_redirect_filename);
+  Assert_Is_False(node.next_command->append_mode_stdout);
+  Assert_Is_False(node.next_command->append_mode_stderr);
+
+
+  Assert_Is_Not_Null(node.next_command->pipe);
+
+  Assert_Is_Not_Null(node.next_command->pipe->args);
+  Assert_Is_Not_Null(node.next_command->pipe->args[0]);
+  Assert_String_Equals(node.next_command->pipe->args[0], "grep2");
+  Assert_Is_Not_Null(node.next_command->pipe->args[1]);
+  Assert_String_Equals(node.next_command->pipe->args[1], "depois");
+  Assert_Is_Null(node.next_command->pipe->args[2]);
+
+  Assert_Is_Null(node.next_command->pipe->next_command);
+  Assert_Is_Null(node.next_command->pipe->stdout_redirect_filename);
+  Assert_Is_Null(node.next_command->pipe->stderr_redirect_filename);
+  Assert_Is_False(node.next_command->pipe->append_mode_stdout);
+  Assert_Is_False(node.next_command->pipe->append_mode_stderr);
+
+}
+
 extern void test_suit_parser(void)
 {
   Register_Test(test_create_parse_context);
@@ -1312,4 +1385,5 @@ extern void test_suit_parser(void)
   Register_Test(test_parse_execute_command_node_13);
   Register_Test(test_parse_execute_command_node_14);
   Register_Test(test_parse_execute_command_node_15);
+  Register_Test(test_parse_execute_command_node_16);
 }
