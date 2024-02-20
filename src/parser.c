@@ -517,6 +517,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
     
     Token token = tokens->data[i];
     assert(token.token_index_start > -1);
+    assert(token_to_string(&token) != NULL);
+    assert(token.type != UNINITIALIZED);
 
     /**
      * @todo João, aqui o início do processo eu posso checar todos os tokens que são mandatórios, por exemplo:
@@ -531,7 +533,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       break;
     }
 
-    if (token.type == STRING && token.data.string.cstring)
+    if (token.type == STRING)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
@@ -554,7 +556,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         list_of_strings_push(list_of_args, token.data.string.cstring);
       }
     }
-    if (token.type == GLOBBING && token.data.globbing.cstring)
+
+    if (token.type == GLOBBING)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
@@ -566,7 +569,8 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
         list_of_strings_push(list_of_args, static_globbing_symbol);
       }
     }
-    if (token.type == REDIRECT && token.data.redirect.cstring)
+
+    if (token.type == REDIRECT)
     {
       int fd = token.data.redirect.fd;
 
@@ -613,7 +617,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       } 
     }
 
-    if (token.type == PIPE  && token.data.pipe.cstring)
+    if (token.type == PIPE)
     {
       // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
       // mas por precaução essa lógica fica
@@ -662,7 +666,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == AND && token.data.and.cstring)
+    if (token.type == AND)
     {
       if (piping)
       {
@@ -702,7 +706,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == QUERY_LAST_STATUS && token.data.query_last_status.cstring)
+    if (token.type == QUERY_LAST_STATUS)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
