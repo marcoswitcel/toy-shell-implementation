@@ -106,6 +106,107 @@ void test_int_to_cstring(void)
   Assert_String_Equals(representation, "-210056");
 }
 
+void test_int_to_cstring_in_base_decimal(void)
+{
+  const char *representation;
+  
+  representation = int_to_cstring_in_base(0, DECIMAL);
+  Assert_String_Equals(representation, "0");
+
+  representation = int_to_cstring_in_base(1, DECIMAL);
+  Assert_String_Equals(representation, "1");
+
+  representation = int_to_cstring_in_base(2, DECIMAL);
+  Assert_String_Equals(representation, "2");
+
+  representation = int_to_cstring_in_base(3, DECIMAL);
+  Assert_String_Equals(representation, "3");
+
+  representation = int_to_cstring_in_base(4, DECIMAL);
+  Assert_String_Equals(representation, "4");
+
+  representation = int_to_cstring_in_base(5, DECIMAL);
+  Assert_String_Equals(representation, "5");
+
+  representation = int_to_cstring_in_base(6, DECIMAL);
+  Assert_String_Equals(representation, "6");
+
+  representation = int_to_cstring_in_base(7, DECIMAL);
+  Assert_String_Equals(representation, "7");
+
+  representation = int_to_cstring_in_base(8, DECIMAL);
+  Assert_String_Equals(representation, "8");
+
+  representation = int_to_cstring_in_base(9, DECIMAL);
+  Assert_String_Equals(representation, "9");
+
+  representation = int_to_cstring_in_base(10, DECIMAL);
+  Assert_String_Equals(representation, "10");
+
+  representation = int_to_cstring_in_base(12, DECIMAL);
+  Assert_String_Equals(representation, "12");
+
+  representation = int_to_cstring_in_base(23, DECIMAL);
+  Assert_String_Equals(representation, "23");
+
+  representation = int_to_cstring_in_base(154, DECIMAL);
+  Assert_String_Equals(representation, "154");
+
+  representation = int_to_cstring_in_base(20056, DECIMAL);
+  Assert_String_Equals(representation, "20056");
+
+  representation = int_to_cstring_in_base(-0, DECIMAL);
+  Assert_String_Equals(representation, "0");
+
+  representation = int_to_cstring_in_base(-1, DECIMAL);
+  Assert_String_Equals(representation, "-1");
+
+  representation = int_to_cstring_in_base(-2, DECIMAL);
+  Assert_String_Equals(representation, "-2");
+
+  representation = int_to_cstring_in_base(-3, DECIMAL);
+  Assert_String_Equals(representation, "-3");
+
+  representation = int_to_cstring_in_base(-4, DECIMAL);
+  Assert_String_Equals(representation, "-4");
+
+  representation = int_to_cstring_in_base(-5, DECIMAL);
+  Assert_String_Equals(representation, "-5");
+
+  representation = int_to_cstring_in_base(-6, DECIMAL);
+  Assert_String_Equals(representation, "-6");
+
+  representation = int_to_cstring_in_base(-7, DECIMAL);
+  Assert_String_Equals(representation, "-7");
+
+  representation = int_to_cstring_in_base(-8, DECIMAL);
+  Assert_String_Equals(representation, "-8");
+
+  representation = int_to_cstring_in_base(-9, DECIMAL);
+  Assert_String_Equals(representation, "-9");
+
+  representation = int_to_cstring_in_base(-10, DECIMAL);
+  Assert_String_Equals(representation, "-10");
+
+  representation = int_to_cstring_in_base(-12, DECIMAL);
+  Assert_String_Equals(representation, "-12");
+
+  representation = int_to_cstring_in_base(-23, DECIMAL);
+  Assert_String_Equals(representation, "-23");
+
+  representation = int_to_cstring_in_base(-154, DECIMAL);
+  Assert_String_Equals(representation, "-154");
+
+  representation = int_to_cstring_in_base(-20056, DECIMAL);
+  Assert_String_Equals(representation, "-20056");
+
+  representation = int_to_cstring_in_base(-20057, DECIMAL);
+  Assert_String_Equals(representation, "-20057");
+
+  representation = int_to_cstring_in_base(-210056, DECIMAL);
+  Assert_String_Equals(representation, "-210056");
+}
+
 void test_is_only_spaces_or_empty_01(void)
 {
   Assert_Is_True(is_only_spaces_or_empty(" "));
@@ -133,6 +234,7 @@ void test_is_only_spaces_or_empty_04(void)
 extern void test_suit_utils(void)
 {
   Register_Test(test_int_to_cstring);
+  Register_Test(test_int_to_cstring_in_base_decimal);
   Register_Test(test_is_only_spaces_or_empty_01);
   Register_Test(test_is_only_spaces_or_empty_02);
   Register_Test(test_is_only_spaces_or_empty_03);

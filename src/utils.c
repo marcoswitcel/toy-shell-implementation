@@ -199,6 +199,52 @@ char *int_to_cstring(int number)
   return number_cstring;
 }
 
+typedef enum Numerical_Base {
+  BINARY = 2,
+  OCTAL =  4,
+  DECIMAL = 10,
+  HEXADECIMAL = 16,
+} Numerical_Base;
+
+char *int_to_cstring_in_base(int number, const Numerical_Base base)
+{
+  static const char symbols[] = "0123456789ABCDEF";
+
+  bool is_negative_number = number < 0;
+  int n_chars = 1 + is_negative_number;
+  int copy = number;
+  // @note a inversão do sinal poderia ser feita com uma negação e uma adição "copy = ~copy + 1;"
+  if (is_negative_number) copy *= -1;
+  
+  while ((copy /= base) > 0) n_chars++;
+
+  char *number_cstring = (char *) malloc(n_chars + 1);
+
+  int currentNumber = number;
+  if (is_negative_number) currentNumber *= -1;
+  
+  for (int i = n_chars; i--;)
+  {
+    if (currentNumber < (int) base)
+    {
+      number_cstring[i] = symbols[currentNumber];
+      break;
+    }
+
+    int remainder = currentNumber % base;
+    number_cstring[i] = symbols[remainder];
+    currentNumber /= base;
+  }
+  
+  if (is_negative_number)
+  {
+    number_cstring[0] = '-';
+  }
+  number_cstring[n_chars] = '\0';
+
+  return number_cstring;
+}
+
 /**
  * @brief Verifica se uma string é composta apenas de espaços ou está vazia
  * 

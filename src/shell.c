@@ -471,6 +471,8 @@ char *shell_wait_command_input(Shell_Context_Data *context)
     // tentar deixar mais explícito esse processo.
     // @suportando-colar-texto-terminal
     if (!delayed_update) wait_to_read_a_byte(&c);
+    
+    Debug_Log_Line("byte read: %d : '%c'", c, c);
 
     delayed_update = false;
 
