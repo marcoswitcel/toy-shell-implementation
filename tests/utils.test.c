@@ -308,6 +308,107 @@ void test_int_to_cstring_in_base_binary(void)
   Assert_String_Equals(representation, "-110011010010001000");
 }
 
+void test_int_to_cstring_in_base_hexadecimal(void)
+{
+  const char *representation;
+  
+  representation = int_to_cstring_in_base(0, HEXADECIMAL);
+  Assert_String_Equals(representation, "0");
+
+  representation = int_to_cstring_in_base(1, HEXADECIMAL);
+  Assert_String_Equals(representation, "1");
+
+  representation = int_to_cstring_in_base(2, HEXADECIMAL);
+  Assert_String_Equals(representation, "2");
+
+  representation = int_to_cstring_in_base(3, HEXADECIMAL);
+  Assert_String_Equals(representation, "3");
+
+  representation = int_to_cstring_in_base(4, HEXADECIMAL);
+  Assert_String_Equals(representation, "4");
+
+  representation = int_to_cstring_in_base(5, HEXADECIMAL);
+  Assert_String_Equals(representation, "5");
+
+  representation = int_to_cstring_in_base(6, HEXADECIMAL);
+  Assert_String_Equals(representation, "6");
+
+  representation = int_to_cstring_in_base(7, HEXADECIMAL);
+  Assert_String_Equals(representation, "7");
+
+  representation = int_to_cstring_in_base(8, HEXADECIMAL);
+  Assert_String_Equals(representation, "8");
+
+  representation = int_to_cstring_in_base(9, HEXADECIMAL);
+  Assert_String_Equals(representation, "9");
+
+  representation = int_to_cstring_in_base(10, HEXADECIMAL);
+  Assert_String_Equals(representation, "A");
+
+  representation = int_to_cstring_in_base(12, HEXADECIMAL);
+  Assert_String_Equals(representation, "C");
+
+  representation = int_to_cstring_in_base(23, HEXADECIMAL);
+  Assert_String_Equals(representation, "17");
+
+  representation = int_to_cstring_in_base(154, HEXADECIMAL);
+  Assert_String_Equals(representation, "9A");
+
+  representation = int_to_cstring_in_base(20056, HEXADECIMAL);
+  Assert_String_Equals(representation, "100111001011000");
+
+  representation = int_to_cstring_in_base(-0, HEXADECIMAL);
+  Assert_String_Equals(representation, "0");
+
+  representation = int_to_cstring_in_base(-1, HEXADECIMAL);
+  Assert_String_Equals(representation, "-1");
+
+  representation = int_to_cstring_in_base(-2, HEXADECIMAL);
+  Assert_String_Equals(representation, "-10");
+
+  representation = int_to_cstring_in_base(-3, HEXADECIMAL);
+  Assert_String_Equals(representation, "-11");
+
+  representation = int_to_cstring_in_base(-4, HEXADECIMAL);
+  Assert_String_Equals(representation, "-100");
+
+  representation = int_to_cstring_in_base(-5, HEXADECIMAL);
+  Assert_String_Equals(representation, "-101");
+
+  representation = int_to_cstring_in_base(-6, HEXADECIMAL);
+  Assert_String_Equals(representation, "-110");
+
+  representation = int_to_cstring_in_base(-7, HEXADECIMAL);
+  Assert_String_Equals(representation, "-111");
+
+  representation = int_to_cstring_in_base(-8, HEXADECIMAL);
+  Assert_String_Equals(representation, "-1000");
+
+  representation = int_to_cstring_in_base(-9, HEXADECIMAL);
+  Assert_String_Equals(representation, "-1001");
+
+  representation = int_to_cstring_in_base(-10, HEXADECIMAL);
+  Assert_String_Equals(representation, "-1010");
+
+  representation = int_to_cstring_in_base(-12, HEXADECIMAL);
+  Assert_String_Equals(representation, "-1100");
+
+  representation = int_to_cstring_in_base(-23, HEXADECIMAL);
+  Assert_String_Equals(representation, "-10111");
+
+  representation = int_to_cstring_in_base(-154, HEXADECIMAL);
+  Assert_String_Equals(representation, "-10011010");
+
+  representation = int_to_cstring_in_base(-20056, HEXADECIMAL);
+  Assert_String_Equals(representation, "-100111001011000");
+
+  representation = int_to_cstring_in_base(-20057, HEXADECIMAL);
+  Assert_String_Equals(representation, "-100111001011001");
+
+  representation = int_to_cstring_in_base(-210056, HEXADECIMAL);
+  Assert_String_Equals(representation, "-110011010010001000");
+}
+
 void test_is_only_spaces_or_empty_01(void)
 {
   Assert_Is_True(is_only_spaces_or_empty(" "));
@@ -337,7 +438,8 @@ extern void test_suit_utils(void)
   Register_Test(test_int_to_cstring);
   Register_Test(test_int_to_cstring_in_base_binary);
   Register_Test(test_int_to_cstring_in_base_decimal);
-  //@todo João, falta testar o hexadecimal e o octal
+  //@todo João, falta testar o octal
+  Register_Test(test_int_to_cstring_in_base_hexadecimal);
   Register_Test(test_is_only_spaces_or_empty_01);
   Register_Test(test_is_only_spaces_or_empty_02);
   Register_Test(test_is_only_spaces_or_empty_03);
