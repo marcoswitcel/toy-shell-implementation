@@ -355,7 +355,7 @@ void test_int_to_cstring_in_base_hexadecimal(void)
   Assert_String_Equals(representation, "9A");
 
   representation = int_to_cstring_in_base(20056, HEXADECIMAL);
-  Assert_String_Equals(representation, "100111001011000");
+  Assert_String_Equals(representation, "4E58");
 
   representation = int_to_cstring_in_base(-0, HEXADECIMAL);
   Assert_String_Equals(representation, "0");
@@ -364,49 +364,49 @@ void test_int_to_cstring_in_base_hexadecimal(void)
   Assert_String_Equals(representation, "-1");
 
   representation = int_to_cstring_in_base(-2, HEXADECIMAL);
-  Assert_String_Equals(representation, "-10");
+  Assert_String_Equals(representation, "-2");
 
   representation = int_to_cstring_in_base(-3, HEXADECIMAL);
-  Assert_String_Equals(representation, "-11");
+  Assert_String_Equals(representation, "-3");
 
   representation = int_to_cstring_in_base(-4, HEXADECIMAL);
-  Assert_String_Equals(representation, "-100");
+  Assert_String_Equals(representation, "-4");
 
   representation = int_to_cstring_in_base(-5, HEXADECIMAL);
-  Assert_String_Equals(representation, "-101");
+  Assert_String_Equals(representation, "-5");
 
   representation = int_to_cstring_in_base(-6, HEXADECIMAL);
-  Assert_String_Equals(representation, "-110");
+  Assert_String_Equals(representation, "-6");
 
   representation = int_to_cstring_in_base(-7, HEXADECIMAL);
-  Assert_String_Equals(representation, "-111");
+  Assert_String_Equals(representation, "-7");
 
   representation = int_to_cstring_in_base(-8, HEXADECIMAL);
-  Assert_String_Equals(representation, "-1000");
+  Assert_String_Equals(representation, "-8");
 
   representation = int_to_cstring_in_base(-9, HEXADECIMAL);
-  Assert_String_Equals(representation, "-1001");
+  Assert_String_Equals(representation, "-9");
 
   representation = int_to_cstring_in_base(-10, HEXADECIMAL);
-  Assert_String_Equals(representation, "-1010");
+  Assert_String_Equals(representation, "-A");
 
   representation = int_to_cstring_in_base(-12, HEXADECIMAL);
-  Assert_String_Equals(representation, "-1100");
+  Assert_String_Equals(representation, "-C");
 
   representation = int_to_cstring_in_base(-23, HEXADECIMAL);
-  Assert_String_Equals(representation, "-10111");
+  Assert_String_Equals(representation, "-17");
 
   representation = int_to_cstring_in_base(-154, HEXADECIMAL);
-  Assert_String_Equals(representation, "-10011010");
+  Assert_String_Equals(representation, "-9A");
 
   representation = int_to_cstring_in_base(-20056, HEXADECIMAL);
-  Assert_String_Equals(representation, "-100111001011000");
+  Assert_String_Equals(representation, "-4E58");
 
   representation = int_to_cstring_in_base(-20057, HEXADECIMAL);
-  Assert_String_Equals(representation, "-100111001011001");
+  Assert_String_Equals(representation, "-4E59");
 
   representation = int_to_cstring_in_base(-210056, HEXADECIMAL);
-  Assert_String_Equals(representation, "-110011010010001000");
+  Assert_String_Equals(representation, "-33488");
 }
 
 void test_is_only_spaces_or_empty_01(void)
