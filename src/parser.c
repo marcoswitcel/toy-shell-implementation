@@ -557,7 +557,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == GLOBBING)
+    else if (token.type == GLOBBING)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
@@ -570,7 +570,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == REDIRECT)
+    else if (token.type == REDIRECT)
     {
       int fd = token.data.redirect.fd;
 
@@ -620,7 +620,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
     /**
      * @todo João, preciso expandir os casos de testes para o processo de parsing das PIPE's e REDIRECT's
      */
-    if (token.type == PIPE)
+    else if (token.type == PIPE)
     {
       // @note João, a princípio não deve acontecer pois é acionado o parsemento recursivo,
       // mas por precaução essa lógica fica
@@ -656,7 +656,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == AND)
+    else if (token.type == AND)
     {
       if (piping)
       {
@@ -696,7 +696,7 @@ Execute_Command_Node parse_execute_command_node_internal(Parse_Context *context,
       }
     }
 
-    if (token.type == QUERY_LAST_STATUS)
+    else if (token.type == QUERY_LAST_STATUS)
     {
       if (stdout_redirect_expect_file_name || stderr_redirect_expect_file_name)
       {
