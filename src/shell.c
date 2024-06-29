@@ -447,7 +447,7 @@ static inline void wait_to_read_a_byte(char *byte)
 
 // @todo João, muita complexidade e duplicidade nessa rotina, seria interessante simplificar,
 // mas antes talvez cobrir com testes. Pra poder testar vou precisar abstrair os comandos "printf"
-// pra escrever pra file descriptors previamente setados no processo ao invés de implicitamente
+// pra escrever para file descriptors previamente setados no processo ao invés de implicitamente
 // escrever pro stdout.
 char *shell_wait_command_input(Shell_Context_Data *context)
 {
@@ -562,7 +562,7 @@ char *shell_wait_command_input(Shell_Context_Data *context)
       else if (c == CTRL_KEY('c'))
       {
         // @todo João, isso acaba sobreescrevendo alguns caracteres quando é dado ctrl-c no meio do texto,
-        // mas não causa nenhum bug, é só visual, por hora fica assim.
+        // mas não causa nenhum bug de usabilidade apenas visual, por hora fica assim.
         write(STDOUT_FILENO, EXPAND_STRING_REF_AND_COUNT("^C\r\n"));
 
         buffer_clear(buffer);
