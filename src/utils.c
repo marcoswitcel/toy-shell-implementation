@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "./list.implementations.h"
 #include "./utils.macro.h"
@@ -263,6 +264,20 @@ bool is_only_spaces_or_empty(const char *cstring)
   }
 
   return true;
+}
+
+/**
+ * @brief checa se uma string termina com um caracter em específico
+ * 
+ * @param cstring 
+ * @param character 
+ * @return true 
+ * @return false 
+ */
+bool ends_with_char(const char *cstring, char character)
+{
+  size_t length = strlen(cstring);
+  return length && (cstring[length - 1] == character);
 }
 
 #endif // UTILS_C

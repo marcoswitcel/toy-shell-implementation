@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 #include "./compilation_definitions.h"
 #include "./list.implementations.h"
@@ -927,6 +928,13 @@ void read_eval_shell_loop(bool colorful, bool no_sound)
 
     // não processa inputs vazios, também não adiciona no histórico
     if (is_only_spaces_or_empty(readed_line)) continue;
+
+    if (ends_with_char(readed_line, '\\'))
+    {
+      // @todo João, terminar de implementar o suporte a comandos de multiplas linhas 
+      shell_report_error(&shell_context, "Comandos de multiplas linhas não suportados ainda.", strlen(readed_line) - 1);
+      continue;
+    }
 
     Parse_Context context = create_parse_context(readed_line);
     Execute_Command_Node execute_command_node = shell_parse_command(&context);
